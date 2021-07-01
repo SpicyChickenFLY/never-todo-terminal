@@ -1,2 +1,70 @@
-# never-todo-cmd
-这是NeverToDo待办列表系列产品中的命令行端
+<div align=center><img src="./static/logo.png" width = "200" height = "200" /><h1>never-todo-cmd</h1></div>
+
+
+> NeverToDo待办列表——命令行端
+
+[ Document in English ](./README_EN.md)
+
+## 总览
+这个应用被分为五部分
+* [后端数据库（开发中）](https://github.com/SpicyChickenFLY/never-todo-backend) - 使用Golang进行开发
+* [前端Web页面（开发中）](https://github.com/bluepongo/never-todo-frontend) - 使用Vue进行开发，可能会用dart写Vue
+* [PC端（Win/Linux/Mac）（发布v0.0.1）](https://github.com/bluepongo/never-todo-client)- 使用Electron-Vue框架搭建
+* [命令行端（Win/Linux/Mac）（开发中）](https://github.com/SpicyChickenFLY/never-todo-cmd) - 使用Golang进行开发
+* [移动端（Android/IOS）（尚未开发）](https://github.com/SpicyChickenFLY/never-todo-mobile) - 使用Dart/Flutter搭建
+
+
+本项目为跨平台的never-todo系列产品提供了一个在线同步的后端服务功能，您可以在自己的服务器中部署该服务并在客户端中配置相应信息来实现同步功能，本项目由[SpicyChickenFLY](https://github.com/SpicyChickenFLY)与[bluepongo](https://github.com/bluepongo)合作开发
+
+## 实现功能
+* [x] 实现数据库中待办、标签的增删改查
+* [x] 将待办、标签的增删改查功能暴露为RESTful的接口
+* [ ] 允许用户进行注册登录
+* [ ] 记录同步数据信息
+
+#### 项目搭建
+
+```bash
+# 查看总览
+never
+# 查看帮助
+never help
+
+## 通过UI交互界面进行操作
+never ui
+
+## 通过指令交互进行操作
+# 撤销
+never undo [<log_id>]
+
+# 查看、搜索待办任务
+never todo | [<FILTER_TODO_FIND>]
+    # FILTER_TODO_FIND
+    <id>[-<id>] [<id>]                  # 通过ID直接定位
+    like <content> [and|or <content>]   # 通过内容模糊搜索
+    +<tag>|-<tag> [+<tag>|-<tag>]       # 通过标签筛选
+    age:<age>[-<age>]                   # 通过创建时间筛选
+    due:<due>[-<due>]                   # 通过截止时间筛选
+
+# 新增待办任务
+never [todo] add <content> [<FILTER_TODO_ADD>]
+    # FILTER_TODO_ADD
+    +<tag> [+<tag>]         # 分配标签
+    due:<due>               # 设置截止时间
+    loop: y|m|w[-SMTWTFS]|d # 设置重复提醒(每周日，一，四：w-SM...T..)
+
+# 完成、删除任务
+never [todo] done|del <id>[-<id>] [<id>]
+
+# 修改任务
+never [todo] 
+    
+
+# TAG_FILTERS
+
+# 新增、删除、修改标签
+never tag add <content> [,<content>]
+never tag del <id> [,<id>]
+never tag [set] <id> <content>
+
+```
