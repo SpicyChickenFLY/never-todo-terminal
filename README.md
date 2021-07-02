@@ -17,10 +17,10 @@
 本项目为跨平台的never-todo系列产品提供了一个在线同步的后端服务功能，您可以在自己的服务器中部署该服务并在客户端中配置相应信息来实现同步功能，本项目由[SpicyChickenFLY](https://github.com/SpicyChickenFLY)与[bluepongo](https://github.com/bluepongo)合作开发
 
 ## 实现功能
-* [x] 实现数据库中待办、标签的增删改查
-* [x] 将待办、标签的增删改查功能暴露为RESTful的接口
-* [ ] 允许用户进行注册登录
-* [ ] 记录同步数据信息
+* [ ] 实现通过输入指令实现待办、标签的增删改查
+* [ ] 实现通过文字终端UI的界面交互完成相应操作
+* [ ] 实现日程相关功能
+* [ ] 实现命令行端和桌面端或者后端服务器的同步机制
 
 #### 项目搭建
 
@@ -43,8 +43,8 @@ never todo | [<FILTER_TODO_FIND>]
     <id>[-<id>] [<id>]                  # 通过ID直接定位
     like <content> [and|or <content>]   # 通过内容模糊搜索
     +<tag>|-<tag> [+<tag>|-<tag>]       # 通过标签筛选
-    age:<age>[-<age>]                   # 通过创建时间筛选
-    due:<due>[-<due>]                   # 通过截止时间筛选
+    age:<age>|[<age>]-[<age>]                   # 通过创建时间筛选
+    due:<due>|[<due>]-[<due>]                   # 通过截止时间筛选
 
 # 新增待办任务
 never [todo] add <content> [<FILTER_TODO_ADD>]
@@ -57,11 +57,14 @@ never [todo] add <content> [<FILTER_TODO_ADD>]
 never [todo] done|del <id>[-<id>] [<id>]
 
 # 修改任务
-never [todo] upd <id> [<content>] [<FILTER_TODO_UPDATE>]
+never [todo] edit <id> [<content>] [<FILTER_TODO_UPDATE>]
     # FILTER_TODO_UPDATE
     +<tag>|-<tag> [+<tag>|-<tag>]   # 分配标签
     due:<due>                       # 设置截止时间
     loop: y|m|w[-SMTWTFS]|d         # 设置重复提醒(每周日，一，四：w-SM...T..)
+
+# 查看某一时段内的统计
+never stat year|month|week|day # 默认为day
 
 # 查看所有标签、修改标签
 never tag
