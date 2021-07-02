@@ -57,14 +57,14 @@ never [todo] add <content> [<FILTER_TODO_ADD>]
 never [todo] done|del <id>[-<id>] [<id>]
 
 # 修改任务
-never [todo] 
-    
+never [todo] upd <id> [<content>] [<FILTER_TODO_UPDATE>]
+    # FILTER_TODO_UPDATE
+    +<tag>|-<tag> [+<tag>|-<tag>]   # 分配标签
+    due:<due>                       # 设置截止时间
+    loop: y|m|w[-SMTWTFS]|d         # 设置重复提醒(每周日，一，四：w-SM...T..)
 
-# TAG_FILTERS
-
-# 新增、删除、修改标签
-never tag add <content> [,<content>]
-never tag del <id> [,<id>]
+# 查看所有标签、修改标签
+never tag
 never tag [set] <id> <content>
 
 ```
