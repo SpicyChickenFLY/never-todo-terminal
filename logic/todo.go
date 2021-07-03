@@ -16,6 +16,7 @@ func init() {
 	model = &data.Model{}
 }
 
+// ShowSummary like the total amount of todo/tag/schedule
 func ShowSummary() error {
 	if err := db.Read(model); err != nil {
 		return err
@@ -40,6 +41,7 @@ func ShowSummary() error {
 	return nil
 }
 
+// ShowTasks with filter provided by params
 func ShowTasks(params []string) error {
 	if err := db.Read(model); err != nil {
 		return err

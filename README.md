@@ -34,8 +34,14 @@ never help
 never ui
 
 ## 通过指令交互进行操作
+# 查看历史操作
+never log [<num>]
+
 # 撤销
 never undo [<log_id>]
+
+# 解释指令的解析结果和执行计划
+never explain [<log_id>]
 
 # 查看、搜索待办任务
 never todo | [<FILTER_TODO_FIND>]
