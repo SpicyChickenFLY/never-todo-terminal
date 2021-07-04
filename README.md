@@ -44,7 +44,7 @@ never undo [<log_id>]
 never explain [<log_id>]
 
 # 查看、搜索待办任务
-never todo | [<FILTER_TODO_FIND>]
+never [todo] [<FILTER_TODO_FIND>]
     # FILTER_TODO_FIND
     <id>[-<id>] [<id>]                  # 通过ID直接定位
     like <content> [and|or <content>]   # 通过内容模糊搜索

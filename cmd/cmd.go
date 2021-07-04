@@ -10,7 +10,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "never",
+	Use: "never [sub]",
 	Run: func(cmd *cobra.Command, args []string) {
 		// 展示logo，用法，当前待办数和标签数
 		fmt.Println(constant.ColorfulLogo)
@@ -23,7 +23,7 @@ var rootCmd = &cobra.Command{
 }
 
 var cmdGuess = &cobra.Command{
-	Use:   "<id>",
+	Use:   "[id]",
 	Short: "let me guess what you want to do",
 	Run: func(cmd *cobra.Command, args []string) {
 		// fmt Println("Pull: " + strings Join(args, " "))
