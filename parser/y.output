@@ -1,0 +1,1465 @@
+
+0: shift/reduce conflict (shift 2(0), red'n 46(0)) on HELP
+ 0: reduce/reduce conflict  (red'ns 46 and 75) on $end
+0: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
+0: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+0: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+0: shift/reduce conflict (shift 2(0), red'n 75(0)) on HELP
+0: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
+0: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
+0: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+state 0
+	$accept: .command $end 
+	task_find_filter: .    (46)
+	content: .    (80)
+	assign_group: .    (75)
+
+	NUM  shift 33
+	IDENT  shift 32
+	PLUS  shift 36
+	MINUS  shift 37
+	HELP  shift 2
+	UI  shift 3
+	GUI  shift 4
+	EXPLAIN  shift 5
+	LOG  shift 17
+	UNDO  shift 18
+	TASK  shift 19
+	TAG  shift 27
+	ADD  reduce 80 (src line 196)
+	DELETE  shift 22
+	SET  shift 24
+	DONE  shift 26
+	AGE  shift 30
+	DUE  shift 31
+	LIKE  shift 28
+	.  reduce 46 (src line 124)
+
+	command  goto 1
+	log_find  goto 6
+	undo_log  goto 7
+	task_help  goto 8
+	task_find  goto 9
+	task_add  goto 10
+	task_delete  goto 11
+	task_set  goto 12
+	task_done  goto 13
+	tag_help  goto 14
+	tag_find  goto 15
+	tag_set  goto 16
+	id  goto 25
+	task_find_filter  goto 20
+	content  goto 21
+	id_group  goto 23
+	assign_group  goto 29
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 1
+	$accept:  command.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	command:  HELP.    (1)
+	tag_help:  HELP.TAG HELP 
+
+	TAG  shift 38
+	.  reduce 1 (src line 36)
+
+
+state 3
+	command:  UI.    (2)
+
+	.  reduce 2 (src line 38)
+
+
+state 4
+	command:  GUI.    (3)
+
+	.  reduce 3 (src line 39)
+
+
+state 5
+	command:  EXPLAIN.    (4)
+
+	.  reduce 4 (src line 40)
+
+
+state 6
+	command:  log_find.    (5)
+
+	.  reduce 5 (src line 42)
+
+
+state 7
+	command:  undo_log.    (6)
+
+	.  reduce 6 (src line 43)
+
+
+state 8
+	command:  task_help.    (7)
+
+	.  reduce 7 (src line 45)
+
+
+state 9
+	command:  task_find.    (8)
+	task_help:  task_find.HELP 
+
+	HELP  shift 39
+	.  reduce 8 (src line 46)
+
+
+state 10
+	command:  task_add.    (9)
+	task_help:  task_add.HELP 
+
+	HELP  shift 40
+	.  reduce 9 (src line 47)
+
+
+state 11
+	command:  task_delete.    (10)
+	task_help:  task_delete.HELP 
+
+	HELP  shift 41
+	.  reduce 10 (src line 48)
+
+
+state 12
+	command:  task_set.    (11)
+	task_help:  task_set.HELP 
+
+	HELP  shift 42
+	.  reduce 11 (src line 49)
+
+
+state 13
+	command:  task_done.    (12)
+
+	.  reduce 12 (src line 50)
+
+
+state 14
+	command:  tag_help.    (13)
+
+	.  reduce 13 (src line 52)
+
+
+state 15
+	command:  tag_find.    (14)
+	tag_help:  tag_find.HELP 
+
+	HELP  shift 43
+	.  reduce 14 (src line 53)
+
+
+state 16
+	command:  tag_set.    (15)
+	tag_help:  tag_set.HELP 
+
+	HELP  shift 44
+	.  reduce 15 (src line 54)
+
+
+state 17
+	log_find:  LOG.    (16)
+	log_find:  LOG.NUM 
+
+	NUM  shift 45
+	.  reduce 16 (src line 58)
+
+
+state 18
+	undo_log:  UNDO.    (18)
+	undo_log:  UNDO.id 
+
+	NUM  shift 33
+	.  reduce 18 (src line 63)
+
+	id  goto 46
+
+19: shift/reduce conflict (shift 47(0), red'n 46(0)) on HELP
+ 19: reduce/reduce conflict  (red'ns 46 and 75) on $end
+19: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
+19: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+19: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+19: shift/reduce conflict (shift 47(0), red'n 75(0)) on HELP
+19: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
+19: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
+19: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+state 19
+	task_help:  TASK.HELP 
+	task_find:  TASK.task_find_filter 
+	task_add:  TASK.ADD content task_add_filter 
+	task_done:  TASK.DONE id_group 
+	task_delete:  TASK.DELETE id_group 
+	task_set:  TASK.SET id content task_update_filter 
+	task_set:  TASK.id SET content task_update_filter 
+	task_set:  TASK.id content task_update_filter 
+	task_find_filter: .    (46)
+	assign_group: .    (75)
+
+	NUM  shift 33
+	PLUS  shift 36
+	MINUS  shift 37
+	HELP  shift 47
+	ADD  shift 49
+	DELETE  shift 51
+	SET  shift 52
+	DONE  shift 50
+	AGE  shift 30
+	DUE  shift 31
+	LIKE  shift 28
+	.  reduce 46 (src line 124)
+
+	id  goto 53
+	task_find_filter  goto 48
+	id_group  goto 54
+	assign_group  goto 29
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 20
+	task_find:  task_find_filter.    (26)
+
+	.  reduce 26 (src line 79)
+
+
+state 21
+	task_add:  content.ADD task_add_filter 
+
+	ADD  shift 55
+	.  error
+
+
+state 22
+	task_delete:  DELETE.id_group 
+
+	NUM  shift 33
+	.  error
+
+	id  goto 57
+	id_group  goto 56
+
+ 23: reduce/reduce conflict  (red'ns 46 and 75) on $end
+23: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
+23: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+23: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 23: reduce/reduce conflict  (red'ns 46 and 75) on HELP
+23: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
+23: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
+23: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+state 23
+	task_done:  id_group.DONE 
+	task_delete:  id_group.DELETE 
+	task_find_filter:  id_group.task_find_filter 
+	task_find_filter: .    (46)
+	assign_group: .    (75)
+
+	NUM  shift 33
+	PLUS  shift 36
+	MINUS  shift 37
+	DELETE  shift 59
+	DONE  shift 58
+	AGE  shift 30
+	DUE  shift 31
+	LIKE  shift 28
+	.  reduce 46 (src line 124)
+
+	id  goto 57
+	task_find_filter  goto 60
+	id_group  goto 54
+	assign_group  goto 29
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 24
+	task_set:  SET.id content task_update_filter 
+
+	NUM  shift 33
+	.  error
+
+	id  goto 61
+
+25: shift/reduce conflict (shift 33(0), red'n 65(0)) on NUM
+25: shift/reduce conflict (shift 65(3), red'n 65(0)) on MINUS
+ 25: reduce/reduce conflict  (red'ns 65 and 80) on $end
+ 25: reduce/reduce conflict  (red'ns 65 and 80) on PLUS
+25: shift/reduce conflict (shift 65(3), red'n 80(0)) on MINUS
+ 25: reduce/reduce conflict  (red'ns 65 and 80) on HELP
+ 25: reduce/reduce conflict  (red'ns 65 and 80) on DUE
+state 25
+	task_set:  id.SET content task_update_filter 
+	task_set:  id.content task_update_filter 
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id.    (65)
+	content: .    (80)
+
+	NUM  shift 33
+	IDENT  shift 32
+	MINUS  shift 65
+	SET  shift 62
+	LOOP  reduce 80 (src line 196)
+	.  reduce 65 (src line 158)
+
+	id  goto 57
+	content  goto 63
+	id_group  goto 64
+
+state 26
+	task_done:  DONE.id_group 
+
+	NUM  shift 33
+	.  error
+
+	id  goto 57
+	id_group  goto 66
+
+state 27
+	tag_find:  TAG.tag_find_filter 
+	tag_set:  TAG.SET id content 
+	tag_find_filter: .    (60)
+
+	NUM  shift 33
+	SET  shift 68
+	LIKE  shift 70
+	.  reduce 60 (src line 148)
+
+	id  goto 57
+	id_group  goto 69
+	tag_find_filter  goto 67
+
+state 28
+	task_find_filter:  LIKE.content_group task_find_filter 
+	content: .    (80)
+
+	IDENT  shift 32
+	NOT  shift 74
+	.  reduce 80 (src line 196)
+
+	content  goto 73
+	content_group  goto 71
+	content_logic  goto 72
+
+ 29: reduce/reduce conflict  (red'ns 46 and 75) on $end
+29: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
+29: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+29: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 29: reduce/reduce conflict  (red'ns 46 and 75) on HELP
+29: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
+29: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
+29: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+state 29
+	task_find_filter:  assign_group.task_find_filter 
+	task_find_filter: .    (46)
+	assign_group: .    (75)
+
+	NUM  shift 33
+	PLUS  shift 36
+	MINUS  shift 37
+	AGE  shift 30
+	DUE  shift 31
+	LIKE  shift 28
+	.  reduce 46 (src line 124)
+
+	id  goto 57
+	task_find_filter  goto 75
+	id_group  goto 54
+	assign_group  goto 29
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 30
+	task_find_filter:  AGE.COLON time_find_filter task_find_filter 
+
+	COLON  shift 76
+	.  error
+
+
+state 31
+	task_find_filter:  DUE.COLON time_find_filter task_find_filter 
+
+	COLON  shift 77
+	.  error
+
+
+state 32
+	content:  IDENT.content 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 78
+
+state 33
+	id:  NUM.    (66)
+
+	.  reduce 66 (src line 161)
+
+
+34: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+34: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+state 34
+	assign_group:  assign_tag.assign_group 
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	.  reduce 75 (src line 180)
+
+	assign_group  goto 79
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+35: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+35: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+state 35
+	assign_group:  unassign_tag.assign_group 
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	.  reduce 75 (src line 180)
+
+	assign_group  goto 80
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 36
+	assign_tag:  PLUS.IDENT 
+
+	IDENT  shift 81
+	.  error
+
+
+state 37
+	unassign_tag:  MINUS.IDENT 
+
+	IDENT  shift 82
+	.  error
+
+
+state 38
+	tag_help:  HELP TAG.HELP 
+
+	HELP  shift 83
+	.  error
+
+
+state 39
+	task_help:  task_find HELP.    (21)
+
+	.  reduce 21 (src line 71)
+
+
+state 40
+	task_help:  task_add HELP.    (22)
+
+	.  reduce 22 (src line 72)
+
+
+state 41
+	task_help:  task_delete HELP.    (23)
+
+	.  reduce 23 (src line 73)
+
+
+state 42
+	task_help:  task_set HELP.    (24)
+
+	.  reduce 24 (src line 74)
+
+
+state 43
+	tag_help:  tag_find HELP.    (42)
+
+	.  reduce 42 (src line 111)
+
+
+state 44
+	tag_help:  tag_set HELP.    (43)
+
+	.  reduce 43 (src line 112)
+
+
+state 45
+	log_find:  LOG NUM.    (17)
+
+	.  reduce 17 (src line 60)
+
+
+state 46
+	undo_log:  UNDO id.    (19)
+
+	.  reduce 19 (src line 65)
+
+
+state 47
+	task_help:  TASK HELP.    (20)
+
+	.  reduce 20 (src line 69)
+
+
+state 48
+	task_find:  TASK task_find_filter.    (25)
+
+	.  reduce 25 (src line 77)
+
+
+state 49
+	task_add:  TASK ADD.content task_add_filter 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 84
+
+state 50
+	task_done:  TASK DONE.id_group 
+
+	NUM  shift 33
+	.  error
+
+	id  goto 57
+	id_group  goto 85
+
+state 51
+	task_delete:  TASK DELETE.id_group 
+
+	NUM  shift 33
+	.  error
+
+	id  goto 57
+	id_group  goto 86
+
+state 52
+	task_set:  TASK SET.id content task_update_filter 
+
+	NUM  shift 33
+	.  error
+
+	id  goto 87
+
+53: shift/reduce conflict (shift 33(0), red'n 65(0)) on NUM
+53: shift/reduce conflict (shift 65(3), red'n 65(0)) on MINUS
+ 53: reduce/reduce conflict  (red'ns 65 and 80) on $end
+ 53: reduce/reduce conflict  (red'ns 65 and 80) on PLUS
+53: shift/reduce conflict (shift 65(3), red'n 80(0)) on MINUS
+ 53: reduce/reduce conflict  (red'ns 65 and 80) on HELP
+ 53: reduce/reduce conflict  (red'ns 65 and 80) on DUE
+state 53
+	task_set:  TASK id.SET content task_update_filter 
+	task_set:  TASK id.content task_update_filter 
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id.    (65)
+	content: .    (80)
+
+	NUM  shift 33
+	IDENT  shift 32
+	MINUS  shift 65
+	SET  shift 88
+	LOOP  reduce 80 (src line 196)
+	.  reduce 65 (src line 158)
+
+	id  goto 57
+	content  goto 89
+	id_group  goto 64
+
+ 54: reduce/reduce conflict  (red'ns 46 and 75) on $end
+54: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
+54: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+54: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 54: reduce/reduce conflict  (red'ns 46 and 75) on HELP
+54: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
+54: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
+54: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+state 54
+	task_find_filter:  id_group.task_find_filter 
+	task_find_filter: .    (46)
+	assign_group: .    (75)
+
+	NUM  shift 33
+	PLUS  shift 36
+	MINUS  shift 37
+	AGE  shift 30
+	DUE  shift 31
+	LIKE  shift 28
+	.  reduce 46 (src line 124)
+
+	id  goto 57
+	task_find_filter  goto 60
+	id_group  goto 54
+	assign_group  goto 29
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+ 55: reduce/reduce conflict  (red'ns 52 and 77) on $end
+55: shift/reduce conflict (shift 36(3), red'n 77(0)) on PLUS
+ 55: reduce/reduce conflict  (red'ns 52 and 77) on HELP
+55: shift/reduce conflict (shift 92(0), red'n 77(0)) on DUE
+55: shift/reduce conflict (shift 93(0), red'n 77(0)) on LOOP
+state 55
+	task_add:  content ADD.task_add_filter 
+	task_add_filter: .    (52)
+	positive_assign_group: .    (77)
+
+	PLUS  shift 36
+	DUE  shift 92
+	LOOP  shift 93
+	.  reduce 52 (src line 133)
+
+	task_add_filter  goto 90
+	positive_assign_group  goto 91
+	assign_tag  goto 94
+
+state 56
+	task_delete:  DELETE id_group.    (33)
+
+	.  reduce 33 (src line 95)
+
+
+57: shift/reduce conflict (shift 33(0), red'n 65(0)) on NUM
+57: shift/reduce conflict (shift 65(3), red'n 65(0)) on MINUS
+state 57
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id.    (65)
+
+	NUM  shift 33
+	MINUS  shift 65
+	.  reduce 65 (src line 158)
+
+	id  goto 57
+	id_group  goto 64
+
+state 58
+	task_done:  id_group DONE.    (31)
+
+	.  reduce 31 (src line 90)
+
+
+state 59
+	task_delete:  id_group DELETE.    (34)
+
+	.  reduce 34 (src line 96)
+
+
+state 60
+	task_find_filter:  id_group task_find_filter.    (47)
+
+	.  reduce 47 (src line 126)
+
+
+state 61
+	task_set:  SET id.content task_update_filter 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 95
+
+state 62
+	task_set:  id SET.content task_update_filter 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 96
+
+ 63: reduce/reduce conflict  (red'ns 56 and 75) on $end
+63: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+63: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 63: reduce/reduce conflict  (red'ns 56 and 75) on HELP
+63: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
+63: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+state 63
+	task_set:  id content.task_update_filter 
+	task_update_filter: .    (56)
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	DUE  shift 99
+	LOOP  shift 100
+	.  reduce 56 (src line 140)
+
+	task_update_filter  goto 97
+	assign_group  goto 98
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 64
+	id_group:  id id_group.    (63)
+
+	.  reduce 63 (src line 155)
+
+
+state 65
+	id_group:  id MINUS.id 
+
+	NUM  shift 33
+	.  error
+
+	id  goto 101
+
+state 66
+	task_done:  DONE id_group.    (30)
+
+	.  reduce 30 (src line 89)
+
+
+state 67
+	tag_find:  TAG tag_find_filter.    (44)
+
+	.  reduce 44 (src line 115)
+
+
+state 68
+	tag_set:  TAG SET.id content 
+
+	NUM  shift 33
+	.  error
+
+	id  goto 102
+
+state 69
+	tag_find_filter:  id_group.tag_find_filter 
+	tag_find_filter: .    (60)
+
+	NUM  shift 33
+	LIKE  shift 70
+	.  reduce 60 (src line 148)
+
+	id  goto 57
+	id_group  goto 69
+	tag_find_filter  goto 103
+
+state 70
+	tag_find_filter:  LIKE.content_group tag_find_filter 
+	content: .    (80)
+
+	IDENT  shift 32
+	NOT  shift 74
+	.  reduce 80 (src line 196)
+
+	content  goto 73
+	content_group  goto 104
+	content_logic  goto 72
+
+ 71: reduce/reduce conflict  (red'ns 46 and 75) on $end
+71: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
+71: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+71: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 71: reduce/reduce conflict  (red'ns 46 and 75) on HELP
+71: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
+71: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
+71: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+state 71
+	task_find_filter:  LIKE content_group.task_find_filter 
+	task_find_filter: .    (46)
+	assign_group: .    (75)
+
+	NUM  shift 33
+	PLUS  shift 36
+	MINUS  shift 37
+	AGE  shift 30
+	DUE  shift 31
+	LIKE  shift 28
+	.  reduce 46 (src line 124)
+
+	id  goto 57
+	task_find_filter  goto 105
+	id_group  goto 54
+	assign_group  goto 29
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 72
+	content_group:  content_logic.    (67)
+
+	.  reduce 67 (src line 165)
+
+
+state 73
+	content_group:  content.    (68)
+	content_logic:  content.AND content 
+	content_logic:  content.OR content 
+	content_logic:  content.XOR content 
+
+	AND  shift 106
+	OR  shift 107
+	XOR  shift 108
+	.  reduce 68 (src line 167)
+
+
+state 74
+	content_logic:  NOT.content 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 109
+
+state 75
+	task_find_filter:  assign_group task_find_filter.    (49)
+
+	.  reduce 49 (src line 128)
+
+
+state 76
+	task_find_filter:  AGE COLON.time_find_filter task_find_filter 
+	time_single: .    (85)
+
+	IDENT  shift 113
+	.  reduce 85 (src line 208)
+
+	time_find_filter  goto 110
+	time_single  goto 111
+	time_range  goto 112
+
+state 77
+	task_find_filter:  DUE COLON.time_find_filter task_find_filter 
+	time_single: .    (85)
+
+	IDENT  shift 113
+	.  reduce 85 (src line 208)
+
+	time_find_filter  goto 114
+	time_single  goto 111
+	time_range  goto 112
+
+state 78
+	content:  IDENT content.    (81)
+
+	.  reduce 81 (src line 198)
+
+
+state 79
+	assign_group:  assign_tag assign_group.    (73)
+
+	.  reduce 73 (src line 177)
+
+
+state 80
+	assign_group:  unassign_tag assign_group.    (74)
+
+	.  reduce 74 (src line 179)
+
+
+state 81
+	assign_tag:  PLUS IDENT.    (78)
+
+	.  reduce 78 (src line 188)
+
+
+state 82
+	unassign_tag:  MINUS IDENT.    (79)
+
+	.  reduce 79 (src line 192)
+
+
+state 83
+	tag_help:  HELP TAG HELP.    (41)
+
+	.  reduce 41 (src line 109)
+
+
+ 84: reduce/reduce conflict  (red'ns 52 and 77) on $end
+84: shift/reduce conflict (shift 36(3), red'n 77(0)) on PLUS
+ 84: reduce/reduce conflict  (red'ns 52 and 77) on HELP
+84: shift/reduce conflict (shift 92(0), red'n 77(0)) on DUE
+84: shift/reduce conflict (shift 93(0), red'n 77(0)) on LOOP
+state 84
+	task_add:  TASK ADD content.task_add_filter 
+	task_add_filter: .    (52)
+	positive_assign_group: .    (77)
+
+	PLUS  shift 36
+	DUE  shift 92
+	LOOP  shift 93
+	.  reduce 52 (src line 133)
+
+	task_add_filter  goto 115
+	positive_assign_group  goto 91
+	assign_tag  goto 94
+
+state 85
+	task_done:  TASK DONE id_group.    (29)
+
+	.  reduce 29 (src line 87)
+
+
+state 86
+	task_delete:  TASK DELETE id_group.    (32)
+
+	.  reduce 32 (src line 93)
+
+
+state 87
+	task_set:  TASK SET id.content task_update_filter 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 116
+
+state 88
+	task_set:  TASK id SET.content task_update_filter 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 117
+
+ 89: reduce/reduce conflict  (red'ns 56 and 75) on $end
+89: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+89: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 89: reduce/reduce conflict  (red'ns 56 and 75) on HELP
+89: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
+89: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+state 89
+	task_set:  TASK id content.task_update_filter 
+	task_update_filter: .    (56)
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	DUE  shift 99
+	LOOP  shift 100
+	.  reduce 56 (src line 140)
+
+	task_update_filter  goto 118
+	assign_group  goto 98
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 90
+	task_add:  content ADD task_add_filter.    (28)
+
+	.  reduce 28 (src line 84)
+
+
+ 91: reduce/reduce conflict  (red'ns 52 and 77) on $end
+91: shift/reduce conflict (shift 36(3), red'n 77(0)) on PLUS
+ 91: reduce/reduce conflict  (red'ns 52 and 77) on HELP
+91: shift/reduce conflict (shift 92(0), red'n 77(0)) on DUE
+91: shift/reduce conflict (shift 93(0), red'n 77(0)) on LOOP
+state 91
+	task_add_filter:  positive_assign_group.task_add_filter 
+	task_add_filter: .    (52)
+	positive_assign_group: .    (77)
+
+	PLUS  shift 36
+	DUE  shift 92
+	LOOP  shift 93
+	.  reduce 52 (src line 133)
+
+	task_add_filter  goto 119
+	positive_assign_group  goto 91
+	assign_tag  goto 94
+
+state 92
+	task_add_filter:  DUE.COLON time_single 
+
+	COLON  shift 120
+	.  error
+
+
+state 93
+	task_add_filter:  LOOP.COLON loop_time 
+
+	COLON  shift 121
+	.  error
+
+
+94: shift/reduce conflict (shift 36(3), red'n 77(0)) on PLUS
+state 94
+	positive_assign_group:  assign_tag.positive_assign_group 
+	positive_assign_group: .    (77)
+
+	PLUS  shift 36
+	.  reduce 77 (src line 185)
+
+	positive_assign_group  goto 122
+	assign_tag  goto 94
+
+ 95: reduce/reduce conflict  (red'ns 56 and 75) on $end
+95: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+95: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 95: reduce/reduce conflict  (red'ns 56 and 75) on HELP
+95: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
+95: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+state 95
+	task_set:  SET id content.task_update_filter 
+	task_update_filter: .    (56)
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	DUE  shift 99
+	LOOP  shift 100
+	.  reduce 56 (src line 140)
+
+	task_update_filter  goto 123
+	assign_group  goto 98
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+ 96: reduce/reduce conflict  (red'ns 56 and 75) on $end
+96: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+96: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 96: reduce/reduce conflict  (red'ns 56 and 75) on HELP
+96: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
+96: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+state 96
+	task_set:  id SET content.task_update_filter 
+	task_update_filter: .    (56)
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	DUE  shift 99
+	LOOP  shift 100
+	.  reduce 56 (src line 140)
+
+	task_update_filter  goto 124
+	assign_group  goto 98
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 97
+	task_set:  id content task_update_filter.    (40)
+
+	.  reduce 40 (src line 105)
+
+
+ 98: reduce/reduce conflict  (red'ns 56 and 75) on $end
+98: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+98: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 98: reduce/reduce conflict  (red'ns 56 and 75) on HELP
+98: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
+98: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+state 98
+	task_update_filter:  assign_group.task_update_filter 
+	task_update_filter: .    (56)
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	DUE  shift 99
+	LOOP  shift 100
+	.  reduce 56 (src line 140)
+
+	task_update_filter  goto 125
+	assign_group  goto 98
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 99
+	task_update_filter:  DUE.COLON time_single 
+
+	COLON  shift 126
+	.  error
+
+
+state 100
+	task_update_filter:  LOOP.COLON loop_time 
+
+	COLON  shift 127
+	.  error
+
+
+state 101
+	id_group:  id MINUS id.    (64)
+
+	.  reduce 64 (src line 157)
+
+
+state 102
+	tag_set:  TAG SET id.content 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 128
+
+state 103
+	tag_find_filter:  id_group tag_find_filter.    (61)
+
+	.  reduce 61 (src line 150)
+
+
+state 104
+	tag_find_filter:  LIKE content_group.tag_find_filter 
+	tag_find_filter: .    (60)
+
+	NUM  shift 33
+	LIKE  shift 70
+	.  reduce 60 (src line 148)
+
+	id  goto 57
+	id_group  goto 69
+	tag_find_filter  goto 129
+
+state 105
+	task_find_filter:  LIKE content_group task_find_filter.    (48)
+
+	.  reduce 48 (src line 127)
+
+
+state 106
+	content_logic:  content AND.content 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 130
+
+state 107
+	content_logic:  content OR.content 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 131
+
+state 108
+	content_logic:  content XOR.content 
+	content: .    (80)
+
+	IDENT  shift 32
+	.  reduce 80 (src line 196)
+
+	content  goto 132
+
+state 109
+	content_logic:  NOT content.    (72)
+
+	.  reduce 72 (src line 174)
+
+
+ 110: reduce/reduce conflict  (red'ns 46 and 75) on $end
+110: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
+110: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+110: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 110: reduce/reduce conflict  (red'ns 46 and 75) on HELP
+110: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
+110: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
+110: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+state 110
+	task_find_filter:  AGE COLON time_find_filter.task_find_filter 
+	task_find_filter: .    (46)
+	assign_group: .    (75)
+
+	NUM  shift 33
+	PLUS  shift 36
+	MINUS  shift 37
+	AGE  shift 30
+	DUE  shift 31
+	LIKE  shift 28
+	.  reduce 46 (src line 124)
+
+	id  goto 57
+	task_find_filter  goto 133
+	id_group  goto 54
+	assign_group  goto 29
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+111: shift/reduce conflict (shift 134(3), red'n 82(0)) on MINUS
+state 111
+	time_find_filter:  time_single.    (82)
+	time_range:  time_single.MINUS time_single 
+
+	MINUS  shift 134
+	.  reduce 82 (src line 201)
+
+
+state 112
+	time_find_filter:  time_range.    (83)
+
+	.  reduce 83 (src line 203)
+
+
+state 113
+	time_single:  IDENT.    (84)
+
+	.  reduce 84 (src line 206)
+
+
+ 114: reduce/reduce conflict  (red'ns 46 and 75) on $end
+114: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
+114: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+114: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 114: reduce/reduce conflict  (red'ns 46 and 75) on HELP
+114: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
+114: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
+114: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+state 114
+	task_find_filter:  DUE COLON time_find_filter.task_find_filter 
+	task_find_filter: .    (46)
+	assign_group: .    (75)
+
+	NUM  shift 33
+	PLUS  shift 36
+	MINUS  shift 37
+	AGE  shift 30
+	DUE  shift 31
+	LIKE  shift 28
+	.  reduce 46 (src line 124)
+
+	id  goto 57
+	task_find_filter  goto 135
+	id_group  goto 54
+	assign_group  goto 29
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 115
+	task_add:  TASK ADD content task_add_filter.    (27)
+
+	.  reduce 27 (src line 82)
+
+
+ 116: reduce/reduce conflict  (red'ns 56 and 75) on $end
+116: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+116: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 116: reduce/reduce conflict  (red'ns 56 and 75) on HELP
+116: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
+116: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+state 116
+	task_set:  TASK SET id content.task_update_filter 
+	task_update_filter: .    (56)
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	DUE  shift 99
+	LOOP  shift 100
+	.  reduce 56 (src line 140)
+
+	task_update_filter  goto 136
+	assign_group  goto 98
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+ 117: reduce/reduce conflict  (red'ns 56 and 75) on $end
+117: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
+117: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
+ 117: reduce/reduce conflict  (red'ns 56 and 75) on HELP
+117: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
+117: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+state 117
+	task_set:  TASK id SET content.task_update_filter 
+	task_update_filter: .    (56)
+	assign_group: .    (75)
+
+	PLUS  shift 36
+	MINUS  shift 37
+	DUE  shift 99
+	LOOP  shift 100
+	.  reduce 56 (src line 140)
+
+	task_update_filter  goto 137
+	assign_group  goto 98
+	assign_tag  goto 34
+	unassign_tag  goto 35
+
+state 118
+	task_set:  TASK id content task_update_filter.    (39)
+
+	.  reduce 39 (src line 104)
+
+
+state 119
+	task_add_filter:  positive_assign_group task_add_filter.    (53)
+
+	.  reduce 53 (src line 135)
+
+
+state 120
+	task_add_filter:  DUE COLON.time_single 
+	time_single: .    (85)
+
+	IDENT  shift 113
+	.  reduce 85 (src line 208)
+
+	time_single  goto 138
+
+state 121
+	task_add_filter:  LOOP COLON.loop_time 
+
+	IDENT  shift 140
+	.  error
+
+	loop_time  goto 139
+
+state 122
+	positive_assign_group:  assign_tag positive_assign_group.    (76)
+
+	.  reduce 76 (src line 183)
+
+
+state 123
+	task_set:  SET id content task_update_filter.    (36)
+
+	.  reduce 36 (src line 101)
+
+
+state 124
+	task_set:  id SET content task_update_filter.    (38)
+
+	.  reduce 38 (src line 103)
+
+
+state 125
+	task_update_filter:  assign_group task_update_filter.    (57)
+
+	.  reduce 57 (src line 142)
+
+
+state 126
+	task_update_filter:  DUE COLON.time_single 
+	time_single: .    (85)
+
+	IDENT  shift 113
+	.  reduce 85 (src line 208)
+
+	time_single  goto 141
+
+state 127
+	task_update_filter:  LOOP COLON.loop_time 
+
+	IDENT  shift 140
+	.  error
+
+	loop_time  goto 142
+
+state 128
+	tag_set:  TAG SET id content.    (45)
+
+	.  reduce 45 (src line 119)
+
+
+state 129
+	tag_find_filter:  LIKE content_group tag_find_filter.    (62)
+
+	.  reduce 62 (src line 151)
+
+
+state 130
+	content_logic:  content AND content.    (69)
+
+	.  reduce 69 (src line 170)
+
+
+state 131
+	content_logic:  content OR content.    (70)
+
+	.  reduce 70 (src line 172)
+
+
+state 132
+	content_logic:  content XOR content.    (71)
+
+	.  reduce 71 (src line 173)
+
+
+state 133
+	task_find_filter:  AGE COLON time_find_filter task_find_filter.    (50)
+
+	.  reduce 50 (src line 129)
+
+
+state 134
+	time_range:  time_single MINUS.time_single 
+	time_single: .    (85)
+
+	IDENT  shift 113
+	.  reduce 85 (src line 208)
+
+	time_single  goto 143
+
+state 135
+	task_find_filter:  DUE COLON time_find_filter task_find_filter.    (51)
+
+	.  reduce 51 (src line 130)
+
+
+state 136
+	task_set:  TASK SET id content task_update_filter.    (35)
+
+	.  reduce 35 (src line 99)
+
+
+state 137
+	task_set:  TASK id SET content task_update_filter.    (37)
+
+	.  reduce 37 (src line 102)
+
+
+state 138
+	task_add_filter:  DUE COLON time_single.    (54)
+
+	.  reduce 54 (src line 136)
+
+
+state 139
+	task_add_filter:  LOOP COLON loop_time.    (55)
+
+	.  reduce 55 (src line 137)
+
+
+state 140
+	loop_time:  IDENT.    (87)
+
+	.  reduce 87 (src line 215)
+
+
+state 141
+	task_update_filter:  DUE COLON time_single.    (58)
+
+	.  reduce 58 (src line 143)
+
+
+state 142
+	task_update_filter:  LOOP COLON loop_time.    (59)
+
+	.  reduce 59 (src line 144)
+
+
+state 143
+	time_range:  time_single MINUS time_single.    (86)
+
+	.  reduce 86 (src line 211)
+
+
+29 terminals, 30 nonterminals
+88 grammar rules, 144/16000 states
+103 shift/reduce, 42 reduce/reduce conflicts reported
+79 working sets used
+memory: parser 159/240000
+8 extra closures
+179 shift entries, 4 exceptions
+97 goto entries
+67 entries saved by goto default
+Optimizer space used: output 208/240000
+208 table entries, 15 zero
+maximum spread: 29, maximum offset: 134

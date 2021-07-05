@@ -63,7 +63,7 @@ never [todo] add <content> [<FILTER_TODO_ADD>]
 never [todo] done|del <id>[-<id>] [<id>]
 
 # 修改任务
-never [todo] edit <id> [<content>] [<FILTER_TODO_UPDATE>]
+never [todo] [set] <id> [<content>] [<FILTER_TODO_UPDATE>]
     # FILTER_TODO_UPDATE
     +<tag>|-<tag> [+<tag>|-<tag>]   # 分配标签
     due:<due>                       # 设置截止时间
@@ -73,7 +73,10 @@ never [todo] edit <id> [<content>] [<FILTER_TODO_UPDATE>]
 never stat year|month|week|day # 默认为day
 
 # 查看所有标签、修改标签
-never tag
+never tag [<FILTER_TAG_FIND>]
+    # FILTER_TAG_FIND
+    <id>[-<id>] [<id>]                  # 通过ID直接定位
+    like <content> [and|or <content>]   # 通过内容模糊搜索
 never tag [set] <id> <content>
 
 ```
