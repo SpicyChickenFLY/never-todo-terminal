@@ -34,7 +34,10 @@ import (
 
 %%
 command:
-    HELP {fmt.Println("command")}
+      command_stmt EOF {}
+
+command_stmt:
+      HELP {fmt.Println("command")}
     | UI {fmt.Println("command")}
     | GUI {fmt.Println("command")}
     | EXPLAIN {fmt.Println("command")}

@@ -35,7 +35,7 @@ func (y *yylexer) getc() byte {
     if b, err := y.src.ReadByte(); err == nil {
         y.current = b
     }
-    fmt.Println("getc()->", string(y.current))
+    fmt.Println("getc()->", string(y.current), y.current)
     return y.current
 }
 
@@ -91,9 +91,10 @@ white		[ \t\n\r]+
 
 {digit} return NUM
 {identifier} return IDENT
-{white} return 0
+'\0' return EOF
 
 %%
+    fmt.Println("lex()->", string(y.current), y.current)
     y.empty = true
     return int(c)
 }
