@@ -2,7 +2,9 @@ package logic
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/SpicyChickenFLY/never-todo-cmd/constant"
 	"github.com/SpicyChickenFLY/never-todo-cmd/data"
 )
 
@@ -18,6 +20,10 @@ func init() {
 
 // ShowSummary like the total amount of todo/tag/schedule
 func ShowSummary() error {
+	// 展示logo，用法，当前待办数和标签数
+	fmt.Println(constant.ColorfulLogo)
+	fmt.Println(constant.Descirption)
+	fmt.Println(constant.Separator)
 	if err := db.Read(model); err != nil {
 		return err
 	}
@@ -55,10 +61,10 @@ func ShowTasks(params []string) error {
 			}
 		}
 	}
-	return db.Write(model)
+	return nil
 }
 
-func AddTasks(params []string) error {
+func AddTasks(assign_tags []data.Tag, dueTime time.Datetime, loop Loop) error {
 	if err := db.Read(model); err != nil {
 		return err
 	}
@@ -78,7 +84,13 @@ func DelTasks(params []string) error {
 	// delete task
 	return db.Write(model)
 }
-func SetTask() {}
+
+func SetTask() {
+	if err := db.Read(model); err != nil {
+		return err
+	}
+	return db.Write(model * data.Model)
+}
 
 func ShowTags() {}
 func AddTags()  {}

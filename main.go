@@ -1,9 +1,14 @@
 package main
 
 import (
-	"github.com/SpicyChickenFLY/never-todo-cmd/cmd"
+	"os"
+	"strings"
+
+	"github.com/SpicyChickenFLY/never-todo-cmd/parser"
 )
 
 func main() {
-	cmd.Execute()
+	// cmd.Execute()
+	args := strings.Join(os.Args, " ")
+	parser.Parse(args)
 }

@@ -7,17 +7,32 @@ import (
 	"testing"
 )
 
-type Command struct{}
+type testCase struct {
+	input      string
+	output     CommandTree
+	supposeErr error
+}
 
 func TestParser(t *testing.T) {
 	testcases := []string{
-		"help",
+		// help
+		"-h",
+		"todo add -h",
+		"todo add me -h",
+		"tag -h",
+		// task
 		"todo",
-		"todo add hi",
+		"look for me",
+		"todo add remeber to go shopping",
+		"add 'del: 1 + 1 & 2 '",
+		"todo done 1-4 20",
+		"del 20 2-5",
+		//
 		"tag 9",
+		// err
 	}
 	for _, tc := range testcases {
-		fmt.Println("testcase: ", tc)
+		fmt.Printf("testcase:%s\n", tc)
 		yyParse(newLexer(bufio.NewReader(strings.NewReader(tc))))
 		fmt.Println("")
 	}

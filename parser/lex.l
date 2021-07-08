@@ -54,12 +54,16 @@ func (y *yylexer) Lex(lval *yySymType) int {
 %yyc c
 %yyn c = y.getc()
 
-digit  [0-9]+
+digit  [+-]?[0-9]+
 letter        [_a-zA-Z]
 identifier    {letter}({letter}|{digit})*
 white		[ \t\n\r]+
-
 %%
+
+    y.buf = y.buf[:0]
+
+"'" return QUOTE
+"\"" return DQUOTE
 
 ":" return COLON
 "+" return PLUS
@@ -70,7 +74,7 @@ white		[ \t\n\r]+
 "!" return NOT
 "^" return XOR
 
-"help" return HELP
+"-h" return HELP
 "ui" return UI
 "gui" return GUI
 "explain" return EXPLAIN
@@ -89,12 +93,17 @@ white		[ \t\n\r]+
 "like" return LIKE
 "loop" return LOOP
 
-{digit} return NUM
-{identifier} return IDENT
-'\0' return EOF
+{digit}
+    fmt.Println("lex: num", y.buf)
+    lval.str = string(y.buf)
+    return NUM
+
+{identifier}
+    return IDENT
+
+{white} {}
 
 %%
-    fmt.Println("lex()->", string(y.current), y.current)
     y.empty = true
     return int(c)
 }

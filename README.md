@@ -44,10 +44,10 @@ never undo [<log_id>]
 never explain [<log_id>]
 
 # 查看、搜索待办任务
-never [todo] [<FILTER_TODO_FIND>]
-    # FILTER_TODO_FIND
+never todo [<FILTER_TODO_LIST>]
+    # FILTER_TODO_LIST
     <id>[-<id>] [<id>]                  # 通过ID直接定位
-    like <content> [and|or <content>]   # 通过内容模糊搜索
+    [like] <content> [and|or <content>]   # 通过内容模糊搜索
     +<tag>|-<tag> [+<tag>|-<tag>]       # 通过标签筛选
     age:<age>|[<age>]-[<age>]                   # 通过创建时间筛选
     due:<due>|[<due>]-[<due>]                   # 通过截止时间筛选
@@ -73,9 +73,9 @@ never [todo] [set] <id> [<content>] [<FILTER_TODO_UPDATE>]
 never stat year|month|week|day # 默认为day
 
 # 查看所有标签、修改标签
-never tag [<FILTER_TAG_FIND>]
-    # FILTER_TAG_FIND
-    <id>[-<id>] [<id>]                  # 通过ID直接定位
+never tag [<FILTER_TAG_LIST>]
+    # FILTER_TAG_LIST
+    <id>[~<id>] [<id>]                  # 通过ID直接定位
     like <content> [and|or <content>]   # 通过内容模糊搜索
 never tag [set] <id> <content>
 

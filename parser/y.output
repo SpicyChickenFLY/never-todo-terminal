@@ -1,59 +1,107 @@
 
-0: shift/reduce conflict (shift 2(0), red'n 46(0)) on HELP
- 0: reduce/reduce conflict  (red'ns 46 and 75) on $end
-0: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
-0: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-0: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
-0: shift/reduce conflict (shift 2(0), red'n 75(0)) on HELP
-0: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
-0: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
-0: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+ 0: reduce/reduce conflict  (red'ns 2 and 49) on $end
+0: shift/reduce conflict (shift 3(0), red'n 49(0)) on HELP
+ 0: reduce/reduce conflict  (red'ns 2 and 79) on $end
+0: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+0: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+0: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+0: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+0: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+0: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+0: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+0: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+0: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+0: shift/reduce conflict (shift 22(0), red'n 79(0)) on ADD
+0: shift/reduce conflict (shift 24(0), red'n 79(0)) on DELETE
+0: shift/reduce conflict (shift 26(0), red'n 79(0)) on SET
+0: shift/reduce conflict (shift 28(0), red'n 79(0)) on DONE
+0: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+0: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+0: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+0: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+0: shift/reduce conflict (shift 3(0), red'n 79(0)) on HELP
+0: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+0: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+ 0: reduce/reduce conflict  (red'ns 2 and 89) on $end
+0: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+0: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+0: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+0: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+0: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+0: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+0: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+0: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+0: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+0: shift/reduce conflict (shift 22(0), red'n 89(0)) on ADD
+0: shift/reduce conflict (shift 24(0), red'n 89(0)) on DELETE
+0: shift/reduce conflict (shift 26(0), red'n 89(0)) on SET
+0: shift/reduce conflict (shift 28(0), red'n 89(0)) on DONE
+0: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+0: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+0: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+0: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+0: shift/reduce conflict (shift 3(0), red'n 89(0)) on HELP
+0: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+0: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
 state 0
 	$accept: .command $end 
-	task_find_filter: .    (46)
-	content: .    (80)
-	assign_group: .    (75)
+	command_stmt: .    (2)
+	task_list_filter: .    (49)
+	assign_group: .    (79)
+	shard_content: .    (89)
 
-	NUM  shift 33
-	IDENT  shift 32
-	PLUS  shift 36
-	MINUS  shift 37
-	HELP  shift 2
-	UI  shift 3
-	GUI  shift 4
-	EXPLAIN  shift 5
-	LOG  shift 17
-	UNDO  shift 18
-	TASK  shift 19
-	TAG  shift 27
-	ADD  reduce 80 (src line 196)
-	DELETE  shift 22
-	SET  shift 24
-	DONE  shift 26
-	AGE  shift 30
-	DUE  shift 31
-	LIKE  shift 28
-	.  reduce 46 (src line 124)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	UI  shift 4
+	GUI  shift 5
+	EXPLAIN  shift 6
+	LOG  shift 18
+	UNDO  shift 19
+	TASK  shift 20
+	TAG  shift 29
+	ADD  shift 22
+	DELETE  shift 24
+	SET  shift 26
+	DONE  shift 28
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	HELP  shift 3
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 2 (src line 51)
 
 	command  goto 1
-	log_find  goto 6
-	undo_log  goto 7
-	task_help  goto 8
-	task_find  goto 9
-	task_add  goto 10
-	task_delete  goto 11
-	task_set  goto 12
-	task_done  goto 13
-	tag_help  goto 14
-	tag_find  goto 15
-	tag_set  goto 16
-	id  goto 25
-	task_find_filter  goto 20
-	content  goto 21
-	id_group  goto 23
-	assign_group  goto 29
-	assign_tag  goto 34
-	unassign_tag  goto 35
+	id  goto 27
+	id_group  goto 25
+	command_stmt  goto 2
+	log_list  goto 7
+	undo_log  goto 8
+	task_help  goto 9
+	task_list  goto 10
+	task_add  goto 11
+	task_delete  goto 12
+	task_set  goto 13
+	task_done  goto 14
+	tag_help  goto 15
+	tag_list  goto 16
+	tag_set  goto 17
+	task_list_filter  goto 21
+	content  goto 23
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 37
 
 state 1
 	$accept:  command.$end 
@@ -63,1403 +111,4592 @@ state 1
 
 
 state 2
-	command:  HELP.    (1)
-	tag_help:  HELP.TAG HELP 
+	command:  command_stmt.    (1)
 
-	TAG  shift 38
-	.  reduce 1 (src line 36)
+	.  reduce 1 (src line 48)
 
 
 state 3
-	command:  UI.    (2)
+	command_stmt:  HELP.    (3)
+	tag_help:  HELP.TAG HELP 
 
-	.  reduce 2 (src line 38)
+	TAG  shift 51
+	.  reduce 3 (src line 53)
 
 
 state 4
-	command:  GUI.    (3)
+	command_stmt:  UI.    (4)
 
-	.  reduce 3 (src line 39)
+	.  reduce 4 (src line 54)
 
 
 state 5
-	command:  EXPLAIN.    (4)
+	command_stmt:  GUI.    (5)
 
-	.  reduce 4 (src line 40)
+	.  reduce 5 (src line 55)
 
 
 state 6
-	command:  log_find.    (5)
+	command_stmt:  EXPLAIN.    (6)
 
-	.  reduce 5 (src line 42)
+	.  reduce 6 (src line 56)
 
 
 state 7
-	command:  undo_log.    (6)
+	command_stmt:  log_list.    (7)
 
-	.  reduce 6 (src line 43)
+	.  reduce 7 (src line 58)
 
 
 state 8
-	command:  task_help.    (7)
+	command_stmt:  undo_log.    (8)
 
-	.  reduce 7 (src line 45)
+	.  reduce 8 (src line 59)
 
 
 state 9
-	command:  task_find.    (8)
-	task_help:  task_find.HELP 
+	command_stmt:  task_help.    (9)
 
-	HELP  shift 39
-	.  reduce 8 (src line 46)
+	.  reduce 9 (src line 61)
 
 
 state 10
-	command:  task_add.    (9)
-	task_help:  task_add.HELP 
+	command_stmt:  task_list.    (10)
+	task_help:  task_list.HELP 
 
-	HELP  shift 40
-	.  reduce 9 (src line 47)
+	HELP  shift 52
+	.  reduce 10 (src line 62)
 
 
 state 11
-	command:  task_delete.    (10)
-	task_help:  task_delete.HELP 
+	command_stmt:  task_add.    (11)
+	task_help:  task_add.HELP 
 
-	HELP  shift 41
-	.  reduce 10 (src line 48)
+	HELP  shift 53
+	.  reduce 11 (src line 63)
 
 
 state 12
-	command:  task_set.    (11)
-	task_help:  task_set.HELP 
+	command_stmt:  task_delete.    (12)
+	task_help:  task_delete.HELP 
 
-	HELP  shift 42
-	.  reduce 11 (src line 49)
+	HELP  shift 54
+	.  reduce 12 (src line 64)
 
 
 state 13
-	command:  task_done.    (12)
+	command_stmt:  task_set.    (13)
+	task_help:  task_set.HELP 
 
-	.  reduce 12 (src line 50)
+	HELP  shift 55
+	.  reduce 13 (src line 65)
 
 
 state 14
-	command:  tag_help.    (13)
+	command_stmt:  task_done.    (14)
 
-	.  reduce 13 (src line 52)
+	.  reduce 14 (src line 66)
 
 
 state 15
-	command:  tag_find.    (14)
-	tag_help:  tag_find.HELP 
+	command_stmt:  tag_help.    (15)
 
-	HELP  shift 43
-	.  reduce 14 (src line 53)
+	.  reduce 15 (src line 68)
 
 
 state 16
-	command:  tag_set.    (15)
-	tag_help:  tag_set.HELP 
+	command_stmt:  tag_list.    (16)
+	tag_help:  tag_list.HELP 
 
-	HELP  shift 44
-	.  reduce 15 (src line 54)
+	HELP  shift 56
+	.  reduce 16 (src line 69)
 
 
 state 17
-	log_find:  LOG.    (16)
-	log_find:  LOG.NUM 
+	command_stmt:  tag_set.    (17)
+	tag_help:  tag_set.HELP 
 
-	NUM  shift 45
-	.  reduce 16 (src line 58)
+	HELP  shift 57
+	.  reduce 17 (src line 70)
 
 
 state 18
-	undo_log:  UNDO.    (18)
+	log_list:  LOG.    (18)
+	log_list:  LOG.NUM 
+
+	NUM  shift 58
+	.  reduce 18 (src line 74)
+
+
+state 19
+	undo_log:  UNDO.    (20)
 	undo_log:  UNDO.id 
 
-	NUM  shift 33
-	.  reduce 18 (src line 63)
+	NUM  shift 38
+	.  reduce 20 (src line 79)
 
-	id  goto 46
+	id  goto 59
 
-19: shift/reduce conflict (shift 47(0), red'n 46(0)) on HELP
- 19: reduce/reduce conflict  (red'ns 46 and 75) on $end
-19: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
-19: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-19: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
-19: shift/reduce conflict (shift 47(0), red'n 75(0)) on HELP
-19: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
-19: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
-19: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
-state 19
+20: shift/reduce conflict (shift 60(0), red'n 49(0)) on HELP
+ 20: reduce/reduce conflict  (red'ns 49 and 79) on $end
+20: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+20: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+20: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+20: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+20: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+20: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+20: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+20: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+20: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+20: shift/reduce conflict (shift 62(0), red'n 79(0)) on ADD
+20: shift/reduce conflict (shift 64(0), red'n 79(0)) on DELETE
+20: shift/reduce conflict (shift 65(0), red'n 79(0)) on SET
+20: shift/reduce conflict (shift 63(0), red'n 79(0)) on DONE
+20: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+20: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+20: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+20: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+20: shift/reduce conflict (shift 60(0), red'n 79(0)) on HELP
+20: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+20: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+ 20: reduce/reduce conflict  (red'ns 49 and 89) on $end
+20: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+20: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+20: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+20: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+20: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+20: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+20: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+20: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+20: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+20: shift/reduce conflict (shift 62(0), red'n 89(0)) on ADD
+20: shift/reduce conflict (shift 64(0), red'n 89(0)) on DELETE
+20: shift/reduce conflict (shift 65(0), red'n 89(0)) on SET
+20: shift/reduce conflict (shift 63(0), red'n 89(0)) on DONE
+20: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+20: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+20: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+20: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+20: shift/reduce conflict (shift 60(0), red'n 89(0)) on HELP
+20: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+20: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 20
 	task_help:  TASK.HELP 
-	task_find:  TASK.task_find_filter 
+	task_list:  TASK.task_list_filter 
 	task_add:  TASK.ADD content task_add_filter 
 	task_done:  TASK.DONE id_group 
 	task_delete:  TASK.DELETE id_group 
 	task_set:  TASK.SET id content task_update_filter 
 	task_set:  TASK.id SET content task_update_filter 
 	task_set:  TASK.id content task_update_filter 
-	task_find_filter: .    (46)
-	assign_group: .    (75)
+	task_list_filter: .    (49)
+	assign_group: .    (79)
+	shard_content: .    (89)
 
-	NUM  shift 33
-	PLUS  shift 36
-	MINUS  shift 37
-	HELP  shift 47
-	ADD  shift 49
-	DELETE  shift 51
-	SET  shift 52
-	DONE  shift 50
-	AGE  shift 30
-	DUE  shift 31
-	LIKE  shift 28
-	.  reduce 46 (src line 124)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 62
+	DELETE  shift 64
+	SET  shift 65
+	DONE  shift 63
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	HELP  shift 60
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 49 (src line 144)
 
-	id  goto 53
-	task_find_filter  goto 48
-	id_group  goto 54
-	assign_group  goto 29
-	assign_tag  goto 34
-	unassign_tag  goto 35
-
-state 20
-	task_find:  task_find_filter.    (26)
-
-	.  reduce 26 (src line 79)
-
+	id  goto 66
+	id_group  goto 67
+	task_list_filter  goto 61
+	content  goto 68
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 37
 
 state 21
-	task_add:  content.ADD task_add_filter 
+	task_list:  task_list_filter.    (28)
 
-	ADD  shift 55
-	.  error
+	.  reduce 28 (src line 95)
 
 
+22: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+22: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+22: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+22: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+22: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+22: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+22: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+22: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+22: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+22: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+22: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+22: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+22: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+22: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+22: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+22: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+22: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+22: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+22: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
 state 22
-	task_delete:  DELETE.id_group 
+	task_add:  ADD.content task_add_filter 
+	shard_content:  ADD.shard_content 
+	shard_content: .    (89)
 
-	NUM  shift 33
-	.  error
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
 
-	id  goto 57
-	id_group  goto 56
+	id  goto 82
+	id_group  goto 71
+	content  goto 69
+	shard_content  goto 70
 
- 23: reduce/reduce conflict  (red'ns 46 and 75) on $end
-23: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
-23: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-23: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 23: reduce/reduce conflict  (red'ns 46 and 75) on HELP
-23: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
-23: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
-23: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
+23: shift/reduce conflict (shift 84(1), red'n 72(0)) on AND
+23: shift/reduce conflict (shift 85(1), red'n 72(0)) on OR
+23: shift/reduce conflict (shift 86(2), red'n 72(0)) on XOR
+23: shift/reduce conflict (shift 83(0), red'n 72(0)) on ADD
 state 23
-	task_done:  id_group.DONE 
-	task_delete:  id_group.DELETE 
-	task_find_filter:  id_group.task_find_filter 
-	task_find_filter: .    (46)
-	assign_group: .    (75)
-
-	NUM  shift 33
-	PLUS  shift 36
-	MINUS  shift 37
-	DELETE  shift 59
-	DONE  shift 58
-	AGE  shift 30
-	DUE  shift 31
-	LIKE  shift 28
-	.  reduce 46 (src line 124)
-
-	id  goto 57
-	task_find_filter  goto 60
-	id_group  goto 54
-	assign_group  goto 29
-	assign_tag  goto 34
-	unassign_tag  goto 35
-
-state 24
-	task_set:  SET.id content task_update_filter 
-
-	NUM  shift 33
-	.  error
-
-	id  goto 61
-
-25: shift/reduce conflict (shift 33(0), red'n 65(0)) on NUM
-25: shift/reduce conflict (shift 65(3), red'n 65(0)) on MINUS
- 25: reduce/reduce conflict  (red'ns 65 and 80) on $end
- 25: reduce/reduce conflict  (red'ns 65 and 80) on PLUS
-25: shift/reduce conflict (shift 65(3), red'n 80(0)) on MINUS
- 25: reduce/reduce conflict  (red'ns 65 and 80) on HELP
- 25: reduce/reduce conflict  (red'ns 65 and 80) on DUE
-state 25
-	task_set:  id.SET content task_update_filter 
-	task_set:  id.content task_update_filter 
-	id_group:  id.id_group 
-	id_group:  id.MINUS id 
-	id_group:  id.    (65)
-	content: .    (80)
-
-	NUM  shift 33
-	IDENT  shift 32
-	MINUS  shift 65
-	SET  shift 62
-	LOOP  reduce 80 (src line 196)
-	.  reduce 65 (src line 158)
-
-	id  goto 57
-	content  goto 63
-	id_group  goto 64
-
-state 26
-	task_done:  DONE.id_group 
-
-	NUM  shift 33
-	.  error
-
-	id  goto 57
-	id_group  goto 66
-
-state 27
-	tag_find:  TAG.tag_find_filter 
-	tag_set:  TAG.SET id content 
-	tag_find_filter: .    (60)
-
-	NUM  shift 33
-	SET  shift 68
-	LIKE  shift 70
-	.  reduce 60 (src line 148)
-
-	id  goto 57
-	id_group  goto 69
-	tag_find_filter  goto 67
-
-state 28
-	task_find_filter:  LIKE.content_group task_find_filter 
-	content: .    (80)
-
-	IDENT  shift 32
-	NOT  shift 74
-	.  reduce 80 (src line 196)
-
-	content  goto 73
-	content_group  goto 71
-	content_logic  goto 72
-
- 29: reduce/reduce conflict  (red'ns 46 and 75) on $end
-29: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
-29: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-29: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 29: reduce/reduce conflict  (red'ns 46 and 75) on HELP
-29: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
-29: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
-29: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
-state 29
-	task_find_filter:  assign_group.task_find_filter 
-	task_find_filter: .    (46)
-	assign_group: .    (75)
-
-	NUM  shift 33
-	PLUS  shift 36
-	MINUS  shift 37
-	AGE  shift 30
-	DUE  shift 31
-	LIKE  shift 28
-	.  reduce 46 (src line 124)
-
-	id  goto 57
-	task_find_filter  goto 75
-	id_group  goto 54
-	assign_group  goto 29
-	assign_tag  goto 34
-	unassign_tag  goto 35
-
-state 30
-	task_find_filter:  AGE.COLON time_find_filter task_find_filter 
-
-	COLON  shift 76
-	.  error
-
-
-state 31
-	task_find_filter:  DUE.COLON time_find_filter task_find_filter 
-
-	COLON  shift 77
-	.  error
-
-
-state 32
-	content:  IDENT.content 
-	content: .    (80)
-
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
-
-	content  goto 78
-
-state 33
-	id:  NUM.    (66)
-
-	.  reduce 66 (src line 161)
-
-
-34: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-34: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
-state 34
-	assign_group:  assign_tag.assign_group 
-	assign_group: .    (75)
-
-	PLUS  shift 36
-	MINUS  shift 37
-	.  reduce 75 (src line 180)
-
-	assign_group  goto 79
-	assign_tag  goto 34
-	unassign_tag  goto 35
-
-35: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-35: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
-state 35
-	assign_group:  unassign_tag.assign_group 
-	assign_group: .    (75)
-
-	PLUS  shift 36
-	MINUS  shift 37
-	.  reduce 75 (src line 180)
-
-	assign_group  goto 80
-	assign_tag  goto 34
-	unassign_tag  goto 35
-
-state 36
-	assign_tag:  PLUS.IDENT 
-
-	IDENT  shift 81
-	.  error
-
-
-state 37
-	unassign_tag:  MINUS.IDENT 
-
-	IDENT  shift 82
-	.  error
-
-
-state 38
-	tag_help:  HELP TAG.HELP 
-
-	HELP  shift 83
-	.  error
-
-
-state 39
-	task_help:  task_find HELP.    (21)
-
-	.  reduce 21 (src line 71)
-
-
-state 40
-	task_help:  task_add HELP.    (22)
-
-	.  reduce 22 (src line 72)
-
-
-state 41
-	task_help:  task_delete HELP.    (23)
-
-	.  reduce 23 (src line 73)
-
-
-state 42
-	task_help:  task_set HELP.    (24)
-
-	.  reduce 24 (src line 74)
-
-
-state 43
-	tag_help:  tag_find HELP.    (42)
-
-	.  reduce 42 (src line 111)
-
-
-state 44
-	tag_help:  tag_set HELP.    (43)
-
-	.  reduce 43 (src line 112)
-
-
-state 45
-	log_find:  LOG NUM.    (17)
-
-	.  reduce 17 (src line 60)
-
-
-state 46
-	undo_log:  UNDO id.    (19)
-
-	.  reduce 19 (src line 65)
-
-
-state 47
-	task_help:  TASK HELP.    (20)
-
-	.  reduce 20 (src line 69)
-
-
-state 48
-	task_find:  TASK task_find_filter.    (25)
-
-	.  reduce 25 (src line 77)
-
-
-state 49
-	task_add:  TASK ADD.content task_add_filter 
-	content: .    (80)
-
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
-
-	content  goto 84
-
-state 50
-	task_done:  TASK DONE.id_group 
-
-	NUM  shift 33
-	.  error
-
-	id  goto 57
-	id_group  goto 85
-
-state 51
-	task_delete:  TASK DELETE.id_group 
-
-	NUM  shift 33
-	.  error
-
-	id  goto 57
-	id_group  goto 86
-
-state 52
-	task_set:  TASK SET.id content task_update_filter 
-
-	NUM  shift 33
-	.  error
-
-	id  goto 87
-
-53: shift/reduce conflict (shift 33(0), red'n 65(0)) on NUM
-53: shift/reduce conflict (shift 65(3), red'n 65(0)) on MINUS
- 53: reduce/reduce conflict  (red'ns 65 and 80) on $end
- 53: reduce/reduce conflict  (red'ns 65 and 80) on PLUS
-53: shift/reduce conflict (shift 65(3), red'n 80(0)) on MINUS
- 53: reduce/reduce conflict  (red'ns 65 and 80) on HELP
- 53: reduce/reduce conflict  (red'ns 65 and 80) on DUE
-state 53
-	task_set:  TASK id.SET content task_update_filter 
-	task_set:  TASK id.content task_update_filter 
-	id_group:  id.id_group 
-	id_group:  id.MINUS id 
-	id_group:  id.    (65)
-	content: .    (80)
-
-	NUM  shift 33
-	IDENT  shift 32
-	MINUS  shift 65
-	SET  shift 88
-	LOOP  reduce 80 (src line 196)
-	.  reduce 65 (src line 158)
-
-	id  goto 57
-	content  goto 89
-	id_group  goto 64
-
- 54: reduce/reduce conflict  (red'ns 46 and 75) on $end
-54: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
-54: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-54: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 54: reduce/reduce conflict  (red'ns 46 and 75) on HELP
-54: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
-54: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
-54: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
-state 54
-	task_find_filter:  id_group.task_find_filter 
-	task_find_filter: .    (46)
-	assign_group: .    (75)
-
-	NUM  shift 33
-	PLUS  shift 36
-	MINUS  shift 37
-	AGE  shift 30
-	DUE  shift 31
-	LIKE  shift 28
-	.  reduce 46 (src line 124)
-
-	id  goto 57
-	task_find_filter  goto 60
-	id_group  goto 54
-	assign_group  goto 29
-	assign_tag  goto 34
-	unassign_tag  goto 35
-
- 55: reduce/reduce conflict  (red'ns 52 and 77) on $end
-55: shift/reduce conflict (shift 36(3), red'n 77(0)) on PLUS
- 55: reduce/reduce conflict  (red'ns 52 and 77) on HELP
-55: shift/reduce conflict (shift 92(0), red'n 77(0)) on DUE
-55: shift/reduce conflict (shift 93(0), red'n 77(0)) on LOOP
-state 55
-	task_add:  content ADD.task_add_filter 
-	task_add_filter: .    (52)
-	positive_assign_group: .    (77)
-
-	PLUS  shift 36
-	DUE  shift 92
-	LOOP  shift 93
-	.  reduce 52 (src line 133)
-
-	task_add_filter  goto 90
-	positive_assign_group  goto 91
-	assign_tag  goto 94
-
-state 56
-	task_delete:  DELETE id_group.    (33)
-
-	.  reduce 33 (src line 95)
-
-
-57: shift/reduce conflict (shift 33(0), red'n 65(0)) on NUM
-57: shift/reduce conflict (shift 65(3), red'n 65(0)) on MINUS
-state 57
-	id_group:  id.id_group 
-	id_group:  id.MINUS id 
-	id_group:  id.    (65)
-
-	NUM  shift 33
-	MINUS  shift 65
-	.  reduce 65 (src line 158)
-
-	id  goto 57
-	id_group  goto 64
-
-state 58
-	task_done:  id_group DONE.    (31)
-
-	.  reduce 31 (src line 90)
-
-
-state 59
-	task_delete:  id_group DELETE.    (34)
-
-	.  reduce 34 (src line 96)
-
-
-state 60
-	task_find_filter:  id_group task_find_filter.    (47)
-
-	.  reduce 47 (src line 126)
-
-
-state 61
-	task_set:  SET id.content task_update_filter 
-	content: .    (80)
-
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
-
-	content  goto 95
-
-state 62
-	task_set:  id SET.content task_update_filter 
-	content: .    (80)
-
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
-
-	content  goto 96
-
- 63: reduce/reduce conflict  (red'ns 56 and 75) on $end
-63: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-63: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 63: reduce/reduce conflict  (red'ns 56 and 75) on HELP
-63: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
-63: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
-state 63
-	task_set:  id content.task_update_filter 
-	task_update_filter: .    (56)
-	assign_group: .    (75)
-
-	PLUS  shift 36
-	MINUS  shift 37
-	DUE  shift 99
-	LOOP  shift 100
-	.  reduce 56 (src line 140)
-
-	task_update_filter  goto 97
-	assign_group  goto 98
-	assign_tag  goto 34
-	unassign_tag  goto 35
-
-state 64
-	id_group:  id id_group.    (63)
-
-	.  reduce 63 (src line 155)
-
-
-state 65
-	id_group:  id MINUS.id 
-
-	NUM  shift 33
-	.  error
-
-	id  goto 101
-
-state 66
-	task_done:  DONE id_group.    (30)
-
-	.  reduce 30 (src line 89)
-
-
-state 67
-	tag_find:  TAG tag_find_filter.    (44)
-
-	.  reduce 44 (src line 115)
-
-
-state 68
-	tag_set:  TAG SET.id content 
-
-	NUM  shift 33
-	.  error
-
-	id  goto 102
-
-state 69
-	tag_find_filter:  id_group.tag_find_filter 
-	tag_find_filter: .    (60)
-
-	NUM  shift 33
-	LIKE  shift 70
-	.  reduce 60 (src line 148)
-
-	id  goto 57
-	id_group  goto 69
-	tag_find_filter  goto 103
-
-state 70
-	tag_find_filter:  LIKE.content_group tag_find_filter 
-	content: .    (80)
-
-	IDENT  shift 32
-	NOT  shift 74
-	.  reduce 80 (src line 196)
-
-	content  goto 73
-	content_group  goto 104
-	content_logic  goto 72
-
- 71: reduce/reduce conflict  (red'ns 46 and 75) on $end
-71: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
-71: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-71: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 71: reduce/reduce conflict  (red'ns 46 and 75) on HELP
-71: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
-71: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
-71: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
-state 71
-	task_find_filter:  LIKE content_group.task_find_filter 
-	task_find_filter: .    (46)
-	assign_group: .    (75)
-
-	NUM  shift 33
-	PLUS  shift 36
-	MINUS  shift 37
-	AGE  shift 30
-	DUE  shift 31
-	LIKE  shift 28
-	.  reduce 46 (src line 124)
-
-	id  goto 57
-	task_find_filter  goto 105
-	id_group  goto 54
-	assign_group  goto 29
-	assign_tag  goto 34
-	unassign_tag  goto 35
-
-state 72
-	content_group:  content_logic.    (67)
-
-	.  reduce 67 (src line 165)
-
-
-state 73
-	content_group:  content.    (68)
+	task_add:  content.ADD task_add_filter 
+	content_group:  content.    (72)
 	content_logic:  content.AND content 
 	content_logic:  content.OR content 
 	content_logic:  content.XOR content 
 
-	AND  shift 106
-	OR  shift 107
-	XOR  shift 108
-	.  reduce 68 (src line 167)
+	AND  shift 84
+	OR  shift 85
+	XOR  shift 86
+	ADD  shift 83
+	.  reduce 72 (src line 200)
 
 
-state 74
-	content_logic:  NOT.content 
-	content: .    (80)
+24: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+24: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+24: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+24: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+24: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+24: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+24: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+24: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+24: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+24: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+24: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+24: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+24: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+24: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+24: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+24: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+24: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 24
+	task_delete:  DELETE.id_group 
+	shard_content:  DELETE.shard_content 
+	shard_content: .    (89)
 
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
-	content  goto 109
+	id  goto 82
+	id_group  goto 87
+	shard_content  goto 88
 
-state 75
-	task_find_filter:  assign_group task_find_filter.    (49)
+ 25: reduce/reduce conflict  (red'ns 49 and 89) on $end
+25: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+25: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+25: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+25: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+25: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+25: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+25: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+25: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+25: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+25: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+25: shift/reduce conflict (shift 90(0), red'n 89(0)) on DELETE
+25: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+25: shift/reduce conflict (shift 89(0), red'n 89(0)) on DONE
+25: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+25: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+25: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+25: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 25: reduce/reduce conflict  (red'ns 49 and 89) on HELP
+25: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+25: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+ 25: reduce/reduce conflict  (red'ns 49 and 79) on $end
+25: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+25: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+25: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+25: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+25: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+25: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+25: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+25: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+25: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+25: shift/reduce conflict (shift 72(0), red'n 79(0)) on ADD
+25: shift/reduce conflict (shift 90(0), red'n 79(0)) on DELETE
+25: shift/reduce conflict (shift 74(0), red'n 79(0)) on SET
+25: shift/reduce conflict (shift 89(0), red'n 79(0)) on DONE
+25: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+25: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+25: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+25: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+ 25: reduce/reduce conflict  (red'ns 49 and 79) on HELP
+25: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+25: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+state 25
+	task_done:  id_group.DONE 
+	task_delete:  id_group.DELETE 
+	task_list_filter:  id_group.task_list_filter 
+	shard_content:  id_group.shard_content 
+	task_list_filter: .    (49)
+	shard_content: .    (89)
+	assign_group: .    (79)
 
-	.  reduce 49 (src line 128)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 90
+	SET  shift 74
+	DONE  shift 89
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 49 (src line 144)
 
+	id  goto 82
+	id_group  goto 67
+	task_list_filter  goto 91
+	content  goto 68
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 92
 
-state 76
-	task_find_filter:  AGE COLON.time_find_filter task_find_filter 
-	time_single: .    (85)
+26: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+26: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+26: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+26: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+26: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+26: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+26: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+26: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+26: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+26: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+26: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+26: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+26: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+26: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+26: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+26: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+26: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 26
+	task_set:  SET.id content task_update_filter 
+	shard_content:  SET.shard_content 
+	shard_content: .    (89)
 
-	IDENT  shift 113
-	.  reduce 85 (src line 208)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
-	time_find_filter  goto 110
-	time_single  goto 111
-	time_range  goto 112
+	id  goto 93
+	id_group  goto 71
+	shard_content  goto 94
 
-state 77
-	task_find_filter:  DUE COLON.time_find_filter task_find_filter 
-	time_single: .    (85)
+27: shift/reduce conflict (shift 38(0), red'n 69(0)) on NUM
+27: shift/reduce conflict (shift 42(0), red'n 69(0)) on IDENT
+27: shift/reduce conflict (shift 79(3), red'n 69(0)) on PLUS
+27: shift/reduce conflict (shift 98(3), red'n 69(0)) on MINUS
+27: shift/reduce conflict (shift 44(0), red'n 69(0)) on COLON
+27: shift/reduce conflict (shift 81(0), red'n 69(0)) on NOT
+27: shift/reduce conflict (shift 47(1), red'n 69(0)) on AND
+27: shift/reduce conflict (shift 48(1), red'n 69(0)) on OR
+27: shift/reduce conflict (shift 49(2), red'n 69(0)) on XOR
+27: shift/reduce conflict (shift 72(0), red'n 69(0)) on ADD
+27: shift/reduce conflict (shift 73(0), red'n 69(0)) on DELETE
+27: shift/reduce conflict (shift 95(0), red'n 69(0)) on SET
+27: shift/reduce conflict (shift 75(0), red'n 69(0)) on DONE
+27: shift/reduce conflict (shift 76(0), red'n 69(0)) on AGE
+27: shift/reduce conflict (shift 77(0), red'n 69(0)) on DUE
+27: shift/reduce conflict (shift 78(0), red'n 69(0)) on LIKE
+27: shift/reduce conflict (shift 43(0), red'n 69(0)) on LOOP
+27: shift/reduce conflict (shift 36(0), red'n 69(0)) on QUOTE
+27: shift/reduce conflict (shift 35(0), red'n 69(0)) on DQUOTE
+ 27: reduce/reduce conflict  (red'ns 69 and 89) on $end
+27: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+27: shift/reduce conflict (shift 98(3), red'n 89(0)) on MINUS
+27: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+27: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 27: reduce/reduce conflict  (red'ns 69 and 89) on HELP
+state 27
+	task_set:  id.SET content task_update_filter 
+	task_set:  id.content task_update_filter 
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id.    (69)
+	shard_content: .    (89)
 
-	IDENT  shift 113
-	.  reduce 85 (src line 208)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 98
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 95
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 69 (src line 185)
 
-	time_find_filter  goto 114
-	time_single  goto 111
-	time_range  goto 112
+	id  goto 82
+	id_group  goto 97
+	content  goto 96
+	shard_content  goto 37
 
-state 78
-	content:  IDENT content.    (81)
+28: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+28: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+28: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+28: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+28: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+28: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+28: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+28: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+28: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+28: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+28: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+28: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+28: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+28: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+28: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+28: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+28: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 28
+	task_done:  DONE.id_group 
+	shard_content:  DONE.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 81 (src line 198)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
+	id  goto 82
+	id_group  goto 99
+	shard_content  goto 100
 
-state 79
-	assign_group:  assign_tag assign_group.    (73)
+state 29
+	tag_list:  TAG.tag_list_filter 
+	tag_set:  TAG.SET id content 
+	tag_list_filter: .    (64)
 
-	.  reduce 73 (src line 177)
+	NUM  shift 38
+	SET  shift 102
+	LIKE  shift 104
+	.  reduce 64 (src line 169)
 
+	id  goto 82
+	id_group  goto 103
+	tag_list_filter  goto 101
 
-state 80
-	assign_group:  unassign_tag assign_group.    (74)
+30: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+30: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+30: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+30: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+30: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+30: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+30: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+30: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+30: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+30: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+30: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+30: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+30: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+30: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+30: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+30: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+30: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+30: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+30: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 30
+	task_list_filter:  LIKE.content_group task_list_filter 
+	shard_content:  LIKE.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 74 (src line 179)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
 
+	id  goto 82
+	id_group  goto 71
+	content  goto 68
+	content_group  goto 105
+	content_logic  goto 39
+	shard_content  goto 106
 
-state 81
-	assign_tag:  PLUS IDENT.    (78)
+ 31: reduce/reduce conflict  (red'ns 49 and 79) on $end
+31: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+31: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+31: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+31: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+31: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+31: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+31: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+31: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+31: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+31: shift/reduce conflict (shift 72(0), red'n 79(0)) on ADD
+31: shift/reduce conflict (shift 73(0), red'n 79(0)) on DELETE
+31: shift/reduce conflict (shift 74(0), red'n 79(0)) on SET
+31: shift/reduce conflict (shift 75(0), red'n 79(0)) on DONE
+31: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+31: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+31: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+31: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+ 31: reduce/reduce conflict  (red'ns 49 and 79) on HELP
+31: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+31: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+ 31: reduce/reduce conflict  (red'ns 49 and 89) on $end
+31: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+31: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+31: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+31: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+31: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+31: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+31: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+31: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+31: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+31: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+31: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+31: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+31: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+31: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+31: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+31: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+31: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 31: reduce/reduce conflict  (red'ns 49 and 89) on HELP
+31: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+31: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 31
+	task_list_filter:  content_group.task_list_filter 
+	task_list_filter: .    (49)
+	assign_group: .    (79)
+	shard_content: .    (89)
 
-	.  reduce 78 (src line 188)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 49 (src line 144)
 
+	id  goto 82
+	id_group  goto 67
+	task_list_filter  goto 107
+	content  goto 68
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 37
 
-state 82
-	unassign_tag:  MINUS IDENT.    (79)
+ 32: reduce/reduce conflict  (red'ns 49 and 79) on $end
+32: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+32: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+32: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+32: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+32: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+32: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+32: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+32: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+32: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+32: shift/reduce conflict (shift 72(0), red'n 79(0)) on ADD
+32: shift/reduce conflict (shift 73(0), red'n 79(0)) on DELETE
+32: shift/reduce conflict (shift 74(0), red'n 79(0)) on SET
+32: shift/reduce conflict (shift 75(0), red'n 79(0)) on DONE
+32: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+32: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+32: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+32: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+ 32: reduce/reduce conflict  (red'ns 49 and 79) on HELP
+32: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+32: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+ 32: reduce/reduce conflict  (red'ns 49 and 89) on $end
+32: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+32: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+32: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+32: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+32: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+32: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+32: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+32: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+32: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+32: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+32: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+32: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+32: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+32: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+32: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+32: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+32: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 32: reduce/reduce conflict  (red'ns 49 and 89) on HELP
+32: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+32: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 32
+	task_list_filter:  assign_group.task_list_filter 
+	task_list_filter: .    (49)
+	assign_group: .    (79)
+	shard_content: .    (89)
 
-	.  reduce 79 (src line 192)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 49 (src line 144)
 
+	id  goto 82
+	id_group  goto 67
+	task_list_filter  goto 108
+	content  goto 68
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 37
 
-state 83
-	tag_help:  HELP TAG HELP.    (41)
+33: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+33: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+33: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+33: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+33: shift/reduce conflict (shift 109(0), red'n 89(0)) on COLON
+33: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+33: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+33: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+33: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+33: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+33: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+33: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+33: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+33: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+33: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+33: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+33: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 33
+	task_list_filter:  AGE.COLON time_list_filter task_list_filter 
+	shard_content:  AGE.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 41 (src line 109)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 109
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 110
 
- 84: reduce/reduce conflict  (red'ns 52 and 77) on $end
-84: shift/reduce conflict (shift 36(3), red'n 77(0)) on PLUS
- 84: reduce/reduce conflict  (red'ns 52 and 77) on HELP
-84: shift/reduce conflict (shift 92(0), red'n 77(0)) on DUE
-84: shift/reduce conflict (shift 93(0), red'n 77(0)) on LOOP
-state 84
-	task_add:  TASK ADD content.task_add_filter 
-	task_add_filter: .    (52)
-	positive_assign_group: .    (77)
+34: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+34: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+34: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+34: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+34: shift/reduce conflict (shift 111(0), red'n 89(0)) on COLON
+34: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+34: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+34: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+34: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+34: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+34: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+34: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+34: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+34: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+34: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+34: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+34: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 34
+	task_list_filter:  DUE.COLON time_list_filter task_list_filter 
+	shard_content:  DUE.shard_content 
+	shard_content: .    (89)
 
-	PLUS  shift 36
-	DUE  shift 92
-	LOOP  shift 93
-	.  reduce 52 (src line 133)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 111
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
-	task_add_filter  goto 115
-	positive_assign_group  goto 91
-	assign_tag  goto 94
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 112
 
-state 85
-	task_done:  TASK DONE id_group.    (29)
+35: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 35
+	content:  DQUOTE.shard_content DQUOTE 
+	content:  DQUOTE.content DQUOTE 
+	shard_content: .    (89)
 
-	.  reduce 29 (src line 87)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  error
 
+	id  goto 82
+	id_group  goto 71
+	content  goto 114
+	shard_content  goto 113
 
-state 86
-	task_delete:  TASK DELETE id_group.    (32)
+36: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+state 36
+	content:  QUOTE.shard_content QUOTE 
+	content:  QUOTE.content QUOTE 
+	shard_content: .    (89)
 
-	.  reduce 32 (src line 93)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  error
 
-
-state 87
-	task_set:  TASK SET id.content task_update_filter 
-	content: .    (80)
-
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
-
+	id  goto 82
+	id_group  goto 71
 	content  goto 116
+	shard_content  goto 115
+
+state 37
+	content:  shard_content.    (88)
+
+	.  reduce 88 (src line 234)
+
+
+state 38
+	id:  NUM.    (70)
+
+	.  reduce 70 (src line 191)
+
+
+state 39
+	content_group:  content_logic.    (71)
+
+	.  reduce 71 (src line 198)
+
+
+40: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+40: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+state 40
+	assign_group:  assign_tag.assign_group 
+	assign_group: .    (79)
+
+	PLUS  shift 118
+	MINUS  shift 119
+	.  reduce 79 (src line 213)
+
+	assign_group  goto 117
+	assign_tag  goto 40
+	unassign_tag  goto 41
+
+41: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+41: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+state 41
+	assign_group:  unassign_tag.assign_group 
+	assign_group: .    (79)
+
+	PLUS  shift 118
+	MINUS  shift 119
+	.  reduce 79 (src line 213)
+
+	assign_group  goto 120
+	assign_tag  goto 40
+	unassign_tag  goto 41
+
+42: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+42: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+42: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+42: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+42: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+42: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+42: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+42: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+42: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+42: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+42: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+42: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+42: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+42: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+42: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+42: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+42: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 42
+	shard_content:  IDENT.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 121
+
+43: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+43: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+43: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+43: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+43: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+43: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+43: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+43: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+43: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+43: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+43: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+43: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+43: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+43: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+43: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+43: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+43: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 43
+	shard_content:  LOOP.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 122
+
+44: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+44: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+44: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+44: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+44: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+44: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+44: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+44: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+44: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+44: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+44: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+44: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+44: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+44: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+44: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+44: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+44: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 44
+	shard_content:  COLON.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 123
+
+45: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+45: shift/reduce conflict (shift 124(0), red'n 89(0)) on IDENT
+45: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+45: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+45: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+45: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+45: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+45: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+45: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+45: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+45: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+45: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+45: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+45: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+45: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+45: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+45: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 45
+	assign_tag:  PLUS.IDENT 
+	shard_content:  PLUS.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 124
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 125
+
+46: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+46: shift/reduce conflict (shift 126(0), red'n 89(0)) on IDENT
+46: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+46: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+46: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+46: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+46: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+46: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+46: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+46: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+46: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+46: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+46: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+46: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+46: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+46: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+46: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 46
+	unassign_tag:  MINUS.IDENT 
+	shard_content:  MINUS.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 126
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 127
+
+47: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+47: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+47: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+47: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+47: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+47: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+47: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+47: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+47: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+47: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+47: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+47: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+47: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+47: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+47: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+47: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+47: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 47
+	shard_content:  AND.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 128
+
+48: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+48: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+48: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+48: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+48: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+48: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+48: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+48: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+48: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+48: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+48: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+48: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+48: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+48: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+48: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+48: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+48: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 48
+	shard_content:  OR.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 129
+
+49: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+49: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+49: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+49: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+49: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+49: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+49: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+49: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+49: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+49: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+49: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+49: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+49: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+49: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+49: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+49: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+49: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 49
+	shard_content:  XOR.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 130
+
+50: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+50: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+50: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+50: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+50: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+50: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+50: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+50: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+50: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+50: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+50: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+50: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+50: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+50: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+50: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+50: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+50: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+50: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+50: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 50
+	content_logic:  NOT.content 
+	shard_content:  NOT.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	content  goto 131
+	shard_content  goto 132
+
+state 51
+	tag_help:  HELP TAG.HELP 
+
+	HELP  shift 133
+	.  error
+
+
+state 52
+	task_help:  task_list HELP.    (23)
+
+	.  reduce 23 (src line 87)
+
+
+state 53
+	task_help:  task_add HELP.    (24)
+
+	.  reduce 24 (src line 88)
+
+
+state 54
+	task_help:  task_delete HELP.    (25)
+
+	.  reduce 25 (src line 89)
+
+
+state 55
+	task_help:  task_set HELP.    (26)
+
+	.  reduce 26 (src line 90)
+
+
+state 56
+	tag_help:  tag_list HELP.    (45)
+
+	.  reduce 45 (src line 129)
+
+
+state 57
+	tag_help:  tag_set HELP.    (46)
+
+	.  reduce 46 (src line 130)
+
+
+state 58
+	log_list:  LOG NUM.    (19)
+
+	.  reduce 19 (src line 76)
+
+
+state 59
+	undo_log:  UNDO id.    (21)
+
+	.  reduce 21 (src line 81)
+
+
+state 60
+	task_help:  TASK HELP.    (22)
+
+	.  reduce 22 (src line 85)
+
+
+state 61
+	task_list:  TASK task_list_filter.    (27)
+
+	.  reduce 27 (src line 93)
+
+
+62: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+62: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+62: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+62: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+62: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+62: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+62: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+62: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+62: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+62: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+62: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+62: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+62: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+62: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+62: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+62: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+62: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+62: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+62: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 62
+	task_add:  TASK ADD.content task_add_filter 
+	shard_content:  ADD.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	content  goto 134
+	shard_content  goto 70
+
+63: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+63: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+63: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+63: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+63: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+63: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+63: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+63: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+63: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+63: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+63: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+63: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+63: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+63: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+63: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+63: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+63: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 63
+	task_done:  TASK DONE.id_group 
+	shard_content:  DONE.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 135
+	shard_content  goto 100
+
+64: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+64: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+64: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+64: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+64: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+64: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+64: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+64: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+64: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+64: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+64: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+64: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+64: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+64: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+64: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+64: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+64: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 64
+	task_delete:  TASK DELETE.id_group 
+	shard_content:  DELETE.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 136
+	shard_content  goto 88
+
+65: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+65: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+65: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+65: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+65: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+65: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+65: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+65: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+65: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+65: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+65: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+65: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+65: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+65: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+65: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+65: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+65: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 65
+	task_set:  TASK SET.id content task_update_filter 
+	shard_content:  SET.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 137
+	id_group  goto 71
+	shard_content  goto 94
+
+66: shift/reduce conflict (shift 38(0), red'n 69(0)) on NUM
+66: shift/reduce conflict (shift 42(0), red'n 69(0)) on IDENT
+66: shift/reduce conflict (shift 79(3), red'n 69(0)) on PLUS
+66: shift/reduce conflict (shift 98(3), red'n 69(0)) on MINUS
+66: shift/reduce conflict (shift 44(0), red'n 69(0)) on COLON
+66: shift/reduce conflict (shift 81(0), red'n 69(0)) on NOT
+66: shift/reduce conflict (shift 47(1), red'n 69(0)) on AND
+66: shift/reduce conflict (shift 48(1), red'n 69(0)) on OR
+66: shift/reduce conflict (shift 49(2), red'n 69(0)) on XOR
+66: shift/reduce conflict (shift 72(0), red'n 69(0)) on ADD
+66: shift/reduce conflict (shift 73(0), red'n 69(0)) on DELETE
+66: shift/reduce conflict (shift 138(0), red'n 69(0)) on SET
+66: shift/reduce conflict (shift 75(0), red'n 69(0)) on DONE
+66: shift/reduce conflict (shift 76(0), red'n 69(0)) on AGE
+66: shift/reduce conflict (shift 77(0), red'n 69(0)) on DUE
+66: shift/reduce conflict (shift 78(0), red'n 69(0)) on LIKE
+66: shift/reduce conflict (shift 43(0), red'n 69(0)) on LOOP
+66: shift/reduce conflict (shift 36(0), red'n 69(0)) on QUOTE
+66: shift/reduce conflict (shift 35(0), red'n 69(0)) on DQUOTE
+ 66: reduce/reduce conflict  (red'ns 69 and 89) on $end
+66: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+66: shift/reduce conflict (shift 98(3), red'n 89(0)) on MINUS
+66: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+66: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 66: reduce/reduce conflict  (red'ns 69 and 89) on HELP
+state 66
+	task_set:  TASK id.SET content task_update_filter 
+	task_set:  TASK id.content task_update_filter 
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id.    (69)
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 98
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 138
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 69 (src line 185)
+
+	id  goto 82
+	id_group  goto 97
+	content  goto 139
+	shard_content  goto 37
+
+ 67: reduce/reduce conflict  (red'ns 49 and 89) on $end
+67: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+67: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+67: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+67: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+67: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+67: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+67: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+67: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+67: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+67: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+67: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+67: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+67: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+67: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+67: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+67: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+67: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 67: reduce/reduce conflict  (red'ns 49 and 89) on HELP
+67: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+67: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+ 67: reduce/reduce conflict  (red'ns 49 and 79) on $end
+67: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+67: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+67: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+67: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+67: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+67: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+67: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+67: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+67: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+67: shift/reduce conflict (shift 72(0), red'n 79(0)) on ADD
+67: shift/reduce conflict (shift 73(0), red'n 79(0)) on DELETE
+67: shift/reduce conflict (shift 74(0), red'n 79(0)) on SET
+67: shift/reduce conflict (shift 75(0), red'n 79(0)) on DONE
+67: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+67: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+67: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+67: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+ 67: reduce/reduce conflict  (red'ns 49 and 79) on HELP
+67: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+67: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+state 67
+	task_list_filter:  id_group.task_list_filter 
+	shard_content:  id_group.shard_content 
+	task_list_filter: .    (49)
+	shard_content: .    (89)
+	assign_group: .    (79)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 49 (src line 144)
+
+	id  goto 82
+	id_group  goto 67
+	task_list_filter  goto 91
+	content  goto 68
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 92
+
+68: shift/reduce conflict (shift 84(1), red'n 72(0)) on AND
+68: shift/reduce conflict (shift 85(1), red'n 72(0)) on OR
+68: shift/reduce conflict (shift 86(2), red'n 72(0)) on XOR
+state 68
+	content_group:  content.    (72)
+	content_logic:  content.AND content 
+	content_logic:  content.OR content 
+	content_logic:  content.XOR content 
+
+	AND  shift 84
+	OR  shift 85
+	XOR  shift 86
+	.  reduce 72 (src line 200)
+
+
+ 69: reduce/reduce conflict  (red'ns 56 and 81) on $end
+69: shift/reduce conflict (shift 118(3), red'n 81(0)) on PLUS
+69: shift/reduce conflict (shift 142(0), red'n 81(0)) on DUE
+69: shift/reduce conflict (shift 143(0), red'n 81(0)) on LOOP
+ 69: reduce/reduce conflict  (red'ns 56 and 81) on HELP
+state 69
+	task_add:  ADD content.task_add_filter 
+	task_add_filter: .    (56)
+	positive_assign_group: .    (81)
+
+	PLUS  shift 118
+	DUE  shift 142
+	LOOP  shift 143
+	.  reduce 56 (src line 154)
+
+	task_add_filter  goto 140
+	positive_assign_group  goto 141
+	assign_tag  goto 144
+
+ 70: reduce/reduce conflict  (red'ns 88 and 92) on $end
+ 70: reduce/reduce conflict  (red'ns 88 and 92) on PLUS
+ 70: reduce/reduce conflict  (red'ns 88 and 92) on DUE
+ 70: reduce/reduce conflict  (red'ns 88 and 92) on LOOP
+ 70: reduce/reduce conflict  (red'ns 88 and 92) on HELP
+state 70
+	content:  shard_content.    (88)
+	shard_content:  ADD shard_content.    (92)
+
+	$end  reduce 88 (src line 234)
+	PLUS  reduce 88 (src line 234)
+	DUE  reduce 88 (src line 234)
+	LOOP  reduce 88 (src line 234)
+	HELP  reduce 88 (src line 234)
+	.  reduce 92 (src line 241)
+
+
+71: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+71: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+71: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+71: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+71: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+71: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+71: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+71: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+71: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+71: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+71: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+71: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+71: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+71: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+71: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+71: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+71: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 71
+	shard_content:  id_group.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 145
+
+72: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+72: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+72: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+72: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+72: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+72: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+72: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+72: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+72: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+72: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+72: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+72: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+72: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+72: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+72: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+72: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+72: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 72
+	shard_content:  ADD.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 146
+
+73: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+73: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+73: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+73: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+73: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+73: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+73: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+73: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+73: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+73: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+73: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+73: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+73: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+73: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+73: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+73: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+73: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 73
+	shard_content:  DELETE.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 88
+
+74: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+74: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+74: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+74: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+74: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+74: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+74: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+74: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+74: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+74: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+74: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+74: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+74: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+74: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+74: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+74: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+74: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 74
+	shard_content:  SET.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 94
+
+75: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+75: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+75: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+75: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+75: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+75: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+75: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+75: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+75: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+75: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+75: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+75: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+75: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+75: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+75: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+75: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+75: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 75
+	shard_content:  DONE.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 100
+
+76: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+76: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+76: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+76: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+76: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+76: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+76: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+76: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+76: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+76: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+76: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+76: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+76: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+76: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+76: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+76: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+76: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 76
+	shard_content:  AGE.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 110
+
+77: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+77: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+77: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+77: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+77: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+77: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+77: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+77: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+77: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+77: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+77: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+77: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+77: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+77: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+77: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+77: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+77: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 77
+	shard_content:  DUE.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 112
+
+78: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+78: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+78: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+78: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+78: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+78: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+78: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+78: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+78: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+78: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+78: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+78: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+78: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+78: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+78: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+78: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+78: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 78
+	shard_content:  LIKE.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 147
+
+79: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+79: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+79: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+79: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+79: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+79: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+79: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+79: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+79: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+79: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+79: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+79: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+79: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+79: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+79: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+79: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+79: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 79
+	shard_content:  PLUS.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 125
+
+80: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+80: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+80: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+80: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+80: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+80: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+80: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+80: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+80: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+80: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+80: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+80: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+80: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+80: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+80: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+80: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+80: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 80
+	shard_content:  MINUS.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 127
+
+81: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+81: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+81: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+81: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+81: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+81: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+81: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+81: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+81: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+81: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+81: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+81: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+81: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+81: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+81: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+81: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+81: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+state 81
+	shard_content:  NOT.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 148
+
+82: shift/reduce conflict (shift 38(0), red'n 69(0)) on NUM
+82: shift/reduce conflict (shift 150(3), red'n 69(0)) on MINUS
+state 82
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id.    (69)
+
+	NUM  shift 38
+	MINUS  shift 150
+	.  reduce 69 (src line 185)
+
+	id  goto 82
+	id_group  goto 149
+
+ 83: reduce/reduce conflict  (red'ns 56 and 81) on $end
+83: shift/reduce conflict (shift 118(3), red'n 81(0)) on PLUS
+83: shift/reduce conflict (shift 142(0), red'n 81(0)) on DUE
+83: shift/reduce conflict (shift 143(0), red'n 81(0)) on LOOP
+ 83: reduce/reduce conflict  (red'ns 56 and 81) on HELP
+state 83
+	task_add:  content ADD.task_add_filter 
+	task_add_filter: .    (56)
+	positive_assign_group: .    (81)
+
+	PLUS  shift 118
+	DUE  shift 142
+	LOOP  shift 143
+	.  reduce 56 (src line 154)
+
+	task_add_filter  goto 151
+	positive_assign_group  goto 141
+	assign_tag  goto 144
+
+84: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+84: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+84: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+84: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+84: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+84: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+84: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+84: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+84: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+84: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+84: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+84: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+84: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+84: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+84: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+84: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+84: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+84: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+84: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 84
+	content_logic:  content AND.content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	content  goto 152
+	shard_content  goto 37
+
+85: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+85: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+85: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+85: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+85: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+85: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+85: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+85: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+85: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+85: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+85: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+85: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+85: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+85: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+85: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+85: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+85: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+85: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+85: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 85
+	content_logic:  content OR.content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	content  goto 153
+	shard_content  goto 37
+
+86: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+86: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+86: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+86: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+86: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+86: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+86: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+86: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+86: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+86: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+86: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+86: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+86: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+86: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+86: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+86: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+86: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+86: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+86: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 86
+	content_logic:  content XOR.content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	content  goto 154
+	shard_content  goto 37
+
+ 87: reduce/reduce conflict  (red'ns 36 and 89) on $end
+87: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+87: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+87: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+87: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+87: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+87: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+87: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+87: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+87: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+87: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+87: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+87: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+87: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+87: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+87: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+87: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+87: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 87: reduce/reduce conflict  (red'ns 36 and 89) on HELP
+state 87
+	task_delete:  DELETE id_group.    (36)
+	shard_content:  id_group.shard_content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  reduce 89 (src line 237)
+	DQUOTE  reduce 89 (src line 237)
+	.  reduce 36 (src line 112)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 145
 
 state 88
-	task_set:  TASK id SET.content task_update_filter 
-	content: .    (80)
+	shard_content:  DELETE shard_content.    (93)
 
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
+	.  reduce 93 (src line 242)
 
-	content  goto 117
 
- 89: reduce/reduce conflict  (red'ns 56 and 75) on $end
-89: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-89: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 89: reduce/reduce conflict  (red'ns 56 and 75) on HELP
-89: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
-89: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+ 89: reduce/reduce conflict  (red'ns 34 and 89) on $end
+89: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+89: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+89: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+89: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+89: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+89: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+89: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+89: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+89: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+89: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+89: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+89: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+89: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+89: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+89: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+89: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+89: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
 state 89
-	task_set:  TASK id content.task_update_filter 
-	task_update_filter: .    (56)
-	assign_group: .    (75)
+	task_done:  id_group DONE.    (34)
+	shard_content:  DONE.shard_content 
+	shard_content: .    (89)
 
-	PLUS  shift 36
-	MINUS  shift 37
-	DUE  shift 99
-	LOOP  shift 100
-	.  reduce 56 (src line 140)
+	$end  reduce 34 (src line 107)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
-	task_update_filter  goto 118
-	assign_group  goto 98
-	assign_tag  goto 34
-	unassign_tag  goto 35
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 100
 
+ 90: reduce/reduce conflict  (red'ns 37 and 89) on $end
+90: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+90: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+90: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+90: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+90: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+90: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+90: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+90: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+90: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+90: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+90: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+90: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+90: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+90: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+90: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+90: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+90: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 90: reduce/reduce conflict  (red'ns 37 and 89) on HELP
 state 90
-	task_add:  content ADD task_add_filter.    (28)
+	task_delete:  id_group DELETE.    (37)
+	shard_content:  DELETE.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 28 (src line 84)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  reduce 89 (src line 237)
+	DQUOTE  reduce 89 (src line 237)
+	.  reduce 37 (src line 113)
 
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 88
 
- 91: reduce/reduce conflict  (red'ns 52 and 77) on $end
-91: shift/reduce conflict (shift 36(3), red'n 77(0)) on PLUS
- 91: reduce/reduce conflict  (red'ns 52 and 77) on HELP
-91: shift/reduce conflict (shift 92(0), red'n 77(0)) on DUE
-91: shift/reduce conflict (shift 93(0), red'n 77(0)) on LOOP
 state 91
-	task_add_filter:  positive_assign_group.task_add_filter 
-	task_add_filter: .    (52)
-	positive_assign_group: .    (77)
+	task_list_filter:  id_group task_list_filter.    (50)
 
-	PLUS  shift 36
-	DUE  shift 92
-	LOOP  shift 93
-	.  reduce 52 (src line 133)
+	.  reduce 50 (src line 146)
 
-	task_add_filter  goto 119
-	positive_assign_group  goto 91
-	assign_tag  goto 94
 
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on $end
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on NUM
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on IDENT
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on PLUS
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on MINUS
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on COLON
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on NOT
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on AND
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on OR
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on XOR
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on ADD
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on DELETE
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on SET
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on DONE
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on AGE
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on DUE
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on LIKE
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on LOOP
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on HELP
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on QUOTE
+ 92: reduce/reduce conflict  (red'ns 88 and 91) on DQUOTE
 state 92
-	task_add_filter:  DUE.COLON time_single 
+	content:  shard_content.    (88)
+	shard_content:  id_group shard_content.    (91)
 
-	COLON  shift 120
-	.  error
+	.  reduce 88 (src line 234)
 
 
+93: shift/reduce conflict (shift 38(0), red'n 69(0)) on NUM
+93: shift/reduce conflict (shift 42(0), red'n 69(0)) on IDENT
+93: shift/reduce conflict (shift 79(3), red'n 69(0)) on PLUS
+93: shift/reduce conflict (shift 98(3), red'n 69(0)) on MINUS
+93: shift/reduce conflict (shift 44(0), red'n 69(0)) on COLON
+93: shift/reduce conflict (shift 81(0), red'n 69(0)) on NOT
+93: shift/reduce conflict (shift 47(1), red'n 69(0)) on AND
+93: shift/reduce conflict (shift 48(1), red'n 69(0)) on OR
+93: shift/reduce conflict (shift 49(2), red'n 69(0)) on XOR
+93: shift/reduce conflict (shift 72(0), red'n 69(0)) on ADD
+93: shift/reduce conflict (shift 73(0), red'n 69(0)) on DELETE
+93: shift/reduce conflict (shift 74(0), red'n 69(0)) on SET
+93: shift/reduce conflict (shift 75(0), red'n 69(0)) on DONE
+93: shift/reduce conflict (shift 76(0), red'n 69(0)) on AGE
+93: shift/reduce conflict (shift 77(0), red'n 69(0)) on DUE
+93: shift/reduce conflict (shift 78(0), red'n 69(0)) on LIKE
+93: shift/reduce conflict (shift 43(0), red'n 69(0)) on LOOP
+93: shift/reduce conflict (shift 36(0), red'n 69(0)) on QUOTE
+93: shift/reduce conflict (shift 35(0), red'n 69(0)) on DQUOTE
+ 93: reduce/reduce conflict  (red'ns 69 and 89) on $end
+93: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+93: shift/reduce conflict (shift 98(3), red'n 89(0)) on MINUS
+93: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+93: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 93: reduce/reduce conflict  (red'ns 69 and 89) on HELP
 state 93
-	task_add_filter:  LOOP.COLON loop_time 
+	task_set:  SET id.content task_update_filter 
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id.    (69)
+	shard_content: .    (89)
 
-	COLON  shift 121
-	.  error
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 98
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 69 (src line 185)
 
+	id  goto 82
+	id_group  goto 97
+	content  goto 155
+	shard_content  goto 37
 
-94: shift/reduce conflict (shift 36(3), red'n 77(0)) on PLUS
 state 94
-	positive_assign_group:  assign_tag.positive_assign_group 
-	positive_assign_group: .    (77)
+	shard_content:  SET shard_content.    (94)
 
-	PLUS  shift 36
-	.  reduce 77 (src line 185)
+	.  reduce 94 (src line 243)
 
-	positive_assign_group  goto 122
-	assign_tag  goto 94
 
- 95: reduce/reduce conflict  (red'ns 56 and 75) on $end
-95: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-95: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 95: reduce/reduce conflict  (red'ns 56 and 75) on HELP
-95: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
-95: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+95: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+95: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+95: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+95: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
 state 95
-	task_set:  SET id content.task_update_filter 
-	task_update_filter: .    (56)
-	assign_group: .    (75)
+	task_set:  id SET.content task_update_filter 
+	shard_content:  SET.shard_content 
+	shard_content: .    (89)
 
-	PLUS  shift 36
-	MINUS  shift 37
-	DUE  shift 99
-	LOOP  shift 100
-	.  reduce 56 (src line 140)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
 
-	task_update_filter  goto 123
-	assign_group  goto 98
-	assign_tag  goto 34
-	unassign_tag  goto 35
+	id  goto 82
+	id_group  goto 71
+	content  goto 156
+	shard_content  goto 157
 
- 96: reduce/reduce conflict  (red'ns 56 and 75) on $end
-96: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-96: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 96: reduce/reduce conflict  (red'ns 56 and 75) on HELP
-96: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
-96: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+ 96: reduce/reduce conflict  (red'ns 60 and 79) on $end
+96: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+96: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+96: shift/reduce conflict (shift 160(0), red'n 79(0)) on DUE
+96: shift/reduce conflict (shift 161(0), red'n 79(0)) on LOOP
+ 96: reduce/reduce conflict  (red'ns 60 and 79) on HELP
 state 96
-	task_set:  id SET content.task_update_filter 
-	task_update_filter: .    (56)
-	assign_group: .    (75)
+	task_set:  id content.task_update_filter 
+	task_update_filter: .    (60)
+	assign_group: .    (79)
 
-	PLUS  shift 36
-	MINUS  shift 37
-	DUE  shift 99
-	LOOP  shift 100
-	.  reduce 56 (src line 140)
+	PLUS  shift 118
+	MINUS  shift 119
+	DUE  shift 160
+	LOOP  shift 161
+	.  reduce 60 (src line 161)
 
-	task_update_filter  goto 124
-	assign_group  goto 98
-	assign_tag  goto 34
-	unassign_tag  goto 35
+	task_update_filter  goto 158
+	assign_group  goto 159
+	assign_tag  goto 40
+	unassign_tag  goto 41
 
+97: shift/reduce conflict (shift 38(0), red'n 67(0)) on NUM
+97: shift/reduce conflict (shift 42(0), red'n 67(0)) on IDENT
+97: shift/reduce conflict (shift 79(3), red'n 67(0)) on PLUS
+97: shift/reduce conflict (shift 80(3), red'n 67(0)) on MINUS
+97: shift/reduce conflict (shift 44(0), red'n 67(0)) on COLON
+97: shift/reduce conflict (shift 81(0), red'n 67(0)) on NOT
+97: shift/reduce conflict (shift 47(1), red'n 67(0)) on AND
+97: shift/reduce conflict (shift 48(1), red'n 67(0)) on OR
+97: shift/reduce conflict (shift 49(2), red'n 67(0)) on XOR
+97: shift/reduce conflict (shift 72(0), red'n 67(0)) on ADD
+97: shift/reduce conflict (shift 73(0), red'n 67(0)) on DELETE
+97: shift/reduce conflict (shift 74(0), red'n 67(0)) on SET
+97: shift/reduce conflict (shift 75(0), red'n 67(0)) on DONE
+97: shift/reduce conflict (shift 76(0), red'n 67(0)) on AGE
+97: shift/reduce conflict (shift 77(0), red'n 67(0)) on DUE
+97: shift/reduce conflict (shift 78(0), red'n 67(0)) on LIKE
+97: shift/reduce conflict (shift 43(0), red'n 67(0)) on LOOP
+ 97: reduce/reduce conflict  (red'ns 67 and 89) on $end
+97: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+97: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+97: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+97: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 97: reduce/reduce conflict  (red'ns 67 and 89) on HELP
 state 97
-	task_set:  id content task_update_filter.    (40)
+	id_group:  id id_group.    (67)
+	shard_content:  id_group.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 40 (src line 105)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 67 (src line 176)
 
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 145
 
- 98: reduce/reduce conflict  (red'ns 56 and 75) on $end
-98: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-98: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 98: reduce/reduce conflict  (red'ns 56 and 75) on HELP
-98: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
-98: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
+98: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+98: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+98: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+98: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
 state 98
-	task_update_filter:  assign_group.task_update_filter 
-	task_update_filter: .    (56)
-	assign_group: .    (75)
+	id_group:  id MINUS.id 
+	shard_content:  MINUS.shard_content 
+	shard_content: .    (89)
 
-	PLUS  shift 36
-	MINUS  shift 37
-	DUE  shift 99
-	LOOP  shift 100
-	.  reduce 56 (src line 140)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
-	task_update_filter  goto 125
-	assign_group  goto 98
-	assign_tag  goto 34
-	unassign_tag  goto 35
+	id  goto 162
+	id_group  goto 71
+	shard_content  goto 127
 
+ 99: reduce/reduce conflict  (red'ns 33 and 89) on $end
+99: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+99: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+99: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+99: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+99: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+99: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+99: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+99: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+99: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+99: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+99: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+99: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+99: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+99: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+99: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+99: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+99: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
 state 99
-	task_update_filter:  DUE.COLON time_single 
+	task_done:  DONE id_group.    (33)
+	shard_content:  id_group.shard_content 
+	shard_content: .    (89)
 
-	COLON  shift 126
-	.  error
+	$end  reduce 33 (src line 106)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 145
 
 state 100
-	task_update_filter:  LOOP.COLON loop_time 
+	shard_content:  DONE shard_content.    (95)
 
-	COLON  shift 127
-	.  error
+	.  reduce 95 (src line 244)
 
 
 state 101
-	id_group:  id MINUS id.    (64)
+	tag_list:  TAG tag_list_filter.    (47)
 
-	.  reduce 64 (src line 157)
+	.  reduce 47 (src line 133)
 
 
 state 102
-	tag_set:  TAG SET id.content 
-	content: .    (80)
+	tag_set:  TAG SET.id content 
 
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
+	NUM  shift 38
+	.  error
 
-	content  goto 128
+	id  goto 163
 
 state 103
-	tag_find_filter:  id_group tag_find_filter.    (61)
+	tag_list_filter:  id_group.tag_list_filter 
+	tag_list_filter: .    (64)
 
-	.  reduce 61 (src line 150)
+	NUM  shift 38
+	LIKE  shift 104
+	.  reduce 64 (src line 169)
 
+	id  goto 82
+	id_group  goto 103
+	tag_list_filter  goto 164
 
+104: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+104: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+104: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+104: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+104: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
 state 104
-	tag_find_filter:  LIKE content_group.tag_find_filter 
-	tag_find_filter: .    (60)
+	tag_list_filter:  LIKE.content_group tag_list_filter 
+	shard_content: .    (89)
 
-	NUM  shift 33
-	LIKE  shift 70
-	.  reduce 60 (src line 148)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
 
-	id  goto 57
-	id_group  goto 69
-	tag_find_filter  goto 129
+	id  goto 82
+	id_group  goto 71
+	content  goto 68
+	content_group  goto 165
+	content_logic  goto 39
+	shard_content  goto 37
 
+ 105: reduce/reduce conflict  (red'ns 49 and 79) on $end
+105: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+105: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+105: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+105: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+105: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+105: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+105: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+105: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+105: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+105: shift/reduce conflict (shift 72(0), red'n 79(0)) on ADD
+105: shift/reduce conflict (shift 73(0), red'n 79(0)) on DELETE
+105: shift/reduce conflict (shift 74(0), red'n 79(0)) on SET
+105: shift/reduce conflict (shift 75(0), red'n 79(0)) on DONE
+105: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+105: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+105: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+105: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+ 105: reduce/reduce conflict  (red'ns 49 and 79) on HELP
+105: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+105: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+ 105: reduce/reduce conflict  (red'ns 49 and 89) on $end
+105: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+105: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+105: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+105: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+105: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+105: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+105: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+105: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+105: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+105: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+105: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+105: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+105: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+105: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+105: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+105: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+105: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 105: reduce/reduce conflict  (red'ns 49 and 89) on HELP
+105: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+105: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
 state 105
-	task_find_filter:  LIKE content_group task_find_filter.    (48)
+	task_list_filter:  LIKE content_group.task_list_filter 
+	task_list_filter: .    (49)
+	assign_group: .    (79)
+	shard_content: .    (89)
 
-	.  reduce 48 (src line 127)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 49 (src line 144)
 
+	id  goto 82
+	id_group  goto 67
+	task_list_filter  goto 166
+	content  goto 68
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 37
 
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on $end
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on NUM
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on IDENT
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on PLUS
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on MINUS
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on COLON
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on NOT
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on AND
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on OR
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on XOR
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on ADD
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on DELETE
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on SET
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on DONE
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on AGE
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on DUE
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on LIKE
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on LOOP
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on HELP
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on QUOTE
+ 106: reduce/reduce conflict  (red'ns 88 and 98) on DQUOTE
 state 106
-	content_logic:  content AND.content 
-	content: .    (80)
+	content:  shard_content.    (88)
+	shard_content:  LIKE shard_content.    (98)
 
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
+	.  reduce 88 (src line 234)
 
-	content  goto 130
 
 state 107
-	content_logic:  content OR.content 
-	content: .    (80)
+	task_list_filter:  content_group task_list_filter.    (52)
 
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
+	.  reduce 52 (src line 148)
 
-	content  goto 131
 
 state 108
-	content_logic:  content XOR.content 
-	content: .    (80)
+	task_list_filter:  assign_group task_list_filter.    (53)
 
-	IDENT  shift 32
-	.  reduce 80 (src line 196)
+	.  reduce 53 (src line 149)
 
-	content  goto 132
 
+109: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+109: shift/reduce conflict (shift 170(0), red'n 89(0)) on IDENT
+109: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+109: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+109: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+109: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+109: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+109: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+109: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+109: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+109: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+109: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+109: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+109: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+109: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+109: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+109: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 109: reduce/reduce conflict  (red'ns 89 and 110) on $end
+109: shift/reduce conflict (shift 38(0), red'n 110(0)) on NUM
+109: shift/reduce conflict (shift 170(0), red'n 110(0)) on IDENT
+109: shift/reduce conflict (shift 79(3), red'n 110(0)) on PLUS
+109: shift/reduce conflict (shift 80(3), red'n 110(0)) on MINUS
+109: shift/reduce conflict (shift 44(0), red'n 110(0)) on COLON
+109: shift/reduce conflict (shift 81(0), red'n 110(0)) on NOT
+109: shift/reduce conflict (shift 47(1), red'n 110(0)) on AND
+109: shift/reduce conflict (shift 48(1), red'n 110(0)) on OR
+109: shift/reduce conflict (shift 49(2), red'n 110(0)) on XOR
+109: shift/reduce conflict (shift 72(0), red'n 110(0)) on ADD
+109: shift/reduce conflict (shift 73(0), red'n 110(0)) on DELETE
+109: shift/reduce conflict (shift 74(0), red'n 110(0)) on SET
+109: shift/reduce conflict (shift 75(0), red'n 110(0)) on DONE
+109: shift/reduce conflict (shift 76(0), red'n 110(0)) on AGE
+109: shift/reduce conflict (shift 77(0), red'n 110(0)) on DUE
+109: shift/reduce conflict (shift 78(0), red'n 110(0)) on LIKE
+109: shift/reduce conflict (shift 43(0), red'n 110(0)) on LOOP
+ 109: reduce/reduce conflict  (red'ns 89 and 110) on HELP
+ 109: reduce/reduce conflict  (red'ns 89 and 110) on QUOTE
+ 109: reduce/reduce conflict  (red'ns 89 and 110) on DQUOTE
 state 109
-	content_logic:  NOT content.    (72)
+	task_list_filter:  AGE COLON.time_list_filter task_list_filter 
+	shard_content:  COLON.shard_content 
+	shard_content: .    (89)
+	time_single: .    (110)
 
-	.  reduce 72 (src line 174)
+	NUM  shift 38
+	IDENT  shift 170
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
+	id  goto 82
+	id_group  goto 71
+	time_list_filter  goto 167
+	time_single  goto 168
+	shard_content  goto 123
+	time_range  goto 169
 
- 110: reduce/reduce conflict  (red'ns 46 and 75) on $end
-110: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
-110: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-110: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 110: reduce/reduce conflict  (red'ns 46 and 75) on HELP
-110: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
-110: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
-110: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
 state 110
-	task_find_filter:  AGE COLON time_find_filter.task_find_filter 
-	task_find_filter: .    (46)
-	assign_group: .    (75)
+	shard_content:  AGE shard_content.    (96)
 
-	NUM  shift 33
-	PLUS  shift 36
-	MINUS  shift 37
-	AGE  shift 30
-	DUE  shift 31
-	LIKE  shift 28
-	.  reduce 46 (src line 124)
+	.  reduce 96 (src line 246)
 
-	id  goto 57
-	task_find_filter  goto 133
-	id_group  goto 54
-	assign_group  goto 29
-	assign_tag  goto 34
-	unassign_tag  goto 35
 
-111: shift/reduce conflict (shift 134(3), red'n 82(0)) on MINUS
+111: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+111: shift/reduce conflict (shift 170(0), red'n 89(0)) on IDENT
+111: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+111: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+111: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+111: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+111: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+111: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+111: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+111: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+111: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+111: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+111: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+111: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+111: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+111: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+111: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 111: reduce/reduce conflict  (red'ns 89 and 110) on $end
+111: shift/reduce conflict (shift 38(0), red'n 110(0)) on NUM
+111: shift/reduce conflict (shift 170(0), red'n 110(0)) on IDENT
+111: shift/reduce conflict (shift 79(3), red'n 110(0)) on PLUS
+111: shift/reduce conflict (shift 80(3), red'n 110(0)) on MINUS
+111: shift/reduce conflict (shift 44(0), red'n 110(0)) on COLON
+111: shift/reduce conflict (shift 81(0), red'n 110(0)) on NOT
+111: shift/reduce conflict (shift 47(1), red'n 110(0)) on AND
+111: shift/reduce conflict (shift 48(1), red'n 110(0)) on OR
+111: shift/reduce conflict (shift 49(2), red'n 110(0)) on XOR
+111: shift/reduce conflict (shift 72(0), red'n 110(0)) on ADD
+111: shift/reduce conflict (shift 73(0), red'n 110(0)) on DELETE
+111: shift/reduce conflict (shift 74(0), red'n 110(0)) on SET
+111: shift/reduce conflict (shift 75(0), red'n 110(0)) on DONE
+111: shift/reduce conflict (shift 76(0), red'n 110(0)) on AGE
+111: shift/reduce conflict (shift 77(0), red'n 110(0)) on DUE
+111: shift/reduce conflict (shift 78(0), red'n 110(0)) on LIKE
+111: shift/reduce conflict (shift 43(0), red'n 110(0)) on LOOP
+ 111: reduce/reduce conflict  (red'ns 89 and 110) on HELP
+ 111: reduce/reduce conflict  (red'ns 89 and 110) on QUOTE
+ 111: reduce/reduce conflict  (red'ns 89 and 110) on DQUOTE
 state 111
-	time_find_filter:  time_single.    (82)
-	time_range:  time_single.MINUS time_single 
+	task_list_filter:  DUE COLON.time_list_filter task_list_filter 
+	shard_content:  COLON.shard_content 
+	shard_content: .    (89)
+	time_single: .    (110)
 
-	MINUS  shift 134
-	.  reduce 82 (src line 201)
+	NUM  shift 38
+	IDENT  shift 170
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
+	id  goto 82
+	id_group  goto 71
+	time_list_filter  goto 171
+	time_single  goto 168
+	shard_content  goto 123
+	time_range  goto 169
 
 state 112
-	time_find_filter:  time_range.    (83)
+	shard_content:  DUE shard_content.    (97)
 
-	.  reduce 83 (src line 203)
+	.  reduce 97 (src line 247)
 
 
+113: shift/reduce conflict (shift 172(0), red'n 88(0)) on DQUOTE
 state 113
-	time_single:  IDENT.    (84)
+	content:  DQUOTE shard_content.DQUOTE 
+	content:  shard_content.    (88)
 
-	.  reduce 84 (src line 206)
+	DQUOTE  shift 172
+	.  error
 
 
- 114: reduce/reduce conflict  (red'ns 46 and 75) on $end
-114: shift/reduce conflict (shift 33(0), red'n 75(0)) on NUM
-114: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-114: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 114: reduce/reduce conflict  (red'ns 46 and 75) on HELP
-114: shift/reduce conflict (shift 30(0), red'n 75(0)) on AGE
-114: shift/reduce conflict (shift 31(0), red'n 75(0)) on DUE
-114: shift/reduce conflict (shift 28(0), red'n 75(0)) on LIKE
 state 114
-	task_find_filter:  DUE COLON time_find_filter.task_find_filter 
-	task_find_filter: .    (46)
-	assign_group: .    (75)
+	content:  DQUOTE content.DQUOTE 
 
-	NUM  shift 33
-	PLUS  shift 36
-	MINUS  shift 37
-	AGE  shift 30
-	DUE  shift 31
-	LIKE  shift 28
-	.  reduce 46 (src line 124)
+	DQUOTE  shift 173
+	.  error
 
-	id  goto 57
-	task_find_filter  goto 135
-	id_group  goto 54
-	assign_group  goto 29
-	assign_tag  goto 34
-	unassign_tag  goto 35
 
+115: shift/reduce conflict (shift 174(0), red'n 88(0)) on QUOTE
 state 115
-	task_add:  TASK ADD content task_add_filter.    (27)
+	content:  QUOTE shard_content.QUOTE 
+	content:  shard_content.    (88)
 
-	.  reduce 27 (src line 82)
+	QUOTE  shift 174
+	.  error
 
 
- 116: reduce/reduce conflict  (red'ns 56 and 75) on $end
-116: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-116: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 116: reduce/reduce conflict  (red'ns 56 and 75) on HELP
-116: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
-116: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
 state 116
-	task_set:  TASK SET id content.task_update_filter 
-	task_update_filter: .    (56)
-	assign_group: .    (75)
+	content:  QUOTE content.QUOTE 
 
-	PLUS  shift 36
-	MINUS  shift 37
-	DUE  shift 99
-	LOOP  shift 100
-	.  reduce 56 (src line 140)
+	QUOTE  shift 175
+	.  error
 
-	task_update_filter  goto 136
-	assign_group  goto 98
-	assign_tag  goto 34
-	unassign_tag  goto 35
 
- 117: reduce/reduce conflict  (red'ns 56 and 75) on $end
-117: shift/reduce conflict (shift 36(3), red'n 75(0)) on PLUS
-117: shift/reduce conflict (shift 37(3), red'n 75(0)) on MINUS
- 117: reduce/reduce conflict  (red'ns 56 and 75) on HELP
-117: shift/reduce conflict (shift 99(0), red'n 75(0)) on DUE
-117: shift/reduce conflict (shift 100(0), red'n 75(0)) on LOOP
 state 117
-	task_set:  TASK id SET content.task_update_filter 
-	task_update_filter: .    (56)
-	assign_group: .    (75)
+	assign_group:  assign_tag assign_group.    (77)
 
-	PLUS  shift 36
-	MINUS  shift 37
-	DUE  shift 99
-	LOOP  shift 100
-	.  reduce 56 (src line 140)
+	.  reduce 77 (src line 210)
 
-	task_update_filter  goto 137
-	assign_group  goto 98
-	assign_tag  goto 34
-	unassign_tag  goto 35
 
 state 118
-	task_set:  TASK id content task_update_filter.    (39)
+	assign_tag:  PLUS.IDENT 
 
-	.  reduce 39 (src line 104)
+	IDENT  shift 176
+	.  error
 
 
 state 119
-	task_add_filter:  positive_assign_group task_add_filter.    (53)
+	unassign_tag:  MINUS.IDENT 
 
-	.  reduce 53 (src line 135)
+	IDENT  shift 177
+	.  error
 
 
 state 120
-	task_add_filter:  DUE COLON.time_single 
-	time_single: .    (85)
+	assign_group:  unassign_tag assign_group.    (78)
 
-	IDENT  shift 113
-	.  reduce 85 (src line 208)
+	.  reduce 78 (src line 212)
 
-	time_single  goto 138
 
 state 121
-	task_add_filter:  LOOP COLON.loop_time 
+	shard_content:  IDENT shard_content.    (90)
 
-	IDENT  shift 140
-	.  error
+	.  reduce 90 (src line 239)
 
-	loop_time  goto 139
 
 state 122
-	positive_assign_group:  assign_tag positive_assign_group.    (76)
+	shard_content:  LOOP shard_content.    (99)
 
-	.  reduce 76 (src line 183)
+	.  reduce 99 (src line 249)
 
 
 state 123
-	task_set:  SET id content task_update_filter.    (36)
+	shard_content:  COLON shard_content.    (100)
 
-	.  reduce 36 (src line 101)
+	.  reduce 100 (src line 251)
 
 
+124: shift/reduce conflict (shift 38(0), red'n 82(0)) on NUM
+124: shift/reduce conflict (shift 42(0), red'n 82(0)) on IDENT
+124: shift/reduce conflict (shift 79(3), red'n 82(0)) on PLUS
+124: shift/reduce conflict (shift 80(3), red'n 82(0)) on MINUS
+124: shift/reduce conflict (shift 44(0), red'n 82(0)) on COLON
+124: shift/reduce conflict (shift 81(0), red'n 82(0)) on NOT
+124: shift/reduce conflict (shift 47(1), red'n 82(0)) on AND
+124: shift/reduce conflict (shift 48(1), red'n 82(0)) on OR
+124: shift/reduce conflict (shift 49(2), red'n 82(0)) on XOR
+124: shift/reduce conflict (shift 72(0), red'n 82(0)) on ADD
+124: shift/reduce conflict (shift 73(0), red'n 82(0)) on DELETE
+124: shift/reduce conflict (shift 74(0), red'n 82(0)) on SET
+124: shift/reduce conflict (shift 75(0), red'n 82(0)) on DONE
+124: shift/reduce conflict (shift 76(0), red'n 82(0)) on AGE
+124: shift/reduce conflict (shift 77(0), red'n 82(0)) on DUE
+124: shift/reduce conflict (shift 78(0), red'n 82(0)) on LIKE
+124: shift/reduce conflict (shift 43(0), red'n 82(0)) on LOOP
+ 124: reduce/reduce conflict  (red'ns 82 and 89) on $end
+124: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+124: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+124: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+124: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+124: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+124: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+124: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+124: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+124: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+124: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+124: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+124: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+124: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+124: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+124: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+124: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+124: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 124: reduce/reduce conflict  (red'ns 82 and 89) on HELP
+ 124: reduce/reduce conflict  (red'ns 82 and 89) on QUOTE
+ 124: reduce/reduce conflict  (red'ns 82 and 89) on DQUOTE
 state 124
-	task_set:  id SET content task_update_filter.    (38)
+	assign_tag:  PLUS IDENT.    (82)
+	shard_content:  IDENT.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 38 (src line 103)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 82 (src line 221)
 
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 121
 
 state 125
-	task_update_filter:  assign_group task_update_filter.    (57)
+	shard_content:  PLUS shard_content.    (101)
 
-	.  reduce 57 (src line 142)
+	.  reduce 101 (src line 252)
 
 
+126: shift/reduce conflict (shift 38(0), red'n 83(0)) on NUM
+126: shift/reduce conflict (shift 42(0), red'n 83(0)) on IDENT
+126: shift/reduce conflict (shift 79(3), red'n 83(0)) on PLUS
+126: shift/reduce conflict (shift 80(3), red'n 83(0)) on MINUS
+126: shift/reduce conflict (shift 44(0), red'n 83(0)) on COLON
+126: shift/reduce conflict (shift 81(0), red'n 83(0)) on NOT
+126: shift/reduce conflict (shift 47(1), red'n 83(0)) on AND
+126: shift/reduce conflict (shift 48(1), red'n 83(0)) on OR
+126: shift/reduce conflict (shift 49(2), red'n 83(0)) on XOR
+126: shift/reduce conflict (shift 72(0), red'n 83(0)) on ADD
+126: shift/reduce conflict (shift 73(0), red'n 83(0)) on DELETE
+126: shift/reduce conflict (shift 74(0), red'n 83(0)) on SET
+126: shift/reduce conflict (shift 75(0), red'n 83(0)) on DONE
+126: shift/reduce conflict (shift 76(0), red'n 83(0)) on AGE
+126: shift/reduce conflict (shift 77(0), red'n 83(0)) on DUE
+126: shift/reduce conflict (shift 78(0), red'n 83(0)) on LIKE
+126: shift/reduce conflict (shift 43(0), red'n 83(0)) on LOOP
+ 126: reduce/reduce conflict  (red'ns 83 and 89) on $end
+126: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+126: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+126: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+126: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+126: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+126: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+126: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+126: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+126: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+126: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+126: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+126: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+126: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+126: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+126: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+126: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+126: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 126: reduce/reduce conflict  (red'ns 83 and 89) on HELP
+ 126: reduce/reduce conflict  (red'ns 83 and 89) on QUOTE
+ 126: reduce/reduce conflict  (red'ns 83 and 89) on DQUOTE
 state 126
-	task_update_filter:  DUE COLON.time_single 
-	time_single: .    (85)
+	unassign_tag:  MINUS IDENT.    (83)
+	shard_content:  IDENT.shard_content 
+	shard_content: .    (89)
 
-	IDENT  shift 113
-	.  reduce 85 (src line 208)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 83 (src line 225)
 
-	time_single  goto 141
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 121
 
 state 127
-	task_update_filter:  LOOP COLON.loop_time 
+	shard_content:  MINUS shard_content.    (102)
 
-	IDENT  shift 140
-	.  error
+	.  reduce 102 (src line 253)
 
-	loop_time  goto 142
 
 state 128
-	tag_set:  TAG SET id content.    (45)
+	shard_content:  AND shard_content.    (103)
 
-	.  reduce 45 (src line 119)
+	.  reduce 103 (src line 254)
 
 
 state 129
-	tag_find_filter:  LIKE content_group tag_find_filter.    (62)
+	shard_content:  OR shard_content.    (104)
 
-	.  reduce 62 (src line 151)
+	.  reduce 104 (src line 255)
 
 
 state 130
-	content_logic:  content AND content.    (69)
+	shard_content:  XOR shard_content.    (105)
 
-	.  reduce 69 (src line 170)
+	.  reduce 105 (src line 256)
 
 
 state 131
-	content_logic:  content OR content.    (70)
+	content_logic:  NOT content.    (76)
 
-	.  reduce 70 (src line 172)
+	.  reduce 76 (src line 207)
 
 
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on $end
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on NUM
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on IDENT
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on PLUS
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on MINUS
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on COLON
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on NOT
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on AND
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on OR
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on XOR
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on ADD
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on DELETE
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on SET
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on DONE
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on AGE
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on DUE
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on LIKE
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on LOOP
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on HELP
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on QUOTE
+ 132: reduce/reduce conflict  (red'ns 88 and 106) on DQUOTE
 state 132
-	content_logic:  content XOR content.    (71)
+	content:  shard_content.    (88)
+	shard_content:  NOT shard_content.    (106)
 
-	.  reduce 71 (src line 173)
+	.  reduce 88 (src line 234)
 
 
 state 133
-	task_find_filter:  AGE COLON time_find_filter task_find_filter.    (50)
+	tag_help:  HELP TAG HELP.    (44)
 
-	.  reduce 50 (src line 129)
+	.  reduce 44 (src line 127)
 
 
+ 134: reduce/reduce conflict  (red'ns 56 and 81) on $end
+134: shift/reduce conflict (shift 118(3), red'n 81(0)) on PLUS
+134: shift/reduce conflict (shift 142(0), red'n 81(0)) on DUE
+134: shift/reduce conflict (shift 143(0), red'n 81(0)) on LOOP
+ 134: reduce/reduce conflict  (red'ns 56 and 81) on HELP
 state 134
-	time_range:  time_single MINUS.time_single 
-	time_single: .    (85)
+	task_add:  TASK ADD content.task_add_filter 
+	task_add_filter: .    (56)
+	positive_assign_group: .    (81)
 
-	IDENT  shift 113
-	.  reduce 85 (src line 208)
+	PLUS  shift 118
+	DUE  shift 142
+	LOOP  shift 143
+	.  reduce 56 (src line 154)
 
-	time_single  goto 143
+	task_add_filter  goto 178
+	positive_assign_group  goto 141
+	assign_tag  goto 144
 
+ 135: reduce/reduce conflict  (red'ns 32 and 89) on $end
+135: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+135: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+135: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+135: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+135: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+135: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+135: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+135: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+135: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+135: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+135: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+135: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+135: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+135: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+135: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+135: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+135: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
 state 135
-	task_find_filter:  DUE COLON time_find_filter task_find_filter.    (51)
+	task_done:  TASK DONE id_group.    (32)
+	shard_content:  id_group.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 51 (src line 130)
+	$end  reduce 32 (src line 104)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
 
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 145
 
+ 136: reduce/reduce conflict  (red'ns 35 and 89) on $end
+136: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+136: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+136: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+136: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+136: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+136: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+136: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+136: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+136: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+136: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+136: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+136: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+136: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+136: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+136: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+136: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+136: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 136: reduce/reduce conflict  (red'ns 35 and 89) on HELP
 state 136
-	task_set:  TASK SET id content task_update_filter.    (35)
+	task_delete:  TASK DELETE id_group.    (35)
+	shard_content:  id_group.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 35 (src line 99)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  reduce 89 (src line 237)
+	DQUOTE  reduce 89 (src line 237)
+	.  reduce 35 (src line 110)
 
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 145
 
+137: shift/reduce conflict (shift 38(0), red'n 69(0)) on NUM
+137: shift/reduce conflict (shift 42(0), red'n 69(0)) on IDENT
+137: shift/reduce conflict (shift 79(3), red'n 69(0)) on PLUS
+137: shift/reduce conflict (shift 98(3), red'n 69(0)) on MINUS
+137: shift/reduce conflict (shift 44(0), red'n 69(0)) on COLON
+137: shift/reduce conflict (shift 81(0), red'n 69(0)) on NOT
+137: shift/reduce conflict (shift 47(1), red'n 69(0)) on AND
+137: shift/reduce conflict (shift 48(1), red'n 69(0)) on OR
+137: shift/reduce conflict (shift 49(2), red'n 69(0)) on XOR
+137: shift/reduce conflict (shift 72(0), red'n 69(0)) on ADD
+137: shift/reduce conflict (shift 73(0), red'n 69(0)) on DELETE
+137: shift/reduce conflict (shift 74(0), red'n 69(0)) on SET
+137: shift/reduce conflict (shift 75(0), red'n 69(0)) on DONE
+137: shift/reduce conflict (shift 76(0), red'n 69(0)) on AGE
+137: shift/reduce conflict (shift 77(0), red'n 69(0)) on DUE
+137: shift/reduce conflict (shift 78(0), red'n 69(0)) on LIKE
+137: shift/reduce conflict (shift 43(0), red'n 69(0)) on LOOP
+137: shift/reduce conflict (shift 36(0), red'n 69(0)) on QUOTE
+137: shift/reduce conflict (shift 35(0), red'n 69(0)) on DQUOTE
+ 137: reduce/reduce conflict  (red'ns 69 and 89) on $end
+137: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+137: shift/reduce conflict (shift 98(3), red'n 89(0)) on MINUS
+137: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+137: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 137: reduce/reduce conflict  (red'ns 69 and 89) on HELP
 state 137
-	task_set:  TASK id SET content task_update_filter.    (37)
+	task_set:  TASK SET id.content task_update_filter 
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id.    (69)
+	shard_content: .    (89)
 
-	.  reduce 37 (src line 102)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 98
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 69 (src line 185)
 
+	id  goto 82
+	id_group  goto 97
+	content  goto 179
+	shard_content  goto 37
 
+138: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+138: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+138: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+138: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
 state 138
-	task_add_filter:  DUE COLON time_single.    (54)
+	task_set:  TASK id SET.content task_update_filter 
+	shard_content:  SET.shard_content 
+	shard_content: .    (89)
 
-	.  reduce 54 (src line 136)
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
 
+	id  goto 82
+	id_group  goto 71
+	content  goto 180
+	shard_content  goto 157
 
+ 139: reduce/reduce conflict  (red'ns 60 and 79) on $end
+139: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+139: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+139: shift/reduce conflict (shift 160(0), red'n 79(0)) on DUE
+139: shift/reduce conflict (shift 161(0), red'n 79(0)) on LOOP
+ 139: reduce/reduce conflict  (red'ns 60 and 79) on HELP
 state 139
-	task_add_filter:  LOOP COLON loop_time.    (55)
+	task_set:  TASK id content.task_update_filter 
+	task_update_filter: .    (60)
+	assign_group: .    (79)
 
-	.  reduce 55 (src line 137)
+	PLUS  shift 118
+	MINUS  shift 119
+	DUE  shift 160
+	LOOP  shift 161
+	.  reduce 60 (src line 161)
 
+	task_update_filter  goto 181
+	assign_group  goto 159
+	assign_tag  goto 40
+	unassign_tag  goto 41
 
 state 140
-	loop_time:  IDENT.    (87)
+	task_add:  ADD content task_add_filter.    (30)
 
-	.  reduce 87 (src line 215)
+	.  reduce 30 (src line 100)
 
 
+ 141: reduce/reduce conflict  (red'ns 56 and 81) on $end
+141: shift/reduce conflict (shift 118(3), red'n 81(0)) on PLUS
+141: shift/reduce conflict (shift 142(0), red'n 81(0)) on DUE
+141: shift/reduce conflict (shift 143(0), red'n 81(0)) on LOOP
+ 141: reduce/reduce conflict  (red'ns 56 and 81) on HELP
 state 141
-	task_update_filter:  DUE COLON time_single.    (58)
+	task_add_filter:  positive_assign_group.task_add_filter 
+	task_add_filter: .    (56)
+	positive_assign_group: .    (81)
 
-	.  reduce 58 (src line 143)
+	PLUS  shift 118
+	DUE  shift 142
+	LOOP  shift 143
+	.  reduce 56 (src line 154)
 
+	task_add_filter  goto 182
+	positive_assign_group  goto 141
+	assign_tag  goto 144
 
 state 142
-	task_update_filter:  LOOP COLON loop_time.    (59)
+	task_add_filter:  DUE.COLON time_single 
 
-	.  reduce 59 (src line 144)
+	COLON  shift 183
+	.  error
 
 
 state 143
-	time_range:  time_single MINUS time_single.    (86)
+	task_add_filter:  LOOP.COLON loop_time 
 
-	.  reduce 86 (src line 211)
+	COLON  shift 184
+	.  error
 
 
-29 terminals, 30 nonterminals
-88 grammar rules, 144/16000 states
-103 shift/reduce, 42 reduce/reduce conflicts reported
-79 working sets used
-memory: parser 159/240000
-8 extra closures
-179 shift entries, 4 exceptions
-97 goto entries
-67 entries saved by goto default
-Optimizer space used: output 208/240000
-208 table entries, 15 zero
-maximum spread: 29, maximum offset: 134
+144: shift/reduce conflict (shift 118(3), red'n 81(0)) on PLUS
+state 144
+	positive_assign_group:  assign_tag.positive_assign_group 
+	positive_assign_group: .    (81)
+
+	PLUS  shift 118
+	.  reduce 81 (src line 218)
+
+	positive_assign_group  goto 185
+	assign_tag  goto 144
+
+state 145
+	shard_content:  id_group shard_content.    (91)
+
+	.  reduce 91 (src line 240)
+
+
+state 146
+	shard_content:  ADD shard_content.    (92)
+
+	.  reduce 92 (src line 241)
+
+
+state 147
+	shard_content:  LIKE shard_content.    (98)
+
+	.  reduce 98 (src line 248)
+
+
+state 148
+	shard_content:  NOT shard_content.    (106)
+
+	.  reduce 106 (src line 257)
+
+
+state 149
+	id_group:  id id_group.    (67)
+
+	.  reduce 67 (src line 176)
+
+
+state 150
+	id_group:  id MINUS.id 
+
+	NUM  shift 38
+	.  error
+
+	id  goto 186
+
+state 151
+	task_add:  content ADD task_add_filter.    (31)
+
+	.  reduce 31 (src line 101)
+
+
+state 152
+	content_logic:  content AND content.    (73)
+
+	.  reduce 73 (src line 203)
+
+
+state 153
+	content_logic:  content OR content.    (74)
+
+	.  reduce 74 (src line 205)
+
+
+state 154
+	content_logic:  content XOR content.    (75)
+
+	.  reduce 75 (src line 206)
+
+
+ 155: reduce/reduce conflict  (red'ns 60 and 79) on $end
+155: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+155: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+155: shift/reduce conflict (shift 160(0), red'n 79(0)) on DUE
+155: shift/reduce conflict (shift 161(0), red'n 79(0)) on LOOP
+ 155: reduce/reduce conflict  (red'ns 60 and 79) on HELP
+state 155
+	task_set:  SET id content.task_update_filter 
+	task_update_filter: .    (60)
+	assign_group: .    (79)
+
+	PLUS  shift 118
+	MINUS  shift 119
+	DUE  shift 160
+	LOOP  shift 161
+	.  reduce 60 (src line 161)
+
+	task_update_filter  goto 187
+	assign_group  goto 159
+	assign_tag  goto 40
+	unassign_tag  goto 41
+
+ 156: reduce/reduce conflict  (red'ns 60 and 79) on $end
+156: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+156: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+156: shift/reduce conflict (shift 160(0), red'n 79(0)) on DUE
+156: shift/reduce conflict (shift 161(0), red'n 79(0)) on LOOP
+ 156: reduce/reduce conflict  (red'ns 60 and 79) on HELP
+state 156
+	task_set:  id SET content.task_update_filter 
+	task_update_filter: .    (60)
+	assign_group: .    (79)
+
+	PLUS  shift 118
+	MINUS  shift 119
+	DUE  shift 160
+	LOOP  shift 161
+	.  reduce 60 (src line 161)
+
+	task_update_filter  goto 188
+	assign_group  goto 159
+	assign_tag  goto 40
+	unassign_tag  goto 41
+
+ 157: reduce/reduce conflict  (red'ns 88 and 94) on $end
+ 157: reduce/reduce conflict  (red'ns 88 and 94) on PLUS
+ 157: reduce/reduce conflict  (red'ns 88 and 94) on MINUS
+ 157: reduce/reduce conflict  (red'ns 88 and 94) on DUE
+ 157: reduce/reduce conflict  (red'ns 88 and 94) on LOOP
+ 157: reduce/reduce conflict  (red'ns 88 and 94) on HELP
+state 157
+	content:  shard_content.    (88)
+	shard_content:  SET shard_content.    (94)
+
+	.  reduce 88 (src line 234)
+
+
+state 158
+	task_set:  id content task_update_filter.    (43)
+
+	.  reduce 43 (src line 122)
+
+
+ 159: reduce/reduce conflict  (red'ns 60 and 79) on $end
+159: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+159: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+159: shift/reduce conflict (shift 160(0), red'n 79(0)) on DUE
+159: shift/reduce conflict (shift 161(0), red'n 79(0)) on LOOP
+ 159: reduce/reduce conflict  (red'ns 60 and 79) on HELP
+state 159
+	task_update_filter:  assign_group.task_update_filter 
+	task_update_filter: .    (60)
+	assign_group: .    (79)
+
+	PLUS  shift 118
+	MINUS  shift 119
+	DUE  shift 160
+	LOOP  shift 161
+	.  reduce 60 (src line 161)
+
+	task_update_filter  goto 189
+	assign_group  goto 159
+	assign_tag  goto 40
+	unassign_tag  goto 41
+
+state 160
+	task_update_filter:  DUE.COLON time_single 
+
+	COLON  shift 190
+	.  error
+
+
+state 161
+	task_update_filter:  LOOP.COLON loop_time 
+
+	COLON  shift 191
+	.  error
+
+
+162: shift/reduce conflict (shift 38(0), red'n 68(3)) on NUM
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on $end
+162: shift/reduce conflict (shift 38(0), red'n 69(0)) on NUM
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on IDENT
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on PLUS
+162: shift/reduce conflict (shift 150(3), red'n 69(0)) on MINUS
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on COLON
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on NOT
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on AND
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on OR
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on XOR
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on ADD
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on DELETE
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on SET
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on DONE
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on AGE
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on DUE
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on LIKE
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on LOOP
+ 162: reduce/reduce conflict  (red'ns 68 and 69) on HELP
+state 162
+	id_group:  id.id_group 
+	id_group:  id.MINUS id 
+	id_group:  id MINUS id.    (68)
+	id_group:  id.    (69)
+
+	NUM  shift 38
+	MINUS  shift 150
+	.  reduce 68 (src line 181)
+
+	id  goto 82
+	id_group  goto 149
+
+state 163
+	tag_set:  TAG SET id.content 
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	content  goto 192
+	shard_content  goto 37
+
+state 164
+	tag_list_filter:  id_group tag_list_filter.    (65)
+
+	.  reduce 65 (src line 171)
+
+
+state 165
+	tag_list_filter:  LIKE content_group.tag_list_filter 
+	tag_list_filter: .    (64)
+
+	NUM  shift 38
+	LIKE  shift 104
+	.  reduce 64 (src line 169)
+
+	id  goto 82
+	id_group  goto 103
+	tag_list_filter  goto 193
+
+state 166
+	task_list_filter:  LIKE content_group task_list_filter.    (51)
+
+	.  reduce 51 (src line 147)
+
+
+ 167: reduce/reduce conflict  (red'ns 49 and 79) on $end
+167: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+167: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+167: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+167: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+167: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+167: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+167: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+167: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+167: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+167: shift/reduce conflict (shift 72(0), red'n 79(0)) on ADD
+167: shift/reduce conflict (shift 73(0), red'n 79(0)) on DELETE
+167: shift/reduce conflict (shift 74(0), red'n 79(0)) on SET
+167: shift/reduce conflict (shift 75(0), red'n 79(0)) on DONE
+167: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+167: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+167: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+167: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+ 167: reduce/reduce conflict  (red'ns 49 and 79) on HELP
+167: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+167: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+ 167: reduce/reduce conflict  (red'ns 49 and 89) on $end
+167: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+167: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+167: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+167: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+167: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+167: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+167: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+167: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+167: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+167: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+167: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+167: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+167: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+167: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+167: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+167: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+167: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 167: reduce/reduce conflict  (red'ns 49 and 89) on HELP
+167: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+167: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 167
+	task_list_filter:  AGE COLON time_list_filter.task_list_filter 
+	task_list_filter: .    (49)
+	assign_group: .    (79)
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 49 (src line 144)
+
+	id  goto 82
+	id_group  goto 67
+	task_list_filter  goto 194
+	content  goto 68
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 37
+
+168: shift/reduce conflict (shift 195(3), red'n 107(0)) on MINUS
+state 168
+	time_list_filter:  time_single.    (107)
+	time_range:  time_single.MINUS time_single 
+
+	MINUS  shift 195
+	.  reduce 107 (src line 260)
+
+
+state 169
+	time_list_filter:  time_range.    (108)
+
+	.  reduce 108 (src line 262)
+
+
+170: shift/reduce conflict (shift 38(0), red'n 109(0)) on NUM
+170: shift/reduce conflict (shift 42(0), red'n 109(0)) on IDENT
+170: shift/reduce conflict (shift 79(3), red'n 109(0)) on PLUS
+170: shift/reduce conflict (shift 80(3), red'n 109(0)) on MINUS
+170: shift/reduce conflict (shift 44(0), red'n 109(0)) on COLON
+170: shift/reduce conflict (shift 81(0), red'n 109(0)) on NOT
+170: shift/reduce conflict (shift 47(1), red'n 109(0)) on AND
+170: shift/reduce conflict (shift 48(1), red'n 109(0)) on OR
+170: shift/reduce conflict (shift 49(2), red'n 109(0)) on XOR
+170: shift/reduce conflict (shift 72(0), red'n 109(0)) on ADD
+170: shift/reduce conflict (shift 73(0), red'n 109(0)) on DELETE
+170: shift/reduce conflict (shift 74(0), red'n 109(0)) on SET
+170: shift/reduce conflict (shift 75(0), red'n 109(0)) on DONE
+170: shift/reduce conflict (shift 76(0), red'n 109(0)) on AGE
+170: shift/reduce conflict (shift 77(0), red'n 109(0)) on DUE
+170: shift/reduce conflict (shift 78(0), red'n 109(0)) on LIKE
+170: shift/reduce conflict (shift 43(0), red'n 109(0)) on LOOP
+ 170: reduce/reduce conflict  (red'ns 109 and 89) on $end
+170: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+170: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+170: shift/reduce conflict (shift 79(3), red'n 89(0)) on PLUS
+170: shift/reduce conflict (shift 80(3), red'n 89(0)) on MINUS
+170: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+170: shift/reduce conflict (shift 81(0), red'n 89(0)) on NOT
+170: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+170: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+170: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+170: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+170: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+170: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+170: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+170: shift/reduce conflict (shift 76(0), red'n 89(0)) on AGE
+170: shift/reduce conflict (shift 77(0), red'n 89(0)) on DUE
+170: shift/reduce conflict (shift 78(0), red'n 89(0)) on LIKE
+170: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 170: reduce/reduce conflict  (red'ns 109 and 89) on HELP
+ 170: reduce/reduce conflict  (red'ns 109 and 89) on QUOTE
+ 170: reduce/reduce conflict  (red'ns 109 and 89) on DQUOTE
+state 170
+	shard_content:  IDENT.shard_content 
+	time_single:  IDENT.    (109)
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 79
+	MINUS  shift 80
+	COLON  shift 44
+	NOT  shift 81
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 76
+	DUE  shift 77
+	LIKE  shift 78
+	LOOP  shift 43
+	.  reduce 89 (src line 237)
+
+	id  goto 82
+	id_group  goto 71
+	shard_content  goto 121
+
+ 171: reduce/reduce conflict  (red'ns 49 and 79) on $end
+171: shift/reduce conflict (shift 38(0), red'n 79(0)) on NUM
+171: shift/reduce conflict (shift 42(0), red'n 79(0)) on IDENT
+171: shift/reduce conflict (shift 45(3), red'n 79(0)) on PLUS
+171: shift/reduce conflict (shift 46(3), red'n 79(0)) on MINUS
+171: shift/reduce conflict (shift 44(0), red'n 79(0)) on COLON
+171: shift/reduce conflict (shift 50(0), red'n 79(0)) on NOT
+171: shift/reduce conflict (shift 47(1), red'n 79(0)) on AND
+171: shift/reduce conflict (shift 48(1), red'n 79(0)) on OR
+171: shift/reduce conflict (shift 49(2), red'n 79(0)) on XOR
+171: shift/reduce conflict (shift 72(0), red'n 79(0)) on ADD
+171: shift/reduce conflict (shift 73(0), red'n 79(0)) on DELETE
+171: shift/reduce conflict (shift 74(0), red'n 79(0)) on SET
+171: shift/reduce conflict (shift 75(0), red'n 79(0)) on DONE
+171: shift/reduce conflict (shift 33(0), red'n 79(0)) on AGE
+171: shift/reduce conflict (shift 34(0), red'n 79(0)) on DUE
+171: shift/reduce conflict (shift 30(0), red'n 79(0)) on LIKE
+171: shift/reduce conflict (shift 43(0), red'n 79(0)) on LOOP
+ 171: reduce/reduce conflict  (red'ns 49 and 79) on HELP
+171: shift/reduce conflict (shift 36(0), red'n 79(0)) on QUOTE
+171: shift/reduce conflict (shift 35(0), red'n 79(0)) on DQUOTE
+ 171: reduce/reduce conflict  (red'ns 49 and 89) on $end
+171: shift/reduce conflict (shift 38(0), red'n 89(0)) on NUM
+171: shift/reduce conflict (shift 42(0), red'n 89(0)) on IDENT
+171: shift/reduce conflict (shift 45(3), red'n 89(0)) on PLUS
+171: shift/reduce conflict (shift 46(3), red'n 89(0)) on MINUS
+171: shift/reduce conflict (shift 44(0), red'n 89(0)) on COLON
+171: shift/reduce conflict (shift 50(0), red'n 89(0)) on NOT
+171: shift/reduce conflict (shift 47(1), red'n 89(0)) on AND
+171: shift/reduce conflict (shift 48(1), red'n 89(0)) on OR
+171: shift/reduce conflict (shift 49(2), red'n 89(0)) on XOR
+171: shift/reduce conflict (shift 72(0), red'n 89(0)) on ADD
+171: shift/reduce conflict (shift 73(0), red'n 89(0)) on DELETE
+171: shift/reduce conflict (shift 74(0), red'n 89(0)) on SET
+171: shift/reduce conflict (shift 75(0), red'n 89(0)) on DONE
+171: shift/reduce conflict (shift 33(0), red'n 89(0)) on AGE
+171: shift/reduce conflict (shift 34(0), red'n 89(0)) on DUE
+171: shift/reduce conflict (shift 30(0), red'n 89(0)) on LIKE
+171: shift/reduce conflict (shift 43(0), red'n 89(0)) on LOOP
+ 171: reduce/reduce conflict  (red'ns 49 and 89) on HELP
+171: shift/reduce conflict (shift 36(0), red'n 89(0)) on QUOTE
+171: shift/reduce conflict (shift 35(0), red'n 89(0)) on DQUOTE
+state 171
+	task_list_filter:  DUE COLON time_list_filter.task_list_filter 
+	task_list_filter: .    (49)
+	assign_group: .    (79)
+	shard_content: .    (89)
+
+	NUM  shift 38
+	IDENT  shift 42
+	PLUS  shift 45
+	MINUS  shift 46
+	COLON  shift 44
+	NOT  shift 50
+	AND  shift 47
+	OR  shift 48
+	XOR  shift 49
+	ADD  shift 72
+	DELETE  shift 73
+	SET  shift 74
+	DONE  shift 75
+	AGE  shift 33
+	DUE  shift 34
+	LIKE  shift 30
+	LOOP  shift 43
+	QUOTE  shift 36
+	DQUOTE  shift 35
+	.  reduce 49 (src line 144)
+
+	id  goto 82
+	id_group  goto 67
+	task_list_filter  goto 196
+	content  goto 68
+	content_group  goto 31
+	assign_group  goto 32
+	content_logic  goto 39
+	assign_tag  goto 40
+	unassign_tag  goto 41
+	shard_content  goto 37
+
+state 172
+	content:  DQUOTE shard_content DQUOTE.    (84)
+
+	.  reduce 84 (src line 229)
+
+
+state 173
+	content:  DQUOTE content DQUOTE.    (86)
+
+	.  reduce 86 (src line 232)
+
+
+state 174
+	content:  QUOTE shard_content QUOTE.    (85)
+
+	.  reduce 85 (src line 231)
+
+
+state 175
+	content:  QUOTE content QUOTE.    (87)
+
+	.  reduce 87 (src line 233)
+
+
+state 176
+	assign_tag:  PLUS IDENT.    (82)
+
+	.  reduce 82 (src line 221)
+
+
+state 177
+	unassign_tag:  MINUS IDENT.    (83)
+
+	.  reduce 83 (src line 225)
+
+
+state 178
+	task_add:  TASK ADD content task_add_filter.    (29)
+
+	.  reduce 29 (src line 98)
+
+
+ 179: reduce/reduce conflict  (red'ns 60 and 79) on $end
+179: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+179: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+179: shift/reduce conflict (shift 160(0), red'n 79(0)) on DUE
+179: shift/reduce conflict (shift 161(0), red'n 79(0)) on LOOP
+ 179: reduce/reduce conflict  (red'ns 60 and 79) on HELP
+state 179
+	task_set:  TASK SET id content.task_update_filter 
+	task_update_filter: .    (60)
+	assign_group: .    (79)
+
+	PLUS  shift 118
+	MINUS  shift 119
+	DUE  shift 160
+	LOOP  shift 161
+	.  reduce 60 (src line 161)
+
+	task_update_filter  goto 197
+	assign_group  goto 159
+	assign_tag  goto 40
+	unassign_tag  goto 41
+
+ 180: reduce/reduce conflict  (red'ns 60 and 79) on $end
+180: shift/reduce conflict (shift 118(3), red'n 79(0)) on PLUS
+180: shift/reduce conflict (shift 119(3), red'n 79(0)) on MINUS
+180: shift/reduce conflict (shift 160(0), red'n 79(0)) on DUE
+180: shift/reduce conflict (shift 161(0), red'n 79(0)) on LOOP
+ 180: reduce/reduce conflict  (red'ns 60 and 79) on HELP
+state 180
+	task_set:  TASK id SET content.task_update_filter 
+	task_update_filter: .    (60)
+	assign_group: .    (79)
+
+	PLUS  shift 118
+	MINUS  shift 119
+	DUE  shift 160
+	LOOP  shift 161
+	.  reduce 60 (src line 161)
+
+	task_update_filter  goto 198
+	assign_group  goto 159
+	assign_tag  goto 40
+	unassign_tag  goto 41
+
+state 181
+	task_set:  TASK id content task_update_filter.    (42)
+
+	.  reduce 42 (src line 121)
+
+
+state 182
+	task_add_filter:  positive_assign_group task_add_filter.    (57)
+
+	.  reduce 57 (src line 156)
+
+
+state 183
+	task_add_filter:  DUE COLON.time_single 
+	time_single: .    (110)
+
+	IDENT  shift 200
+	.  reduce 110 (src line 267)
+
+	time_single  goto 199
+
+state 184
+	task_add_filter:  LOOP COLON.loop_time 
+
+	IDENT  shift 202
+	.  error
+
+	loop_time  goto 201
+
+state 185
+	positive_assign_group:  assign_tag positive_assign_group.    (80)
+
+	.  reduce 80 (src line 216)
+
+
+state 186
+	id_group:  id MINUS id.    (68)
+
+	.  reduce 68 (src line 181)
+
+
+state 187
+	task_set:  SET id content task_update_filter.    (39)
+
+	.  reduce 39 (src line 118)
+
+
+state 188
+	task_set:  id SET content task_update_filter.    (41)
+
+	.  reduce 41 (src line 120)
+
+
+state 189
+	task_update_filter:  assign_group task_update_filter.    (61)
+
+	.  reduce 61 (src line 163)
+
+
+state 190
+	task_update_filter:  DUE COLON.time_single 
+	time_single: .    (110)
+
+	IDENT  shift 200
+	.  reduce 110 (src line 267)
+
+	time_single  goto 203
+
+state 191
+	task_update_filter:  LOOP COLON.loop_time 
+
+	IDENT  shift 202
+	.  error
+
+	loop_time  goto 204
+
+state 192
+	tag_set:  TAG SET id content.    (48)
+
+	.  reduce 48 (src line 137)
+
+
+state 193
+	tag_list_filter:  LIKE content_group tag_list_filter.    (66)
+
+	.  reduce 66 (src line 172)
+
+
+state 194
+	task_list_filter:  AGE COLON time_list_filter task_list_filter.    (54)
+
+	.  reduce 54 (src line 150)
+
+
+195: shift/reduce conflict (shift 200(0), red'n 110(0)) on IDENT
+state 195
+	time_range:  time_single MINUS.time_single 
+	time_single: .    (110)
+
+	IDENT  shift 200
+	.  reduce 110 (src line 267)
+
+	time_single  goto 205
+
+state 196
+	task_list_filter:  DUE COLON time_list_filter task_list_filter.    (55)
+
+	.  reduce 55 (src line 151)
+
+
+state 197
+	task_set:  TASK SET id content task_update_filter.    (38)
+
+	.  reduce 38 (src line 116)
+
+
+state 198
+	task_set:  TASK id SET content task_update_filter.    (40)
+
+	.  reduce 40 (src line 119)
+
+
+state 199
+	task_add_filter:  DUE COLON time_single.    (58)
+
+	.  reduce 58 (src line 157)
+
+
+state 200
+	time_single:  IDENT.    (109)
+
+	.  reduce 109 (src line 265)
+
+
+state 201
+	task_add_filter:  LOOP COLON loop_time.    (59)
+
+	.  reduce 59 (src line 158)
+
+
+state 202
+	loop_time:  IDENT.    (112)
+
+	.  reduce 112 (src line 274)
+
+
+state 203
+	task_update_filter:  DUE COLON time_single.    (62)
+
+	.  reduce 62 (src line 164)
+
+
+state 204
+	task_update_filter:  LOOP COLON loop_time.    (63)
+
+	.  reduce 63 (src line 165)
+
+
+state 205
+	time_range:  time_single MINUS time_single.    (111)
+
+	.  reduce 111 (src line 270)
+
+
+30 terminals, 32 nonterminals
+113 grammar rules, 206/16000 states
+1405 shift/reduce, 185 reduce/reduce conflicts reported
+131 working sets used
+memory: parser 364/240000
+0 extra closures
+1274 shift entries, 15 exceptions
+167 goto entries
+203 entries saved by goto default
+Optimizer space used: output 721/240000
+721 table entries, 225 zero
+maximum spread: 30, maximum offset: 195
