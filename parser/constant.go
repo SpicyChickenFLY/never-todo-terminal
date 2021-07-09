@@ -6,25 +6,41 @@ import (
 )
 
 const ( // Command Type
-
+	help = 0 + itoa,
+	ui,
+	gui,
+	explain,
 )
 
-type Commander interface {
+// Node is the basic element of the AST
+type Node interface {
+	Text() string
+	SetText(text string)
+}
+
+// RootNode is the root of the AST
+type RootNode interface {
 	Execute()
+	Type()
+}
+
+type root struct {
+}
+
+func (r *root) Execute() {
+	switch r.Type() {
+	case "":
+
+	}
+}
+
+// StmtNode contain a complex statement
+type StmtNode interface {
+	Node
 	Explain()
 }
 
-type CommandTree struct {
-	Type int
-}
-
-func NewCommandTree() CommandTree {
-	return CommandTree{}
-}
-
-type Node struct {
-}
-
+// Parse expose yypase
 func Parse(args string) {
 	yyParse(newLexer(bufio.NewReader(strings.NewReader(args))))
 }

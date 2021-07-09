@@ -9,7 +9,8 @@ import (
 %union {
    str string
    num int
-   cmd *Command
+   cmd *CmdNode
+   stmt *StmtNode
 }
 
 %token <str> NUM 
@@ -32,35 +33,37 @@ import (
 
 %token <str> QUOTE DQUOTE
 
-%type <cmd> command
+%type <cmd> cmd
 %type <str> id id_group
 
-%start command
+%start root
 
 %%
-command:
-      command_stmt {/*fmt.Println("command")*/}
+root:
+      cmd {/*fmt.Println("cmd")*/}
+      stmt
 
-command_stmt:
-      {fmt.Println("command_stmt-summary")}
-    | HELP {fmt.Println("command_stmt-HELP")}
-    | UI {fmt.Println("command_stmt-UI")}
-    | GUI {fmt.Println("command_stmt-GUI")}
-    | EXPLAIN {fmt.Println("command_stmt-EXPLAIN")}
+cmd:
+      {fmt.Println("cmd-summary")}
+    | HELP {fmt.Println("cmd-HELP")}
+    | UI {fmt.Println("cmd-UI")}
+    | GUI {fmt.Println("cmd-GUI")}
+    | EXPLAIN {fmt.Println("cmd-EXPLAIN")}
 
-    | log_list  {fmt.Println("command_stmt-log_list")}
-    | undo_log {fmt.Println("command_stmt-undo_log")}
+stmt:
+    | log_list  {fmt.Println("stmt_log_list")}
+    | undo_log {fmt.Println("stmt_undo_log")}
 
-    | task_help {fmt.Println("command_stmt-task_help")}
-    | task_list {fmt.Println("command_stmt-task_list")}
-    | task_add {fmt.Println("command_stmt-task_add")}
-    | task_delete {fmt.Println("command_stmt-task_delete")}
-    | task_set {fmt.Println("command_stmt-task_set")}
-    | task_done {fmt.Println("command_stmt-task_done")}
+    | task_help {fmt.Println("stmt_task_help")}
+    | task_list {fmt.Println("stmt_task_list")}
+    | task_add {fmt.Println("stmt_task_add")}
+    | task_delete {fmt.Println("stmt_task_delete")}
+    | task_set {fmt.Println("stmt_task_set")}
+    | task_done {fmt.Println("stmt_task_done")}
     
-    | tag_help {fmt.Println("command_stmt-tag_help")}
-    | tag_list {fmt.Println("command_stmt-tag_list")}
-    | tag_set {fmt.Println("command_stmt-tag_set")}
+    | tag_help {fmt.Println("stmt_tag_help")}
+    | tag_list {fmt.Println("stmt_tag_list")}
+    | tag_set {fmt.Println("stmt_tag_set")}
     ;
 
 // ========== LOG =============
@@ -130,8 +133,6 @@ tag_list:
 tag_set:
       TAG SET id content {/*fmt.Println("task_set")*/}
     ;
-
-
 
 // ========== TASK FILTER =============
 task_list_filter:
