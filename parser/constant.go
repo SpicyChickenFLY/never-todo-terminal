@@ -3,14 +3,18 @@ package parser
 import (
 	"bufio"
 	"strings"
+
+	"github.com/SpicyChickenFLY/never-todo-cmd/logic"
 )
 
 const ( // Command Type
-	help = 0 + itoa,
-	ui,
-	gui,
-	explain,
+	cmdHelp = 0 + iota
+	cmdUI
+	cmdGUI
+	cmdExplain
 )
+
+var debug = false
 
 // Node is the basic element of the AST
 type Node interface {
@@ -25,19 +29,32 @@ type RootNode interface {
 }
 
 type root struct {
+	cmdtype int
 }
 
 func (r *root) Execute() {
 	switch r.Type() {
-	case "":
+	case 0:
 
 	}
+}
+
+func (r *root) Type() int {
+	return r.cmdtype
 }
 
 // StmtNode contain a complex statement
 type StmtNode interface {
 	Node
 	Explain()
+}
+
+type help struct {
+	root
+}
+
+func (h *help) Explain() {
+	logic.ShowHelpInfo()
 }
 
 // Parse expose yypase

@@ -35,7 +35,9 @@ func (y *yylexer) getc() byte {
     if b, err := y.src.ReadByte(); err == nil {
         y.current = b
     }
-    fmt.Println("getc()->", string(y.current), y.current)
+    if debug {
+        fmt.Println("getc()->", string(y.current), y.current)
+    }
     return y.current
 }
 
@@ -94,7 +96,9 @@ white		[ \t\n\r]+
 "loop" return LOOP
 
 {digit}
-    fmt.Println("lex: num", y.buf)
+    if debug {
+        fmt.Println("lex: num", y.buf)
+    }
     lval.str = string(y.buf)
     return NUM
 

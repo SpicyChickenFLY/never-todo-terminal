@@ -9,6 +9,6 @@ import (
 
 func main() {
 	// cmd.Execute()
-	args := strings.Join(os.Args, " ")
+	args := strings.Join(os.Args[1:], " ")
 	parser.Parse(args)
 }

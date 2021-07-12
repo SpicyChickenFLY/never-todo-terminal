@@ -21,9 +21,9 @@ var cmdTodoAdd = &cobra.Command{
 	Short: "add new task(s)",
 	Run: func(cmd *cobra.Command, args []string) {
 		// fmt Println("Pull: " + strings Join(args, " "))
-		if err := logic.AddTasks(args); err != nil {
-			panic(err)
-		}
+		// if err := logic.AddTasks(args); err != nil {
+		// 	panic(err)
+		// }
 	},
 }
 

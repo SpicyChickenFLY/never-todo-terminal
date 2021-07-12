@@ -8,4 +8,4 @@ golex -o ..\parser\lex.go ..\parser\lex.l
 
 
 
-go test ../parser
+go test -v ../parser

@@ -64,12 +64,9 @@ func ShowTasks(params []string) error {
 	return nil
 }
 
-func AddTasks(assign_tags []data.Tag, dueTime time.Datetime, loop Loop) error {
+func AddTasks(assign_tags []data.Tag, dueTime time.Time, loop string) error {
 	if err := db.Read(model); err != nil {
 		return err
-	}
-	for _, param := range params {
-		fmt.Println(param)
 	}
 	// add new task
 	return db.Write(model)
@@ -85,11 +82,11 @@ func DelTasks(params []string) error {
 	return db.Write(model)
 }
 
-func SetTask() {
+func SetTask() error {
 	if err := db.Read(model); err != nil {
 		return err
 	}
-	return db.Write(model * data.Model)
+	return db.Write(model)
 }
 
 func ShowTags() {}

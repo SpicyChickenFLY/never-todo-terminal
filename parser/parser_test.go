@@ -9,7 +9,7 @@ import (
 
 type testCase struct {
 	input      string
-	output     CommandTree
+	output     RootNode
 	supposeErr error
 }
 
