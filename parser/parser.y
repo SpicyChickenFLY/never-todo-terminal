@@ -148,19 +148,27 @@ task_update:
 
 // ========== TASK FILTER =============
 task_list_filter:
-      definite_task_list_filter {/*if debug {fmt.Println("task_list_filter-end")}*/}
-    | indefinite_task_list_filter {}
+      definite_task_list_filter { $$ = ast.NewDefiniteTaskListFilterNode($1, nil) }
+    | indefinite_task_list_filter { $$ = ast.NewIndefiniteTaskListFilterNode(nil, $1) }
+    ;
 
 definite_task_list_filter:
       id_group {}
+    ;
 
 indefinite_task_list_filter:
-      LIKE content_group task_list_filter {}
-    | content_group task_list_filter {}
-    | content_group task_list_filter {}
-    | assign_group task_list_filter {}
-    | AGE COLON time_list_filter task_list_filter {}
-    | DUE COLON time_list_filter task_list_filter {}
+      LIKE content_group task_list_filter { 
+        $$ = $3 
+        $$.SetContentGroupNode($2)
+      }
+    | content_group task_list_filter { 
+        $$ = $2
+        $$.SetContentGroupNode($1)
+      }
+    | assign_group task_list_filter {  }
+    | AGE COLON time_list_filter task_list_filter {  }
+    | DUE COLON time_list_filter task_list_filter {  }
+    ;
 
 task_add_filter:
       {}
@@ -182,11 +190,11 @@ task_update_option:
 // ========== TAG COMMAND =============
 
 tag_list:
-      TAG tag_list_filter {/*if debug {fmt.Println("tag_list")}*/}
+      TAG tag_list_filter {  }
     ;
 
 tag_set:
-      TAG SET id content {/*if debug {fmt.Println("task_update")}*/}
+      TAG SET id content {}
     ;
 
 // ========== TAG FILTER =============
@@ -218,12 +226,12 @@ id:
     ; 
 
 content_group:
-      content {}
+      content { $$ = NewContentGroupNode(ast.OPNone, []ContentGroupNode{$1}) }
     | LBRACK content_group RBRACK { $$ = $2 }
-    | content_group AND content_group {}
-    | content_group OR content_group {}
-    | content_group XOR content_group {}
-    | NOT content_group {}
+    | content_group AND content_group { $$ = NewContentGroupNode(ast.OPAND, []ContentGroupNode{$1, $3}) }
+    | content_group OR content_group { $$ = NewContentGroupNode(ast.OPOR, []ContentGroupNode{$1, $3}) }
+    | content_group XOR content_group { $$ = NewContentGroupNode(ast.OPXOR, []ContentGroupNode{$1, $3}) }
+    | NOT content_group { $$ = NewContentGroupNode(ast.OPNOT, []ContentGroupNode{$2}) }
     ;
 
 content:
@@ -232,32 +240,32 @@ content:
     | DQUOTE content DQUOTE { $$ = $2 }
     | QUOTE content QUOTE { $$ = $2 }
     | shard_content { $$ = $1 }
+    ;
 
 // 转义所有关键字
 shard_content:
-      {if debug {fmt.Println("content-end")}}
-    | IDENT shard_content { $$ = $1 + $2 }
+      { $$ = "" }
     | id_group shard_content { $$ = $1.Restore() + $2}
+    | IDENT shard_content { $$ = $1 + $2 }
     
-    | ADD shard_content {}
-    | DELETE shard_content {}
-    | SET shard_content {}
-    | DONE shard_content {}
+    | ADD shard_content { $$ = $1 + $2 }
+    | DELETE shard_content { $$ = $1 + $2 }
+    | SET shard_content { $$ = $1 + $2 }
+    | DONE shard_content { $$ = $1 + $2 }
 
-    | AGE shard_content {}
-    | DUE shard_content {}
-    | LIKE shard_content {}
-    | LOOP shard_content {}
+    | AGE shard_content { $$ = $1 + $2 }
+    | DUE shard_content { $$ = $1 + $2 }
+    | LIKE shard_content { $$ = $1 + $2 }
+    | LOOP shard_content { $$ = $1 + $2 }
 
-    | COLON shard_content {}
-    | PLUS shard_content {}
-    | MINUS shard_content {}
-    | AND shard_content {}
-    | OR shard_content {}
-    | XOR shard_content {}
-    | NOT shard_content {}
+    | COLON shard_content { $$ = $1 + $2 }
+    | PLUS shard_content { $$ = $1 + $2 }
+    | MINUS shard_content { $$ = $1 + $2 }
+    | AND shard_content { $$ = $1 + $2 }
+    | OR shard_content { $$ = $1 + $2 }
+    | XOR shard_content { $$ = $1 + $2 }
+    | NOT shard_content { $$ = $1 + $2 }
     ;
-
 
 assign_group:
       { $$ = ast.NewAssignGroupNode() }

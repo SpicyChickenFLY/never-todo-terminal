@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/constant"
-	"github.com/SpicyChickenFLY/never-todo-cmd/logic"
+	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +16,7 @@ var rootCmd = &cobra.Command{
 		fmt.Println(constant.ColorfulLogo)
 		fmt.Println(constant.Descirption)
 		fmt.Println(constant.Separator)
-		if err := logic.ShowSummary(); err != nil {
+		if err := controller.ShowSummary(); err != nil {
 			panic(err)
 		}
 	},

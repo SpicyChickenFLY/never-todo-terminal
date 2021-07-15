@@ -64,36 +64,90 @@ white		[ \t\n\r]+
 
     y.buf = y.buf[:0]
 
-"'" return QUOTE
-"\"" return DQUOTE
+"'" 
+    lval.str = string(y.buf)
+    return QUOTE
+"\"" 
+    lval.str = string(y.buf)
+    return DQUOTE
 
-":" return COLON
-"+" return PLUS
-"-" return MINUS
+":" 
+    lval.str = string(y.buf)
+    return COLON
+"+" 
+    lval.str = string(y.buf)
+    return PLUS
+"-" 
+    lval.str = string(y.buf)
+    return MINUS
 
-"&" return AND
-"|" return OR
-"!" return NOT
-"^" return XOR
+"&" 
+    lval.str = string(y.buf)
+    return AND
+"|" 
+    lval.str = string(y.buf)
+    return OR
+"!" 
+    lval.str = string(y.buf)
+    return NOT
+"^" 
+    lval.str = string(y.buf)
+    return XOR
 
-"-h" return HELP
-"ui" return UI
-"gui" return GUI
-"explain" return EXPLAIN
-"log" return LOG
-"undo" return UNDO
+"-h" 
+    lval.str = string(y.buf)
+    return HELP
+"ui" 
+    lval.str = string(y.buf)
+    return UI
+"gui" 
+    lval.str = string(y.buf)
+    return GUI
+"explain" 
+    lval.str = string(y.buf)
+    return EXPLAIN
+"log" 
+    lval.str = string(y.buf)
+    return LOG
+"undo" 
+    lval.str = string(y.buf)
+    return UNDO
 
-"todo"|"task" return TASK
-"tag" return TAG
+"todo"|"task" 
+    lval.str = string(y.buf)
+    return TASK
+"tag" 
+    lval.str = string(y.buf)
+    return TAG
 
-"add"|"create" return ADD
-"del"|"delete"|"remove" return DELETE
-"set"|"edit" return SET
-"done"|"complete" return DONE
-"age" return AGE
-"due" return DUE
-"like" return LIKE
-"loop" return LOOP
+"add"|"create" 
+    lval.str = string(y.buf)
+    return ADD
+"del"|"delete"|"remove" 
+    lval.str = string(y.buf)
+    return DELETE
+"set"|"edit" 
+    lval.str = string(y.buf)
+    return SET
+"done"|"complete" 
+    lval.str = string(y.buf)
+    return DONE
+
+"age" 
+    lval.str = string(y.buf)
+    return AGE
+
+"due" 
+    lval.str = string(y.buf)
+    return DUE
+
+"like" 
+    lval.str = string(y.buf)
+    return LIKE
+
+"loop" 
+    lval.str = string(y.buf)
+    return LOOP
 
 {digit}
     lval.str = string(y.buf)

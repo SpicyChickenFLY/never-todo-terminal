@@ -10,6 +10,32 @@ import (
 // Task List
 // ============================
 
+type TaskListNode struct {
+	taskListFilterNode *TaskListFilterNode
+}
+
+func NewTaskListNode() {}
+
+type TaskListFilterNode struct {
+	definiteTaskListFilterNode   *DefiniteTaskListFilterNode
+	indefiniteTaskListFilterNode *IndefiniteTaskListFilterNode
+}
+
+func NewTaskListFilterNode() {}
+
+type DefiniteTaskListFilterNode struct {
+	idGroup *IDGroupNode
+}
+
+func NewDefiniteTaskListFilterNode() {}
+
+type IndefiniteTaskListFilterNode struct {
+	contentGroup *ContentGroupNode
+	assignGroup  *AssignGroupNode
+}
+
+func NewIndefiniteTaskListFilterNode() {}
+
 // ============================
 // Task Done
 // ============================
