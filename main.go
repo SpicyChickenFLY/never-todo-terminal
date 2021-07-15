@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -8,7 +9,15 @@ import (
 )
 
 func main() {
-	// cmd.Execute()
+	// Restore the args to origin command string
 	args := strings.Join(os.Args[1:], " ")
-	parser.Parse(args)
+	// Parse command string to an AST
+	result := parser.Parse(args)
+	fmt.Println("[INFO]: parse command string successfully")
+	// Execute the AST
+	if err := result.Execute(); err != nil {
+		fmt.Println("[ERROR]: ", err.Error())
+	} else {
+		fmt.Println("[INFO]: execute command successfully")
+	}
 }

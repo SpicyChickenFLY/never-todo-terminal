@@ -1,4 +1,4 @@
-package logic
+package controller
 
 import (
 	"fmt"
@@ -71,22 +71,23 @@ func AddTasks(assign_tags []data.Tag, dueTime time.Time, loop string) error {
 	// add new task
 	return db.Write(model)
 }
-func DelTasks(params []string) error {
+func DeleteTask(ids []int) error {
 	if err := db.Read(model); err != nil {
 		return err
-	}
-	for _, param := range params {
-		fmt.Println(param)
 	}
 	// delete task
 	return db.Write(model)
 }
 
-func SetTask() error {
+func UpdateTask(id int, content string) error {
 	if err := db.Read(model); err != nil {
 		return err
 	}
 	return db.Write(model)
+}
+
+func CompleteTask(ids []int) error {
+	return nil
 }
 
 func ShowTags() {}

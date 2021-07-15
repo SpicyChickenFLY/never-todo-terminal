@@ -56,7 +56,7 @@ func (y *yylexer) Lex(lval *yySymType) int {
 %yyc c
 %yyn c = y.getc()
 
-digit  [+-]?[0-9]+
+digit  [0-9]+
 letter        [_a-zA-Z]
 identifier    {letter}({letter}|{digit})*
 white		[ \t\n\r]+
@@ -96,9 +96,6 @@ white		[ \t\n\r]+
 "loop" return LOOP
 
 {digit}
-    if debug {
-        fmt.Println("lex: num", y.buf)
-    }
     lval.str = string(y.buf)
     return NUM
 

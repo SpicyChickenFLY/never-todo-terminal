@@ -3,21 +3,30 @@ package parser
 
 import (
     "fmt"
+    "strconv"
+    "github.com/SpicyChickenFLY/never-todo-cmd/parser/ast"
 )
 %}
 
 %union {
    str string
    num int
-   cmd *RootNode
-   stmt *StmtNode
+   root ast.Node
+   stmt ast.StmtNode
+   taskDeleteNode *ast.TaskDeleteNode
+   taskDoneNode *ast.TaskDoneNode
+   taskUpdateNode *ast.TaskUpdateNode
+   taskUpdateOptionNode *ast.TaskUpdateOptionNode
+   idGroupNode *ast.IDGroupNode
+   contentGroupNode *ast.ContentGroupNode
+   assignGroupNode *ast.AssignGroupNode
 }
 
-%token <str> NUM 
-%token <str> IDENT
+%token <str> NUM IDENT
 
-%token <str> PLUS MINUS
-%token <str> COLON
+%right <str> PLUS MINUS
+%token <str> COLON QUOTE DQUOTE
+%token <str> LBRACK RBRACK
 
 %token <str> NOT
 %left <str> AND OR 
@@ -26,44 +35,71 @@ import (
 %token <str> UI GUI EXPLAIN LOG UNDO 
 %token <str> TASK TAG ADD DELETE SET DONE
 %token <str> AGE DUE LIKE LOOP 
-
 %token <str> HELP
 
-%right PLUS MINUS
 
-%token <str> QUOTE DQUOTE
+%type <root> root
+%type <stmt> stmt
+%type <taskDeleteNode> task_delete
+%type <taskDoneNode> task_done
+%type <taskUpdateNode> task_update
+%type <taskUpdateOptionNode> task_update_option
 
-%type <cmd> cmd
-%type <str> id id_group
+%type <num> id 
+%type <idGroupNode> id_group
+%type <str> content shard_content
+%type <contentGroupNode> content_group
+%type <assignGroupNode> assign_group positive_assign_group
+%type <str> assign_tag unassign_tag
 
 %start root
 
 %%
-root:
-      cmd {/*if debug {fmt.Println("cmd")}*/}
-      stmt
 
-cmd:
-      {if debug {fmt.Println("cmd-summary")}}
-    | HELP {if debug {fmt.Println("cmd-HELP")}}
-    | UI {if debug {fmt.Println("cmd-UI")}}
-    | GUI {if debug {fmt.Println("cmd-GUI")}}
-    | EXPLAIN stmt {if debug {fmt.Println("cmd-EXPLAIN")}}
+root:
+      { result = ast.NewRootNode(ast.CMDSummary, nil) }
+    | UI { result = ast.NewRootNode(ast.CMDUI, nil) }
+    | GUI { result = ast.NewRootNode(ast.CMDGUI, nil) }
+    | EXPLAIN stmt { result = ast.NewRootNode(ast.CMDExplain, &$2) }
+    | stmt { result = ast.NewRootNode(ast.CMDStmt, &$1) }
+    | help { result = ast.NewRootNode(ast.CMDHelp, nil) }
+    ;
 
 stmt:
-    | log_list  {if debug {fmt.Println("stmt_log_list")}}
+      log_list  {if debug {fmt.Println("stmt_log_list")}}
     | undo_log {if debug {fmt.Println("stmt_undo_log")}}
 
     | task_help {if debug {fmt.Println("stmt_task_help")}}
     | task_list {if debug {fmt.Println("stmt_task_list")}}
     | task_add {if debug {fmt.Println("stmt_task_add")}}
-    | task_delete {if debug {fmt.Println("stmt_task_delete")}}
-    | task_set {if debug {fmt.Println("stmt_task_set")}}
-    | task_done {if debug {fmt.Println("stmt_task_done")}}
+    | task_delete { $$ = $1 }
+    | task_update { $$ = $1 }
+    | task_done { $$ = $1 }
     
     | tag_help {if debug {fmt.Println("stmt_tag_help")}}
     | tag_list {if debug {fmt.Println("stmt_tag_list")}}
     | tag_set {if debug {fmt.Println("stmt_tag_set")}}
+    ;
+
+
+// ========== HELP =============
+help:
+      HELP {}
+    | task_help {}
+    | tag_help {}
+
+task_help:
+      TASK HELP {/*if debug {fmt.Println("task_help")}*/}
+    | task_list HELP {/*if debug {fmt.Println("task_help")}*/}
+    | task_add HELP {/*if debug {fmt.Println("task_help")}*/}
+    | task_delete HELP {/*if debug {fmt.Println("task_help")}*/}
+    | task_update HELP {/*if debug {fmt.Println("task_help")}*/}
+    ;
+
+tag_help:
+      TAG HELP {/*if debug {fmt.Println("tag_help")}*/}
+    | tag_list HELP {/*if debug {fmt.Println("tag_help")}*/}
+    | tag_set HELP  {/*if debug {fmt.Println("tag_help")}*/}
     ;
 
 // ========== LOG =============
@@ -77,18 +113,10 @@ undo_log:
     | UNDO id {/*if debug {fmt.Println("log")}*/}
     ;
 
-// ========== TASK COMMAND =============
-task_help:
-      TASK HELP {/*if debug {fmt.Println("task_help")}*/}
-    | task_list HELP {/*if debug {fmt.Println("task_help")}*/}
-    | task_add HELP {/*if debug {fmt.Println("task_help")}*/}
-    | task_delete HELP {/*if debug {fmt.Println("task_help")}*/}
-    | task_set HELP {/*if debug {fmt.Println("task_help")}*/}
-    ;
-
+// ========== TASK COMMAND ==============
 task_list:
-      TASK task_list_filter {/*if debug {fmt.Println("task_list")}*/}
-    | task_list_filter {/*if debug {fmt.Println("task_list")}*/}
+      TASK task_list_filter {}
+    | task_list_filter {}
     ;
 
 task_add:
@@ -98,158 +126,166 @@ task_add:
     ;
 
 task_done:
-      TASK DONE id_group {/*if debug {fmt.Println("task_done")}*/}
-    | DONE id_group {/*if debug {fmt.Println("task_done")}*/}
-    | id_group DONE {/*if debug {fmt.Println("task_done")}*/}
+      TASK DONE id_group { $$ = ast.NewTaskDoneNode($3) }
+    | DONE id_group { $$= ast.NewTaskDoneNode($2) }
+    | id_group DONE { $$= ast.NewTaskDoneNode($1) }
     ;
 
 task_delete:
-      TASK DELETE id_group {/*if debug {fmt.Println("task_delete")}*/}
-    | DELETE id_group {/*if debug {fmt.Println("task_delete")}*/}
-    | id_group DELETE {/*if debug {fmt.Println("task_delete")}*/}
+      TASK DELETE id_group {$$ = ast.NewTaskDeleteNode($3)}
+    | DELETE id_group {$$ = ast.NewTaskDeleteNode($2)}
+    | id_group DELETE {$$ = ast.NewTaskDeleteNode($1)}
     ;
 
-task_set:
-      TASK SET id content task_update_filter {/*if debug {fmt.Println("task_set")}*/}
-    | SET id content task_update_filter {/*if debug {fmt.Println("task_set")}*/}
-    | TASK id SET content task_update_filter {/*if debug {fmt.Println("task_set")}*/}
-    | id SET content task_update_filter {/*if debug {fmt.Println("task_set")}*/}
-    | TASK id content task_update_filter {/*if debug {fmt.Println("task_set")}*/}
-    | id content task_update_filter {/*if debug {fmt.Println("task_set")}*/}
+task_update:
+      TASK SET id content task_update_option { $$ = ast.NewTaskUpdateNode($3, $4, $5) }
+    | SET id content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
+    | TASK id SET content task_update_option { $$ = ast.NewTaskUpdateNode($2, $4, $5) }
+    | id SET content task_update_option { $$ = ast.NewTaskUpdateNode($1, $3, $4) }
+    | TASK id content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
+    | id content task_update_option { $$ = ast.NewTaskUpdateNode($1, $2, $3) }
     ;
 
+// ========== TASK FILTER =============
+task_list_filter:
+      definite_task_list_filter {/*if debug {fmt.Println("task_list_filter-end")}*/}
+    | indefinite_task_list_filter {}
+
+definite_task_list_filter:
+      id_group {}
+
+indefinite_task_list_filter:
+      LIKE content_group task_list_filter {}
+    | content_group task_list_filter {}
+    | content_group task_list_filter {}
+    | assign_group task_list_filter {}
+    | AGE COLON time_list_filter task_list_filter {}
+    | DUE COLON time_list_filter task_list_filter {}
+
+task_add_filter:
+      {}
+    | positive_assign_group task_add_filter {}
+    /* | DUE COLON time_single {}
+    | LOOP COLON loop_time {} */
+    ;
+
+task_update_option:
+      { $$ = ast.NewTaskUpdateOptionNode() }
+    | assign_group task_update_option { 
+        $2.AssignTag($1)
+        $$ = $2 
+      }
+    /* | DUE COLON time_single {}
+    | LOOP COLON loop_time {} */
+    ;
 
 // ========== TAG COMMAND =============
-tag_help:HELP
-      TAG HELP {/*if debug {fmt.Println("tag_help")}*/}
-    | tag_list HELP {/*if debug {fmt.Println("tag_help")}*/}
-    | tag_set HELP  {/*if debug {fmt.Println("tag_help")}*/}
-    ;
 
 tag_list:
       TAG tag_list_filter {/*if debug {fmt.Println("tag_list")}*/}
     ;
 
 tag_set:
-      TAG SET id content {/*if debug {fmt.Println("task_set")}*/}
-    ;
-
-// ========== TASK FILTER =============
-task_list_filter:
-     {/*if debug {fmt.Println("task_list_filter-end")}*/}
-    | id_group task_list_filter {/*if debug {fmt.Println("task_list_filter")}*/}
-    | LIKE content_group task_list_filter {/*if debug {fmt.Println("task_list_filter")}*/}
-    | content_group task_list_filter {/*if debug {fmt.Println("task_list_filter")}*/}
-    | assign_group task_list_filter {/*if debug {fmt.Println("task_list_filter")}*/}
-    | AGE COLON time_list_filter task_list_filter {/*if debug {fmt.Println("task_list_filter")}*/}
-    | DUE COLON time_list_filter task_list_filter {/*if debug {fmt.Println("task_list_filter")}*/}
-    ;
-
-task_add_filter:
-      {/*if debug {fmt.Println("task_add_filter")}*/}
-    | positive_assign_group task_add_filter {/*if debug {fmt.Println("task_add_filter")}*/}
-    | DUE COLON time_single {/*if debug {fmt.Println("task_add_filter")}*/}
-    | LOOP COLON loop_time {/*if debug {fmt.Println("task_add_filter")}*/}
-    ;
-
-task_update_filter:
-      {/*if debug {fmt.Println("task_update_filter")}*/}
-    | assign_group task_update_filter {/*if debug {fmt.Println("task_update_filter")}*/}
-    | DUE COLON time_single {/*if debug {fmt.Println("task_update_filter")}*/}
-    | LOOP COLON loop_time {/*if debug {fmt.Println("task_update_filter")}*/}
+      TAG SET id content {/*if debug {fmt.Println("task_update")}*/}
     ;
 
 // ========== TAG FILTER =============
 tag_list_filter:
-      {/*if debug {fmt.Println("task_list_filter")}*/}
-    | id_group tag_list_filter {/*if debug {fmt.Println("task_list_filter")}*/}
-    | LIKE content_group tag_list_filter {/*if debug {fmt.Println("task_list_filter")}*/}
+      { $$ = ast.NewTagListFilter() }
+    | id_group { $$ = ast.NewTagListFilter($1) }
+    | LIKE content_group { $$ = ast.NewTagListFilter($2) }
+    | content_group { $$ = ast.NewTagListFilter($1) }
     ;
 
-// ========== COMMON =============
+// ========== UTILS =============
 id_group:
-      id id_group {
-        $$ =  $1 + $2
-        // if debug {fmt.Println("id_group:", $1, $2)
+      id_group id_group { 
+        $1.MergeIDNode($2)
+        $$ =  $1 
       }
-    | id MINUS id {
-        $$ = $1 + $2
-        // if debug {fmt.Println("id_group:",$1, $3)
-      }
-    | id {
-        $$ = $1
-        // if debug {fmt.Println("id_group:", $1)
-      }
+    | id MINUS id { $$ = ast.NewIDGroupNode($1, $3) }
+    | id { $$ = ast.NewIDGroupNode($1) }
     ;
 
 id: 
       NUM {
-        $$ = $1
-        // fmt.Printf("id:%s\n", $1) 
+        val, err := strconv.Atoi($1)
+        if err != nil {
+          panic(err)
+        }
+        $$ = val
       }
     ; 
 
 content_group:
-      content_logic {/*if debug {fmt.Println("content_group")}*/}
-    | content {/*if debug {fmt.Println("content_group")}*/}
-    ;
-
-content_logic:
-      content AND content {/*if debug {fmt.Println("content_logic")}*/}
-    | content OR content {/*if debug {fmt.Println("content_logic")}*/}
-    | content XOR content {/*if debug {fmt.Println("content_logic")}*/}
-    | NOT content {/*if debug {fmt.Println("content_logic")}*/}
-    ;
-
-assign_group:
-      assign_tag assign_group {/*if debug {fmt.Println("assign_group")}*/}
-    | unassign_tag assign_group {/*if debug {fmt.Println("assign_group")}*/}
-    | {/*if debug {fmt.Println("assign_group")}*/}
-    ;
-
-positive_assign_group:
-      assign_tag positive_assign_group {/*if debug {fmt.Println("positive_assign_group")}*/}
-    | {/*if debug {fmt.Println("positive_assign_group")}*/}
-    ;
-
-assign_tag: 
-      PLUS IDENT  {/*if debug {fmt.Println("assign_tag")}*/}
-    ;
-
-unassign_tag: 
-      MINUS IDENT  {/*if debug {fmt.Println("unassign_tag")}*/}
+      content {}
+    | LBRACK content_group RBRACK { $$ = $2 }
+    | content_group AND content_group {}
+    | content_group OR content_group {}
+    | content_group XOR content_group {}
+    | NOT content_group {}
     ;
 
 content:
-      DQUOTE shard_content DQUOTE {}
-    | QUOTE shard_content QUOTE {}
-    | DQUOTE content DQUOTE {}
-    | QUOTE content QUOTE {}
-    | shard_content {}
+      DQUOTE shard_content DQUOTE { $$ = $2 }
+    | QUOTE shard_content QUOTE { $$ = $2 }
+    | DQUOTE content DQUOTE { $$ = $2 }
+    | QUOTE content QUOTE { $$ = $2 }
+    | shard_content { $$ = $1 }
 
 // 转义所有关键字
 shard_content:
       {if debug {fmt.Println("content-end")}}
-    | IDENT shard_content {if debug {fmt.Println("content-merge")}}
-    | id_group shard_content {if debug {fmt.Println("content-merge")}}
-    | ADD shard_content {if debug {fmt.Println("content-merge")}}
-    | DELETE shard_content {if debug {fmt.Println("content-merge")}}
-    | SET shard_content {if debug {fmt.Println("content-merge")}}
-    | DONE shard_content {if debug {fmt.Println("content-merge")}}
+    | IDENT shard_content { $$ = $1 + $2 }
+    | id_group shard_content { $$ = $1.Restore() + $2}
+    
+    | ADD shard_content {}
+    | DELETE shard_content {}
+    | SET shard_content {}
+    | DONE shard_content {}
 
-    | AGE shard_content {if debug {fmt.Println("content-merge")}}
-    | DUE shard_content {if debug {fmt.Println("content-merge")}}
-    | LIKE shard_content {if debug {fmt.Println("content-merge")}}
-    | LOOP shard_content {if debug {fmt.Println("content-merge")}}
+    | AGE shard_content {}
+    | DUE shard_content {}
+    | LIKE shard_content {}
+    | LOOP shard_content {}
 
-    | COLON shard_content {if debug {fmt.Println("content-merge")}}
-    | PLUS shard_content {if debug {fmt.Println("content-merge")}}
-    | MINUS shard_content {if debug {fmt.Println("content-merge")}}
-    | AND shard_content {if debug {fmt.Println("content-merge")}}
-    | OR shard_content {if debug {fmt.Println("content-merge")}}
-    | XOR shard_content {if debug {fmt.Println("content-merge")}}
-    | NOT shard_content {if debug {fmt.Println("content-merge")}}
+    | COLON shard_content {}
+    | PLUS shard_content {}
+    | MINUS shard_content {}
+    | AND shard_content {}
+    | OR shard_content {}
+    | XOR shard_content {}
+    | NOT shard_content {}
     ;
+
+
+assign_group:
+      { $$ = ast.NewAssignGroupNode() }
+    | assign_tag assign_group {
+        $$ = $2
+        $$.AssignTag($1)
+      }
+    | unassign_tag assign_group {
+        $$ = $2
+        $$.UnassignTag($1)
+      }
+    ;
+
+positive_assign_group:
+      { $$ = ast.NewAssignGroupNode() }
+    | assign_tag positive_assign_group {
+        $$ = $2
+        $$.AssignTag($1)}
+    ;
+
+assign_tag: 
+      PLUS IDENT  { $$ = $2 }
+    ;
+
+unassign_tag: 
+      MINUS IDENT  { $$ = $2}
+    ;
+
 
 time_list_filter:
       time_single {/*if debug {fmt.Println("time_list_filter")}*/}
@@ -265,8 +301,8 @@ time_range:
       time_single MINUS time_single {/*if debug {fmt.Println("time_range")}*/}
     ;
 
-loop_time:
-      IDENT {/*if debug {fmt.Println("loop_time")}*/}
-     ;
+/* loop_time:
+      IDENT {}
+     ; */
 
 %%

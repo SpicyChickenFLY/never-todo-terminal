@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+
+	"github.com/SpicyChickenFLY/never-todo-cmd/parser/ast"
 )
 
 type testCase struct {
 	input      string
-	output     RootNode
+	output     ast.Node
 	supposeErr error
 }
 
@@ -25,7 +27,7 @@ func TestParser(t *testing.T) {
 		"look for me",
 		"todo add remeber to go shopping",
 		"add 'del: 1 + 1 & 2 '",
-		"todo done 1-4 20",
+		"todo done 1-4 20-15",
 		"del 20 2-5",
 		//
 		"tag 9",
