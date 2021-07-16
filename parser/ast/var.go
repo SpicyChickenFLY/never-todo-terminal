@@ -47,6 +47,8 @@ func (ign *IDGroupNode) MergeIDNode(idNode *IDGroupNode) {
 }
 
 // Restore to statement
+func (ign *IDGroupNode) Restore() string { return ign.restore() }
+
 func (ign *IDGroupNode) restore() string {
 	result := ""
 	for _, id := range ign.idGroup {
@@ -83,20 +85,29 @@ func (ign *IDGroupNode) removeRepeatedIDs() {
 // ============================
 
 const ( // operator type
+	// OPNone indicate none command
 	OPNone = iota + 0
+	// OPNOT not
 	OPNOT
+	// OPAND and
 	OPAND
+	// OPOR or
 	OPOR
+	// OPXOR xor
 	OPXOR
 )
 
+// ContentGroupNode is node include contents
 type ContentGroupNode struct {
-	operands []ContentGroupNode
+	content  string
+	operands []*ContentGroupNode
 	operator int
 }
 
-func NewContentGroupNode(operator int, operands []ContentGroupNode) *ContentGroupNode {
-	return &ContentGroupNode{operands, operator}
+// NewContentGroupNode return ContentGroupNode
+func NewContentGroupNode(
+	content string, operator int, operands []*ContentGroupNode) *ContentGroupNode {
+	return &ContentGroupNode{content, operands, operator}
 }
 
 func (cgn *ContentGroupNode) filter(tags []data.Tag) []data.Tag {
@@ -112,6 +123,7 @@ func (cgn *ContentGroupNode) filter(tags []data.Tag) []data.Tag {
 // ============================
 // Assign Group
 // ============================
+
 // AssignGroupNode is node include id
 type AssignGroupNode struct {
 	assignGroup   []string

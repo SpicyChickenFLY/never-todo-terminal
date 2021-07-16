@@ -2,24 +2,31 @@
 package parser
 
 import (
-    "fmt"
-    "strconv"
-    "github.com/SpicyChickenFLY/never-todo-cmd/parser/ast"
+  "fmt"
+  "strconv"
+  "github.com/SpicyChickenFLY/never-todo-cmd/parser/ast"
 )
 %}
 
 %union {
-   str string
-   num int
-   root ast.Node
-   stmt ast.StmtNode
-   taskDeleteNode *ast.TaskDeleteNode
-   taskDoneNode *ast.TaskDoneNode
-   taskUpdateNode *ast.TaskUpdateNode
-   taskUpdateOptionNode *ast.TaskUpdateOptionNode
-   idGroupNode *ast.IDGroupNode
-   contentGroupNode *ast.ContentGroupNode
-   assignGroupNode *ast.AssignGroupNode
+  str string
+  num int
+  root ast.Node
+  stmt ast.StmtNode
+
+  taskListNode *ast.TaskListNode
+  taskListFilterNode *ast.TaskListFilterNode
+  indefiniteTaskListFilterNode *ast.IndefiniteTaskListFilterNode
+  taskDeleteNode *ast.TaskDeleteNode
+  taskDoneNode *ast.TaskDoneNode
+  taskUpdateNode *ast.TaskUpdateNode
+  taskUpdateOptionNode *ast.TaskUpdateOptionNode
+
+  tagListFilterNode *ast.TagListFilterNode
+
+  idGroupNode *ast.IDGroupNode
+  contentGroupNode *ast.ContentGroupNode
+  assignGroupNode *ast.AssignGroupNode
 }
 
 %token <str> NUM IDENT
@@ -40,17 +47,24 @@ import (
 
 %type <root> root
 %type <stmt> stmt
+
+%type <taskListNode> task_list
+%type <taskListFilterNode> task_list_filter
+%type <indefiniteTaskListFilterNode> indefinite_task_list_filter itlf_1 itlf_2 itlf_3
 %type <taskDeleteNode> task_delete
 %type <taskDoneNode> task_done
 %type <taskUpdateNode> task_update
 %type <taskUpdateOptionNode> task_update_option
 
+%type <tagListFilterNode> tag_list_filter
+
 %type <num> id 
 %type <idGroupNode> id_group
 %type <str> content shard_content
-%type <contentGroupNode> content_group
+%type <contentGroupNode> content_group content_filter
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
+%type <str> time_list_filter
 
 %start root
 
@@ -70,7 +84,7 @@ stmt:
     | undo_log {if debug {fmt.Println("stmt_undo_log")}}
 
     | task_help {if debug {fmt.Println("stmt_task_help")}}
-    | task_list {if debug {fmt.Println("stmt_task_list")}}
+    | task_list { $$ = $1 }
     | task_add {if debug {fmt.Println("stmt_task_add")}}
     | task_delete { $$ = $1 }
     | task_update { $$ = $1 }
@@ -115,8 +129,8 @@ undo_log:
 
 // ========== TASK COMMAND ==============
 task_list:
-      TASK task_list_filter {}
-    | task_list_filter {}
+      TASK task_list_filter { $$ = ast.NewTaskListNode($2) }
+    | task_list_filter { $$ = ast.NewTaskListNode($1) }
     ;
 
 task_add:
@@ -148,26 +162,55 @@ task_update:
 
 // ========== TASK FILTER =============
 task_list_filter:
-      definite_task_list_filter { $$ = ast.NewDefiniteTaskListFilterNode($1, nil) }
-    | indefinite_task_list_filter { $$ = ast.NewIndefiniteTaskListFilterNode(nil, $1) }
-    ;
-
-definite_task_list_filter:
-      id_group {}
+      { $$ = ast.NewTaskListFilterNode(nil, nil) }
+    | id_group { $$ = ast.NewTaskListFilterNode($1, nil) }
+    | indefinite_task_list_filter { $$ = ast.NewTaskListFilterNode(nil, $1) }
     ;
 
 indefinite_task_list_filter:
-      LIKE content_group task_list_filter { 
-        $$ = $3 
-        $$.SetContentGroupNode($2)
-      }
-    | content_group task_list_filter { 
+      itlf_1 { $$ = $1 }
+    |  content_filter itlf_1 {
         $$ = $2
-        $$.SetContentGroupNode($1)
+        $$.SetContentFilter($1)
       }
-    | assign_group task_list_filter {  }
-    | AGE COLON time_list_filter task_list_filter {  }
-    | DUE COLON time_list_filter task_list_filter {  }
+    | itlf_1 content_filter {
+        $$ = $1
+        $$.SetContentFilter($2)
+      }
+    ;
+
+content_filter:
+      LIKE content_group { $$ = $2 }
+    | content_group { $$ = $1}
+    ;
+
+itlf_1:
+      itlf_2 { $$ = $1 }
+    | assign_group itlf_2 {
+        $$ = $2
+        $$.SetAssignFilter($1)
+      }
+    | itlf_2 assign_group {
+        $$ = $1
+        $$.SetAssignFilter($2)
+      }
+    ;
+
+itlf_2:
+      itlf_3 { $$ = $1 }
+    | AGE COLON time_list_filter itlf_3 {
+        $$ = $4
+        $$.SetAgeFilter($3)
+      }
+    | itlf_3 AGE COLON time_list_filter {
+        $$ = $1
+        $$.SetAgeFilter($4)
+      }
+    ;
+
+itlf_3:
+      { $$ = ast.NewIndefiniteTaskListFilterNode() }
+    | DUE COLON time_list_filter { $$.SetDueFilter($3) }
     ;
 
 task_add_filter:
@@ -199,10 +242,10 @@ tag_set:
 
 // ========== TAG FILTER =============
 tag_list_filter:
-      { $$ = ast.NewTagListFilter() }
-    | id_group { $$ = ast.NewTagListFilter($1) }
-    | LIKE content_group { $$ = ast.NewTagListFilter($2) }
-    | content_group { $$ = ast.NewTagListFilter($1) }
+      { $$ = ast.NewTagListFilterNode(nil, nil) }
+    | id_group { $$ = ast.NewTagListFilterNode($1, nil) }
+    | LIKE content_group { $$ = ast.NewTagListFilterNode(nil, $2) }
+    | content_group { $$ = ast.NewTagListFilterNode(nil, $1) }
     ;
 
 // ========== UTILS =============
@@ -226,12 +269,20 @@ id:
     ; 
 
 content_group:
-      content { $$ = NewContentGroupNode(ast.OPNone, []ContentGroupNode{$1}) }
+      content { 
+        $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) 
+      }
     | LBRACK content_group RBRACK { $$ = $2 }
-    | content_group AND content_group { $$ = NewContentGroupNode(ast.OPAND, []ContentGroupNode{$1, $3}) }
-    | content_group OR content_group { $$ = NewContentGroupNode(ast.OPOR, []ContentGroupNode{$1, $3}) }
-    | content_group XOR content_group { $$ = NewContentGroupNode(ast.OPXOR, []ContentGroupNode{$1, $3}) }
-    | NOT content_group { $$ = NewContentGroupNode(ast.OPNOT, []ContentGroupNode{$2}) }
+    | content_group AND content_group { 
+        $$ = ast.NewContentGroupNode("", ast.OPAND, []*ast.ContentGroupNode{$1, $3}) 
+      }
+    | content_group OR content_group {
+        $$ = ast.NewContentGroupNode("", ast.OPOR, []*ast.ContentGroupNode{$1, $3}) 
+      }
+    | content_group XOR content_group { 
+        $$ = ast.NewContentGroupNode("", ast.OPXOR, []*ast.ContentGroupNode{$1, $3}) 
+      }
+    | NOT content_group { $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2}) }
     ;
 
 content:
@@ -265,6 +316,9 @@ shard_content:
     | OR shard_content { $$ = $1 + $2 }
     | XOR shard_content { $$ = $1 + $2 }
     | NOT shard_content { $$ = $1 + $2 }
+
+    | TASK shard_content { $$ = $1 + $2 }
+    | TAG shard_content { $$ = $1 + $2 }
     ;
 
 assign_group:
@@ -296,8 +350,8 @@ unassign_tag:
 
 
 time_list_filter:
-      time_single {/*if debug {fmt.Println("time_list_filter")}*/}
-    | time_range {/*if debug {fmt.Println("time_list_filter")}*/}
+      time_single {}
+    | time_range {}
     ;
 
 time_single:

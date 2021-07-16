@@ -2,16 +2,23 @@ package ast
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 )
 
 const ( // Command Type
+	// CMDSummary CMDSummary
 	CMDSummary = 0 + iota
+	// CMDUI CMDUI
 	CMDUI
+	// CMDGUI CMDGUI
 	CMDGUI
+	// CMDExplain CMDExplain
 	CMDExplain
+	// CMDStmt CMDStmt
 	CMDStmt
+	// CMDHelp CMDHelp
 	CMDHelp
 )
 
@@ -43,6 +50,8 @@ func (rn *RootNode) Execute() error {
 	case CMDGUI:
 		return controller.StartGUI()
 	case CMDExplain:
+		fmt.Println("rewrite command: ", (*(rn.stmtNode)).restore())
+		fmt.Println("==== Execute Plan ====")
 		(*(rn.stmtNode)).explain()
 		return nil
 	case CMDStmt:
@@ -58,4 +67,5 @@ func (rn *RootNode) getCmdType() int { return rn.cmdType }
 type StmtNode interface {
 	execute() error
 	explain()
+	restore() string
 }

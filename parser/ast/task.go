@@ -10,31 +10,84 @@ import (
 // Task List
 // ============================
 
+// TaskListNode include task list filter
 type TaskListNode struct {
 	taskListFilterNode *TaskListFilterNode
 }
 
-func NewTaskListNode() {}
+// NewTaskListNode return TaskListNode
+func NewTaskListNode(tlfn *TaskListFilterNode) *TaskListNode {
+	return &TaskListNode{tlfn}
+}
 
+func (tln *TaskListNode) execute() error { return nil }
+func (tln *TaskListNode) explain() {
+	fmt.Println("list task ")
+	tln.taskListFilterNode.explain()
+}
+func (tln *TaskListNode) restore() string {
+	return "task list " + tln.taskListFilterNode.restore()
+}
+
+// TaskListFilterNode include idGroup OR indefiniteTaskListFilter
 type TaskListFilterNode struct {
-	definiteTaskListFilterNode   *DefiniteTaskListFilterNode
-	indefiniteTaskListFilterNode *IndefiniteTaskListFilterNode
+	idGroup                  *IDGroupNode
+	indefiniteTaskListFilter *IndefiniteTaskListFilterNode
 }
 
-func NewTaskListFilterNode() {}
-
-type DefiniteTaskListFilterNode struct {
-	idGroup *IDGroupNode
+// NewTaskListFilterNode return TaskListFilterNode
+func NewTaskListFilterNode(
+	idGroup *IDGroupNode,
+	itlf *IndefiniteTaskListFilterNode) *TaskListFilterNode {
+	return &TaskListFilterNode{idGroup, itlf}
 }
 
-func NewDefiniteTaskListFilterNode() {}
+func (tlfn *TaskListFilterNode) execute() error { return nil }
+func (tlfn *TaskListFilterNode) explain() {
+	if tlfn.idGroup != nil {
+		tlfn.idGroup.explain()
+	}
+	if tlfn.indefiniteTaskListFilter != nil {
+		tlfn.indefiniteTaskListFilter.explain()
+	}
+}
+func (tlfn *TaskListFilterNode) restore() string {
+	result := ""
+	if tlfn.idGroup != nil {
+		result += tlfn.idGroup.restore()
+	}
+	if tlfn.indefiniteTaskListFilter != nil {
+		result += tlfn.indefiniteTaskListFilter.restore()
+	}
+	return result
+}
 
+// IndefiniteTaskListFilterNode include content assignGroup age due
 type IndefiniteTaskListFilterNode struct {
 	contentGroup *ContentGroupNode
 	assignGroup  *AssignGroupNode
 }
 
-func NewIndefiniteTaskListFilterNode() {}
+// NewIndefiniteTaskListFilterNode return IndefiniteTaskListFilterNode
+func NewIndefiniteTaskListFilterNode() *IndefiniteTaskListFilterNode {
+	return &IndefiniteTaskListFilterNode{}
+}
+
+// SetContentFilter func
+func (itlfn *IndefiniteTaskListFilterNode) SetContentFilter(cgn *ContentGroupNode) {}
+
+// SetAssignFilter func
+func (itlfn *IndefiniteTaskListFilterNode) SetAssignFilter(agn *AssignGroupNode) {}
+
+// SetAgeFilter func
+func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(str string) {}
+
+// SetDueFilter func
+func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(str string) {}
+
+func (itlfn *IndefiniteTaskListFilterNode) execute() error  { return nil }
+func (itlfn *IndefiniteTaskListFilterNode) explain()        {}
+func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
 
 // ============================
 // Task Done
@@ -53,7 +106,7 @@ func NewTaskDoneNode(ign *IDGroupNode) *TaskDoneNode {
 // Restore to statement
 func (tdn *TaskDoneNode) restore() string {
 	result := "task done "
-	result += tdn.idGroup.restore()
+	result += tdn.idGroup.Restore()
 	return result
 }
 
@@ -84,7 +137,7 @@ func NewTaskDeleteNode(ign *IDGroupNode) *TaskDeleteNode {
 
 func (tdn *TaskDeleteNode) restore() string {
 	result := "task del "
-	result += tdn.idGroup.restore()
+	result += tdn.idGroup.Restore()
 	return result
 }
 
@@ -114,7 +167,7 @@ func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) *Task
 }
 
 // Restore to statement
-func (tun *TaskUpdateNode) Restore() string {
+func (tun *TaskUpdateNode) restore() string {
 	result := fmt.Sprintf("task set %d %s", tun.id, tun.content)
 	result += tun.Option.restore()
 	return result
@@ -154,5 +207,6 @@ func (tuon TaskUpdateOptionNode) restore() string {
 	return ""
 }
 
-func (tuon TaskUpdateOptionNode) assignTag(agn *AssignGroupNode) {
+// AssignTag for task
+func (tuon TaskUpdateOptionNode) AssignTag(agn *AssignGroupNode) {
 }
