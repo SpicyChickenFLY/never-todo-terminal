@@ -3,8 +3,6 @@ package ast
 import (
 	"fmt"
 	"sort"
-
-	"github.com/SpicyChickenFLY/never-todo-cmd/data"
 )
 
 // ============================
@@ -40,9 +38,7 @@ func NewIDGroupNode(ids ...int) *IDGroupNode {
 
 // MergeIDNode merge with othen IDGroup
 func (ign *IDGroupNode) MergeIDNode(idNode *IDGroupNode) {
-	for _, id := range idNode.idGroup {
-		ign.idGroup = append(ign.idGroup, id)
-	}
+	ign.idGroup = append(ign.idGroup, idNode.idGroup...)
 	ign.removeRepeatedIDs()
 }
 
@@ -81,43 +77,25 @@ func (ign *IDGroupNode) removeRepeatedIDs() {
 }
 
 // ============================
-// Content Group
+// Content Node
 // ============================
 
-const ( // operator type
-	// OPNone indicate none command
-	OPNone = iota + 0
-	// OPNOT not
-	OPNOT
-	// OPAND and
-	OPAND
-	// OPOR or
-	OPOR
-	// OPXOR xor
-	OPXOR
-)
-
-// ContentGroupNode is node include contents
-type ContentGroupNode struct {
-	content  string
-	operands []*ContentGroupNode
-	operator int
+// ContentNode is node include id
+type ContentNode struct {
+	content string
 }
 
-// NewContentGroupNode return ContentGroupNode
-func NewContentGroupNode(
-	content string, operator int, operands []*ContentGroupNode) *ContentGroupNode {
-	return &ContentGroupNode{content, operands, operator}
+func NewContentNode(content string) *ContentNode {
+	return &ContentNode{content}
 }
 
-func (cgn *ContentGroupNode) filter(tags []data.Tag) []data.Tag {
-	switch cgn.operator {
-	case OPNone:
-		return tags
+func (cn *ContentNode) restore() string {
+	return "like " + cn.content
+}
 
-	default:
-		return tags
-	}
+// Explain which id will be used
+func (cn *ContentNode) explain() {
+	fmt.Println("which content like: ", cn.content)
 }
 
 // ============================
@@ -135,6 +113,13 @@ func NewAssignGroupNode() *AssignGroupNode {
 	return &AssignGroupNode{}
 }
 
+func (agn *AssignGroupNode) execute() error { return nil }
+
+func (agn *AssignGroupNode) explain() {
+	fmt.Println("assign following tags: ", agn.assignGroup)
+	fmt.Println("unassign following tags: ", agn.unassignGroup)
+}
+
 func (agn *AssignGroupNode) restore() string {
 	result := ""
 	for _, assignTag := range agn.assignGroup {
@@ -146,13 +131,9 @@ func (agn *AssignGroupNode) restore() string {
 	return result
 }
 
-func (agn *AssignGroupNode) explain() {
-	fmt.Println("assign following tags: ", agn.assignGroup)
-	fmt.Println("unassign following tags: ", agn.unassignGroup)
-}
-
 // AssignTag for task
 func (agn *AssignGroupNode) AssignTag(tag string) {
+	fmt.Println("add tag")
 	agn.assignGroup = append(agn.assignGroup, tag)
 	agn.removeRepeatedTags()
 }

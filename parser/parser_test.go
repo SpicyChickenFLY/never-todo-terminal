@@ -26,9 +26,10 @@ func TestParser(t *testing.T) {
 		"todo",
 		"look for me",
 		"todo add remeber to go shopping",
-		"add 'del: 1 + 1 & 2 '",
+		"add 'del 1  1 2 '",
 		"explain todo done 1-4 20-15",
 		"del 20 2-5",
+		"explain  todo task todo like 123 AND tag",
 		//
 		"tag 9",
 		// err

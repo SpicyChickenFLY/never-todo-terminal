@@ -24,6 +24,7 @@ func (tln *TaskListNode) execute() error { return nil }
 func (tln *TaskListNode) explain() {
 	fmt.Println("list task ")
 	tln.taskListFilterNode.explain()
+	fmt.Println()
 }
 func (tln *TaskListNode) restore() string {
 	return "task list " + tln.taskListFilterNode.restore()
@@ -64,8 +65,8 @@ func (tlfn *TaskListFilterNode) restore() string {
 
 // IndefiniteTaskListFilterNode include content assignGroup age due
 type IndefiniteTaskListFilterNode struct {
-	contentGroup *ContentGroupNode
-	assignGroup  *AssignGroupNode
+	content     *ContentNode
+	assignGroup *AssignGroupNode
 }
 
 // NewIndefiniteTaskListFilterNode return IndefiniteTaskListFilterNode
@@ -74,10 +75,15 @@ func NewIndefiniteTaskListFilterNode() *IndefiniteTaskListFilterNode {
 }
 
 // SetContentFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetContentFilter(cgn *ContentGroupNode) {}
+func (itlfn *IndefiniteTaskListFilterNode) SetContentFilter(content *ContentNode) {
+	itlfn.content = content
+}
 
 // SetAssignFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetAssignFilter(agn *AssignGroupNode) {}
+func (itlfn *IndefiniteTaskListFilterNode) SetAssignFilter(agn *AssignGroupNode) {
+	fmt.Println("SetAssignFilter")
+	itlfn.assignGroup = agn
+}
 
 // SetAgeFilter func
 func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(str string) {}
@@ -85,8 +91,16 @@ func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(str string) {}
 // SetDueFilter func
 func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(str string) {}
 
-func (itlfn *IndefiniteTaskListFilterNode) execute() error  { return nil }
-func (itlfn *IndefiniteTaskListFilterNode) explain()        {}
+func (itlfn *IndefiniteTaskListFilterNode) execute() error { return nil }
+
+func (itlfn *IndefiniteTaskListFilterNode) explain() {
+	if itlfn.content != nil {
+		itlfn.content.explain()
+	}
+	if itlfn.assignGroup != nil {
+		itlfn.assignGroup.explain()
+	}
+}
 func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
 
 // ============================
@@ -162,7 +176,7 @@ type TaskUpdateNode struct {
 }
 
 // NewTaskUpdateNode return TaskUpdateNode
-func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) *TaskUpdateNode {
+func NewTaskUpdateNode(id int, content *ContentNode, tuon *TaskUpdateOptionNode) *TaskUpdateNode {
 	return &TaskUpdateNode{}
 }
 

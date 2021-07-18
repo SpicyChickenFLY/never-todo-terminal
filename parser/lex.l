@@ -81,19 +81,6 @@ white		[ \t\n\r]+
     lval.str = string(y.buf)
     return MINUS
 
-"&" 
-    lval.str = string(y.buf)
-    return AND
-"|" 
-    lval.str = string(y.buf)
-    return OR
-"!" 
-    lval.str = string(y.buf)
-    return NOT
-"^" 
-    lval.str = string(y.buf)
-    return XOR
-
 "-h" 
     lval.str = string(y.buf)
     return HELP
@@ -154,6 +141,7 @@ white		[ \t\n\r]+
     return NUM
 
 {identifier}
+    lval.str = string(y.buf)
     return IDENT
 
 {white} {}

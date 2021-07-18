@@ -25,7 +25,7 @@ import (
   tagListFilterNode *ast.TagListFilterNode
 
   idGroupNode *ast.IDGroupNode
-  contentGroupNode *ast.ContentGroupNode
+  contentNode *ast.ContentNode
   assignGroupNode *ast.AssignGroupNode
 }
 
@@ -60,8 +60,8 @@ import (
 
 %type <num> id 
 %type <idGroupNode> id_group
-%type <str> content shard_content
-%type <contentGroupNode> content_group content_filter
+%type <contentNode> definite_content content_filter
+%type <str> shard_content 
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
 %type <str> time_list_filter
@@ -134,9 +134,9 @@ task_list:
     ;
 
 task_add:
-      TASK ADD content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
-    | ADD content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
-    | content ADD task_add_filter {/*if debug {fmt.Println("task_add")}*/}
+      TASK ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
+    | ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
+    | definite_content ADD task_add_filter {/*if debug {fmt.Println("task_add")}*/}
     ;
 
 task_done:
@@ -152,12 +152,12 @@ task_delete:
     ;
 
 task_update:
-      TASK SET id content task_update_option { $$ = ast.NewTaskUpdateNode($3, $4, $5) }
-    | SET id content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
-    | TASK id SET content task_update_option { $$ = ast.NewTaskUpdateNode($2, $4, $5) }
-    | id SET content task_update_option { $$ = ast.NewTaskUpdateNode($1, $3, $4) }
-    | TASK id content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
-    | id content task_update_option { $$ = ast.NewTaskUpdateNode($1, $2, $3) }
+      TASK SET id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($3, $4, $5) }
+    | SET id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
+    | TASK id SET definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $4, $5) }
+    | id SET definite_content task_update_option { $$ = ast.NewTaskUpdateNode($1, $3, $4) }
+    | TASK id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
+    | id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($1, $2, $3) }
     ;
 
 // ========== TASK FILTER =============
@@ -180,12 +180,13 @@ indefinite_task_list_filter:
     ;
 
 content_filter:
-      LIKE content_group { $$ = $2 }
-    | content_group { $$ = $1}
+      LIKE definite_content { $$ = $2 }
+    | definite_content { $$ = $1}
     ;
 
 itlf_1:
-      itlf_2 { $$ = $1 }
+      itlf_2 { $$ = $1 
+      fmt.Println("assign")}
     | assign_group itlf_2 {
         $$ = $2
         $$.SetAssignFilter($1)
@@ -237,15 +238,15 @@ tag_list:
     ;
 
 tag_set:
-      TAG SET id content {}
+      TAG SET id definite_content {}
     ;
 
 // ========== TAG FILTER =============
 tag_list_filter:
       { $$ = ast.NewTagListFilterNode(nil, nil) }
     | id_group { $$ = ast.NewTagListFilterNode($1, nil) }
-    | LIKE content_group { $$ = ast.NewTagListFilterNode(nil, $2) }
-    | content_group { $$ = ast.NewTagListFilterNode(nil, $1) }
+    | LIKE definite_content { $$ = ast.NewTagListFilterNode(nil, $2) }
+    | definite_content { $$ = ast.NewTagListFilterNode(nil, $1) }
     ;
 
 // ========== UTILS =============
@@ -267,59 +268,6 @@ id:
         $$ = val
       }
     ; 
-
-content_group:
-      content { 
-        $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) 
-      }
-    | LBRACK content_group RBRACK { $$ = $2 }
-    | content_group AND content_group { 
-        $$ = ast.NewContentGroupNode("", ast.OPAND, []*ast.ContentGroupNode{$1, $3}) 
-      }
-    | content_group OR content_group {
-        $$ = ast.NewContentGroupNode("", ast.OPOR, []*ast.ContentGroupNode{$1, $3}) 
-      }
-    | content_group XOR content_group { 
-        $$ = ast.NewContentGroupNode("", ast.OPXOR, []*ast.ContentGroupNode{$1, $3}) 
-      }
-    | NOT content_group { $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2}) }
-    ;
-
-content:
-      DQUOTE shard_content DQUOTE { $$ = $2 }
-    | QUOTE shard_content QUOTE { $$ = $2 }
-    | DQUOTE content DQUOTE { $$ = $2 }
-    | QUOTE content QUOTE { $$ = $2 }
-    | shard_content { $$ = $1 }
-    ;
-
-// 转义所有关键字
-shard_content:
-      { $$ = "" }
-    | id_group shard_content { $$ = $1.Restore() + $2}
-    | IDENT shard_content { $$ = $1 + $2 }
-    
-    | ADD shard_content { $$ = $1 + $2 }
-    | DELETE shard_content { $$ = $1 + $2 }
-    | SET shard_content { $$ = $1 + $2 }
-    | DONE shard_content { $$ = $1 + $2 }
-
-    | AGE shard_content { $$ = $1 + $2 }
-    | DUE shard_content { $$ = $1 + $2 }
-    | LIKE shard_content { $$ = $1 + $2 }
-    | LOOP shard_content { $$ = $1 + $2 }
-
-    | COLON shard_content { $$ = $1 + $2 }
-    | PLUS shard_content { $$ = $1 + $2 }
-    | MINUS shard_content { $$ = $1 + $2 }
-    | AND shard_content { $$ = $1 + $2 }
-    | OR shard_content { $$ = $1 + $2 }
-    | XOR shard_content { $$ = $1 + $2 }
-    | NOT shard_content { $$ = $1 + $2 }
-
-    | TASK shard_content { $$ = $1 + $2 }
-    | TAG shard_content { $$ = $1 + $2 }
-    ;
 
 assign_group:
       { $$ = ast.NewAssignGroupNode() }
@@ -366,5 +314,37 @@ time_range:
 /* loop_time:
       IDENT {}
      ; */
+
+definite_content:
+      DQUOTE shard_content DQUOTE { $$ = ast.NewContentNode($2) }
+    | QUOTE shard_content QUOTE { $$ = ast.NewContentNode($2) }
+    // | DQUOTE definite_content DQUOTE { $$ = $2 }
+    // | QUOTE definite_content QUOTE { $$ = $2 }
+    // | shard_content { $$ = ast.NewContentNode($1) }
+    ;
+
+// 转义所有关键字
+shard_content:
+      { $$ = "" }
+    | shard_content id_group  { $$ = $1 + " " + $2.Restore()}
+    | shard_content IDENT  { $$ = $1 + " " + $2 }
+    
+    | shard_content ADD { $$ = $1 + " " + $2 }
+    | shard_content DELETE { $$ = $1 + " " + $2 }
+    | shard_content SET { $$ = $1 + " " + $2 }
+    | shard_content DONE { $$ = $1 + " " + $2 }
+
+    | shard_content AGE { $$ = $1 + " " + $2 }
+    | shard_content DUE { $$ = $1 + " " + $2 }
+    | shard_content LIKE { $$ = $1 + " " + $2 }
+    | shard_content LOOP { $$ = $1 + " " + $2 }
+
+    | shard_content COLON  { $$ = $1 + " " + $2 }
+    | shard_content PLUS  { $$ = $1 + " " + $2 }
+    | shard_content MINUS  { $$ = $1 + " " + $2 }
+
+    | shard_content TASK  { $$ = $1 + " " + $2 }
+    | shard_content TAG  { $$ = $1 + " " + $2 }
+    ;
 
 %%
