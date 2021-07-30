@@ -60,8 +60,8 @@ import (
 
 %type <num> id 
 %type <idGroupNode> id_group
-%type <str> content shard_content
-%type <contentGroupNode> content_group content_filter
+%type <str> definite_content shard_content
+%type <contentGroupNode> content_group content_filter content_logic_p3 content_logic_p2 content_logic_p1
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
 %type <str> time_list_filter
@@ -134,9 +134,9 @@ task_list:
     ;
 
 task_add:
-      TASK ADD content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
-    | ADD content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
-    | content ADD task_add_filter {/*if debug {fmt.Println("task_add")}*/}
+      TASK ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
+    | ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
+    | definite_content ADD task_add_filter {/*if debug {fmt.Println("task_add")}*/}
     ;
 
 task_done:
@@ -152,12 +152,12 @@ task_delete:
     ;
 
 task_update:
-      TASK SET id content task_update_option { $$ = ast.NewTaskUpdateNode($3, $4, $5) }
-    | SET id content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
-    | TASK id SET content task_update_option { $$ = ast.NewTaskUpdateNode($2, $4, $5) }
-    | id SET content task_update_option { $$ = ast.NewTaskUpdateNode($1, $3, $4) }
-    | TASK id content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
-    | id content task_update_option { $$ = ast.NewTaskUpdateNode($1, $2, $3) }
+      TASK SET id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($3, $4, $5) }
+    | SET id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
+    | TASK id SET definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $4, $5) }
+    | id SET definite_content task_update_option { $$ = ast.NewTaskUpdateNode($1, $3, $4) }
+    | TASK id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
+    | id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($1, $2, $3) }
     ;
 
 // ========== TASK FILTER =============
@@ -237,7 +237,7 @@ tag_list:
     ;
 
 tag_set:
-      TAG SET id content {}
+      TAG SET id definite_content {}
     ;
 
 // ========== TAG FILTER =============
@@ -269,28 +269,41 @@ id:
     ; 
 
 content_group:
-      content { 
-        $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) 
+      content_logic_p3 { 
+        $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2})
       }
-    | LBRACK content_group RBRACK { $$ = $2 }
-    | content_group AND content_group { 
-        $$ = ast.NewContentGroupNode("", ast.OPAND, []*ast.ContentGroupNode{$1, $3}) 
-      }
-    | content_group OR content_group {
-        $$ = ast.NewContentGroupNode("", ast.OPOR, []*ast.ContentGroupNode{$1, $3}) 
-      }
-    | content_group XOR content_group { 
-        $$ = ast.NewContentGroupNode("", ast.OPXOR, []*ast.ContentGroupNode{$1, $3}) 
-      }
-    | NOT content_group { $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2}) }
     ;
 
-content:
+content_logic_p3:
+      content_logic_p2 {}
+    | content_logic_p2 AND content_logic_p2 {
+        $$ = ast.NewContentGroupNode("", ast.OPAND, []*ast.ContentGroupNode{$1, $3})
+      }
+    ;
+
+content_logic_p2:
+      content_logic_p1 {}
+    | content_logic_p2 OR content_logic_p2 { 
+        $$ = ast.NewContentGroupNode("", ast.OPOR, []*ast.ContentGroupNode{$1, $3})
+      }
+    ;
+
+content_logic_p1:
+      definite_content { 
+        $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) 
+      }
+    | LBRACK content_logic_p3 RBRACK { $$ = $2 }
+    | NOT content_logic_p1 { 
+        $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2}) 
+      }
+    ;
+
+definite_content:
       DQUOTE shard_content DQUOTE { $$ = $2 }
     | QUOTE shard_content QUOTE { $$ = $2 }
-    | DQUOTE content DQUOTE { $$ = $2 }
-    | QUOTE content QUOTE { $$ = $2 }
-    | shard_content { $$ = $1 }
+    | DQUOTE definite_content DQUOTE { $$ = $2 }
+    | QUOTE definite_content QUOTE { $$ = $2 }
+    /* | shard_content { $$ = $1 } */
     ;
 
 // 转义所有关键字
@@ -299,6 +312,9 @@ shard_content:
     | id_group shard_content { $$ = $1.Restore() + $2}
     | IDENT shard_content { $$ = $1 + $2 }
     
+    | TASK shard_content { $$ = $1 + $2 }
+    | TAG shard_content { $$ = $1 + $2 }
+
     | ADD shard_content { $$ = $1 + $2 }
     | DELETE shard_content { $$ = $1 + $2 }
     | SET shard_content { $$ = $1 + $2 }
@@ -317,8 +333,7 @@ shard_content:
     | XOR shard_content { $$ = $1 + $2 }
     | NOT shard_content { $$ = $1 + $2 }
 
-    | TASK shard_content { $$ = $1 + $2 }
-    | TAG shard_content { $$ = $1 + $2 }
+
     ;
 
 assign_group:
