@@ -303,8 +303,34 @@ definite_content:
     | QUOTE shard_content QUOTE { $$ = $2 }
     | DQUOTE definite_content DQUOTE { $$ = $2 }
     | QUOTE definite_content QUOTE { $$ = $2 }
+    | DQUOTE indefinite_content DQUOTE {}
+    | QUOTE indefinite_content QUOTE {}
     /* | shard_content { $$ = $1 } */
     ;
+
+indefinite_content:
+      TASK shard_content { $$ = $1 + $2 }
+    | TAG shard_content { $$ = $1 + $2 }
+
+    | ADD shard_content { $$ = $1 + $2 }
+    | DELETE shard_content { $$ = $1 + $2 }
+    | SET shard_content { $$ = $1 + $2 }
+    | DONE shard_content { $$ = $1 + $2 }
+
+    | AGE shard_content { $$ = $1 + $2 }
+    | DUE shard_content { $$ = $1 + $2 }
+    | LIKE shard_content { $$ = $1 + $2 }
+    | LOOP shard_content { $$ = $1 + $2 }
+
+    | COLON shard_content { $$ = $1 + $2 }
+    | PLUS shard_content { $$ = $1 + $2 }
+    | MINUS shard_content { $$ = $1 + $2 }
+    | AND shard_content { $$ = $1 + $2 }
+    | OR shard_content { $$ = $1 + $2 }
+    | XOR shard_content { $$ = $1 + $2 }
+    | NOT shard_content { $$ = $1 + $2 }
+    ;
+
 
 // 转义所有关键字
 shard_content:
