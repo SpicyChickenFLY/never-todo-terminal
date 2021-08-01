@@ -1,9 +1,7 @@
 package parser
 
 import (
-	"bufio"
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/parser/ast"
@@ -35,7 +33,12 @@ func TestParser(t *testing.T) {
 	}
 	for _, tc := range testcases {
 		fmt.Printf("testcase:%s\n", tc)
-		yyParse(newLexer(bufio.NewReader(strings.NewReader(tc))))
+		Parse(tc)
+		fmt.Println(result)
+		result.Explain()
+		// if err := result.Execute(); err != nil {
+		// 	fmt.Println(err.Error())
+		// }
 		fmt.Println("")
 	}
 }

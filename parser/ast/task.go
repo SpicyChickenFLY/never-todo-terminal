@@ -16,8 +16,8 @@ type TaskListNode struct {
 }
 
 // NewTaskListNode return TaskListNode
-func NewTaskListNode(tlfn *TaskListFilterNode) *TaskListNode {
-	return &TaskListNode{tlfn}
+func NewTaskListNode(tlfn *TaskListFilterNode) TaskListNode {
+	return TaskListNode{tlfn}
 }
 
 func (tln *TaskListNode) execute() error { return nil }
@@ -99,8 +99,8 @@ type TaskDoneNode struct {
 }
 
 // NewTaskDoneNode return TaskDoneNode
-func NewTaskDoneNode(ign *IDGroupNode) *TaskDoneNode {
-	return &TaskDoneNode{ign}
+func NewTaskDoneNode(ign *IDGroupNode) TaskDoneNode {
+	return TaskDoneNode{ign}
 }
 
 // Restore to statement
@@ -131,8 +131,8 @@ type TaskDeleteNode struct {
 }
 
 // NewTaskDeleteNode return TaskDeleteNode
-func NewTaskDeleteNode(ign *IDGroupNode) *TaskDeleteNode {
-	return &TaskDeleteNode{*ign}
+func NewTaskDeleteNode(ign *IDGroupNode) TaskDeleteNode {
+	return TaskDeleteNode{*ign}
 }
 
 func (tdn *TaskDeleteNode) restore() string {
@@ -162,8 +162,8 @@ type TaskUpdateNode struct {
 }
 
 // NewTaskUpdateNode return TaskUpdateNode
-func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) *TaskUpdateNode {
-	return &TaskUpdateNode{}
+func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) TaskUpdateNode {
+	return TaskUpdateNode{}
 }
 
 // Restore to statement

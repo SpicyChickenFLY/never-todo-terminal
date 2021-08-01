@@ -14,12 +14,12 @@ import (
   root ast.Node
   stmt ast.StmtNode
 
-  taskListNode *ast.TaskListNode
+  taskListNode ast.TaskListNode
   taskListFilterNode *ast.TaskListFilterNode
   indefiniteTaskListFilterNode *ast.IndefiniteTaskListFilterNode
-  taskDeleteNode *ast.TaskDeleteNode
-  taskDoneNode *ast.TaskDoneNode
-  taskUpdateNode *ast.TaskUpdateNode
+  taskDeleteNode ast.TaskDeleteNode
+  taskDoneNode ast.TaskDoneNode
+  taskUpdateNode ast.TaskUpdateNode
   taskUpdateOptionNode *ast.TaskUpdateOptionNode
 
   tagListFilterNode *ast.TagListFilterNode
@@ -60,7 +60,7 @@ import (
 
 %type <num> id 
 %type <idGroupNode> id_group
-%type <str> definite_content shard_content
+%type <str> definite_content indefinite_content shard_content
 %type <contentGroupNode> content_group content_filter content_logic_p3 content_logic_p2 content_logic_p1
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
@@ -74,8 +74,8 @@ root:
       { result = ast.NewRootNode(ast.CMDSummary, nil) }
     | UI { result = ast.NewRootNode(ast.CMDUI, nil) }
     | GUI { result = ast.NewRootNode(ast.CMDGUI, nil) }
-    | EXPLAIN stmt { result = ast.NewRootNode(ast.CMDExplain, &$2) }
-    | stmt { result = ast.NewRootNode(ast.CMDStmt, &$1) }
+    | EXPLAIN stmt { result = ast.NewRootNode(ast.CMDExplain, $2) }
+    | stmt { result = ast.NewRootNode(ast.CMDStmt, $1) }
     | help { result = ast.NewRootNode(ast.CMDHelp, nil) }
     ;
 
@@ -84,11 +84,11 @@ stmt:
     | undo_log {if debug {fmt.Println("stmt_undo_log")}}
 
     | task_help {if debug {fmt.Println("stmt_task_help")}}
-    | task_list { $$ = $1 }
+    | task_list { $$ = &$1 }
     | task_add {if debug {fmt.Println("stmt_task_add")}}
-    | task_delete { $$ = $1 }
-    | task_update { $$ = $1 }
-    | task_done { $$ = $1 }
+    | task_delete { $$ = &$1 }
+    | task_update { $$ = &$1 }
+    | task_done { $$ = &$1 }
     
     | tag_help {if debug {fmt.Println("stmt_tag_help")}}
     | tag_list {if debug {fmt.Println("stmt_tag_list")}}
@@ -134,7 +134,9 @@ task_list:
     ;
 
 task_add:
-      TASK ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
+      TASK ADD indefinite_content {/*if debug {fmt.Println("task_add")}*/}
+    | ADD indefinite_content {/*if debug {fmt.Println("task_add")}*/}
+    | TASK ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
     | ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
     | definite_content ADD task_add_filter {/*if debug {fmt.Println("task_add")}*/}
     ;
@@ -270,7 +272,10 @@ id:
 
 content_group:
       content_logic_p3 { 
-        $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2})
+        $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$1})
+      }
+      | indefinite_content {
+        $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{})
       }
     ;
 
@@ -305,30 +310,32 @@ definite_content:
     | QUOTE definite_content QUOTE { $$ = $2 }
     | DQUOTE indefinite_content DQUOTE {}
     | QUOTE indefinite_content QUOTE {}
-    /* | shard_content { $$ = $1 } */
     ;
 
 indefinite_content:
-      TASK shard_content { $$ = $1 + $2 }
-    | TAG shard_content { $$ = $1 + $2 }
+      indefinite_content TASK { $$ = $1 + $2 }
+    | indefinite_content TAG { $$ = $1 + $2 }
 
-    | ADD shard_content { $$ = $1 + $2 }
-    | DELETE shard_content { $$ = $1 + $2 }
-    | SET shard_content { $$ = $1 + $2 }
-    | DONE shard_content { $$ = $1 + $2 }
+    | indefinite_content ADD { $$ = $1 + $2 }
+    | indefinite_content DELETE { $$ = $1 + $2 }
+    | indefinite_content SET { $$ = $1 + $2 }
+    | indefinite_content DONE { $$ = $1 + $2 }
 
-    | AGE shard_content { $$ = $1 + $2 }
-    | DUE shard_content { $$ = $1 + $2 }
-    | LIKE shard_content { $$ = $1 + $2 }
-    | LOOP shard_content { $$ = $1 + $2 }
+    | indefinite_content AGE { $$ = $1 + $2 }
+    | indefinite_content DUE { $$ = $1 + $2 }
+    | indefinite_content LIKE { $$ = $1 + $2 }
+    | indefinite_content LOOP { $$ = $1 + $2 }
 
-    | COLON shard_content { $$ = $1 + $2 }
-    | PLUS shard_content { $$ = $1 + $2 }
-    | MINUS shard_content { $$ = $1 + $2 }
-    | AND shard_content { $$ = $1 + $2 }
-    | OR shard_content { $$ = $1 + $2 }
-    | XOR shard_content { $$ = $1 + $2 }
-    | NOT shard_content { $$ = $1 + $2 }
+    | indefinite_content COLON { $$ = $1 + $2 }
+    | indefinite_content PLUS { $$ = $1 + $2 }
+    | indefinite_content MINUS { $$ = $1 + $2 }
+    | indefinite_content AND { $$ = $1 + $2 }
+    | indefinite_content OR { $$ = $1 + $2 }
+    | indefinite_content XOR { $$ = $1 + $2 }
+    | indefinite_content NOT { $$ = $1 + $2 }
+    | indefinite_content NUM  { $$ = $1 + fmt.Sprint($2) }
+
+    | shard_content { $$ = $1 }
     ;
 
 
@@ -338,28 +345,6 @@ shard_content:
     | id_group shard_content { $$ = $1.Restore() + $2}
     | IDENT shard_content { $$ = $1 + $2 }
     
-    | TASK shard_content { $$ = $1 + $2 }
-    | TAG shard_content { $$ = $1 + $2 }
-
-    | ADD shard_content { $$ = $1 + $2 }
-    | DELETE shard_content { $$ = $1 + $2 }
-    | SET shard_content { $$ = $1 + $2 }
-    | DONE shard_content { $$ = $1 + $2 }
-
-    | AGE shard_content { $$ = $1 + $2 }
-    | DUE shard_content { $$ = $1 + $2 }
-    | LIKE shard_content { $$ = $1 + $2 }
-    | LOOP shard_content { $$ = $1 + $2 }
-
-    | COLON shard_content { $$ = $1 + $2 }
-    | PLUS shard_content { $$ = $1 + $2 }
-    | MINUS shard_content { $$ = $1 + $2 }
-    | AND shard_content { $$ = $1 + $2 }
-    | OR shard_content { $$ = $1 + $2 }
-    | XOR shard_content { $$ = $1 + $2 }
-    | NOT shard_content { $$ = $1 + $2 }
-
-
     ;
 
 assign_group:
