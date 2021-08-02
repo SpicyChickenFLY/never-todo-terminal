@@ -1,5 +1,12 @@
 package ast
 
+type TagListNode struct {
+}
+
+func NewTagListNode() TagListNode {
+	return TagListNode{}
+}
+
 type TagListFilterNode struct {
 }
 

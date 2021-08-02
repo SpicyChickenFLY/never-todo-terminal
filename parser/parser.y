@@ -56,6 +56,7 @@ import (
 %type <taskUpdateNode> task_update
 %type <taskUpdateOptionNode> task_update_option
 
+%type <tagNode> tag_list
 %type <tagListFilterNode> tag_list_filter
 
 %type <num> id 
@@ -91,7 +92,7 @@ stmt:
     | task_done { $$ = &$1 }
     
     | tag_help {if debug {fmt.Println("stmt_tag_help")}}
-    | tag_list {if debug {fmt.Println("stmt_tag_list")}}
+    | tag_list { $$ = &$1 }
     | tag_set {if debug {fmt.Println("stmt_tag_set")}}
     ;
 
@@ -235,11 +236,11 @@ task_update_option:
 // ========== TAG COMMAND =============
 
 tag_list:
-      TAG tag_list_filter {  }
+      TAG tag_list_filter { $$ = ast.NewTagListNode($2) }
     ;
 
 tag_set:
-      TAG SET id definite_content {}
+      TAG SET id definite_content {  }
     ;
 
 // ========== TAG FILTER =============
