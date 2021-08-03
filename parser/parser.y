@@ -17,11 +17,13 @@ import (
   taskListNode ast.TaskListNode
   taskListFilterNode *ast.TaskListFilterNode
   indefiniteTaskListFilterNode *ast.IndefiniteTaskListFilterNode
+  taskAddNode ast.TaskAddNode
   taskDeleteNode ast.TaskDeleteNode
   taskDoneNode ast.TaskDoneNode
   taskUpdateNode ast.TaskUpdateNode
   taskUpdateOptionNode *ast.TaskUpdateOptionNode
 
+  tagListNode ast.TagListNode
   tagListFilterNode *ast.TagListFilterNode
 
   idGroupNode *ast.IDGroupNode
@@ -51,12 +53,13 @@ import (
 %type <taskListNode> task_list
 %type <taskListFilterNode> task_list_filter
 %type <indefiniteTaskListFilterNode> indefinite_task_list_filter itlf_1 itlf_2 itlf_3
+%type <taskAddNode> task_add
 %type <taskDeleteNode> task_delete
 %type <taskDoneNode> task_done
 %type <taskUpdateNode> task_update
 %type <taskUpdateOptionNode> task_update_option
 
-%type <tagNode> tag_list
+%type <tagListNode> tag_list
 %type <tagListFilterNode> tag_list_filter
 
 %type <num> id 
@@ -135,11 +138,11 @@ task_list:
     ;
 
 task_add:
-      TASK ADD indefinite_content {/*if debug {fmt.Println("task_add")}*/}
-    | ADD indefinite_content {/*if debug {fmt.Println("task_add")}*/}
-    | TASK ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
-    | ADD definite_content task_add_filter {/*if debug {fmt.Println("task_add")}*/}
-    | definite_content ADD task_add_filter {/*if debug {fmt.Println("task_add")}*/}
+      TASK ADD indefinite_content { $$ = ast.NewTaskAddNode() }
+    | ADD indefinite_content { $$ = ast.NewTaskAddNode() }
+    | TASK ADD definite_content task_add_option { $$ = ast.NewTaskAddNode() }
+    | ADD definite_content task_add_option { $$ = ast.NewTaskAddNode() }
+    | definite_content ADD task_add_option { $$ = ast.NewTaskAddNode() }
     ;
 
 task_done:
@@ -216,9 +219,9 @@ itlf_3:
     | DUE COLON time_list_filter { $$.SetDueFilter($3) }
     ;
 
-task_add_filter:
+task_add_option:
       {}
-    | positive_assign_group task_add_filter {}
+    | positive_assign_group task_add_option {}
     /* | DUE COLON time_single {}
     | LOOP COLON loop_time {} */
     ;
@@ -314,7 +317,9 @@ definite_content:
     ;
 
 indefinite_content:
-      indefinite_content TASK { $$ = $1 + $2 }
+      shard_content { $$ = $1 }
+
+    | indefinite_content TASK { $$ = $1 + $2 }
     | indefinite_content TAG { $$ = $1 + $2 }
 
     | indefinite_content ADD { $$ = $1 + $2 }
@@ -335,8 +340,6 @@ indefinite_content:
     | indefinite_content XOR { $$ = $1 + $2 }
     | indefinite_content NOT { $$ = $1 + $2 }
     | indefinite_content NUM  { $$ = $1 + fmt.Sprint($2) }
-
-    | shard_content { $$ = $1 }
     ;
 
 

@@ -90,6 +90,32 @@ func (itlfn *IndefiniteTaskListFilterNode) explain()        {}
 func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
 
 // ============================
+// Task Add·
+// ============================
+
+type TaskAddNode struct {
+	id      int
+	content string
+	Option  TaskAddOptionNode
+}
+
+func NewTaskAddNode() TaskAddNode {
+	return TaskAddNode{}
+}
+
+func (tan *TaskAddNode) execute() error { return nil }
+func (tan *TaskAddNode) explain() {
+	fmt.Println("list task ")
+	// tan.taskAddOptionNode.explain()
+}
+func (tan *TaskAddNode) restore() string {
+	return "task list " // + tan.taskAddOptionNode.restore()
+}
+
+type TaskAddOptionNode struct {
+}
+
+// ============================
 // Task Done
 // ============================
 

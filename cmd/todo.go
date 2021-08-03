@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/SpicyChickenFLY/never-todo-cmd/logic"
+	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/spf13/cobra"
 )
 
@@ -9,7 +9,7 @@ var cmdTodo = &cobra.Command{
 	Use:   "todo [<id>|<keyword>]",
 	Short: "deal with task(s)",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := logic.ShowTasks(args); err != nil {
+		if err := controller.ShowTasks(args); err != nil {
 			// cmd.PrintErr(err)
 			panic(err)
 		}
