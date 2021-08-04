@@ -3,10 +3,11 @@ package ast
 import "fmt"
 
 type TagListNode struct {
+	tagListFilterNode *TagListFilterNode
 }
 
-func NewTagListNode() TagListNode {
-	return TagListNode{}
+func NewTagListNode(tlfn *TagListFilterNode) TagListNode {
+	return TagListNode{tlfn}
 }
 
 func (tln *TagListNode) execute() error { return nil }

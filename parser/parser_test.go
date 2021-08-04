@@ -25,16 +25,15 @@ func TestParser(t *testing.T) {
 		"look for me",
 		"todo add remeber to go shopping",
 		"add 'del: 1 + 1 & 2 '",
-		"explain todo done 1-4 20-15",
+		"done 1-4 20-15",
 		"del 20 2-5",
 		//
 		"tag 9",
 		// err
 	}
 	for _, tc := range testcases {
-		fmt.Printf("testcase:%s\n", tc)
+		fmt.Printf("testcase: %s\n", tc)
 		Parse(tc)
-		fmt.Println(result)
 		result.Explain()
 		// if err := result.Execute(); err != nil {
 		// 	fmt.Println(err.Error())

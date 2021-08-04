@@ -22,11 +22,10 @@ func NewTaskListNode(tlfn *TaskListFilterNode) TaskListNode {
 
 func (tln *TaskListNode) execute() error { return nil }
 func (tln *TaskListNode) explain() {
-	fmt.Println("list task ")
 	tln.taskListFilterNode.explain()
 }
 func (tln *TaskListNode) restore() string {
-	return "task list " + tln.taskListFilterNode.restore()
+	return "todo list " + tln.taskListFilterNode.restore()
 }
 
 // TaskListFilterNode include idGroup OR indefiniteTaskListFilter
@@ -45,10 +44,13 @@ func NewTaskListFilterNode(
 func (tlfn *TaskListFilterNode) execute() error { return nil }
 func (tlfn *TaskListFilterNode) explain() {
 	if tlfn.idGroup != nil {
+		fmt.Println("list todo tasks")
 		tlfn.idGroup.explain()
-	}
-	if tlfn.indefiniteTaskListFilter != nil {
+	} else if tlfn.indefiniteTaskListFilter != nil {
+		fmt.Println("list todo tasks")
 		tlfn.indefiniteTaskListFilter.explain()
+	} else {
+		fmt.Println("list all todo tasks")
 	}
 }
 func (tlfn *TaskListFilterNode) restore() string {
@@ -74,19 +76,36 @@ func NewIndefiniteTaskListFilterNode() *IndefiniteTaskListFilterNode {
 }
 
 // SetContentFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetContentFilter(cgn *ContentGroupNode) {}
+func (itlfn *IndefiniteTaskListFilterNode) SetContentFilter(cgn *ContentGroupNode) {
+	itlfn.contentGroup = cgn
+}
 
 // SetAssignFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetAssignFilter(agn *AssignGroupNode) {}
+func (itlfn *IndefiniteTaskListFilterNode) SetAssignFilter(agn *AssignGroupNode) {
+	itlfn.assignGroup = agn
+}
 
 // SetAgeFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(str string) {}
+func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(str string) {
+	fmt.Println("set age")
+}
 
 // SetDueFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(str string) {}
+func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(str string) {
+	fmt.Println("set due")
+}
 
-func (itlfn *IndefiniteTaskListFilterNode) execute() error  { return nil }
-func (itlfn *IndefiniteTaskListFilterNode) explain()        {}
+func (itlfn *IndefiniteTaskListFilterNode) execute() error { return nil }
+func (itlfn *IndefiniteTaskListFilterNode) explain() {
+	if itlfn.contentGroup != nil {
+		fmt.Print("\tby content: ")
+		itlfn.contentGroup.explain()
+	}
+	if itlfn.assignGroup != nil {
+		fmt.Print("\tby assign")
+		itlfn.assignGroup.explain()
+	}
+}
 func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
 
 // ============================
@@ -94,22 +113,22 @@ func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
 // ============================
 
 type TaskAddNode struct {
-	id      int
 	content string
-	Option  TaskAddOptionNode
+	Option  *TaskAddOptionNode
 }
 
-func NewTaskAddNode() TaskAddNode {
-	return TaskAddNode{}
+func NewTaskAddNode(c string) TaskAddNode {
+	return TaskAddNode{c, nil}
 }
 
 func (tan *TaskAddNode) execute() error { return nil }
 func (tan *TaskAddNode) explain() {
-	fmt.Println("list task ")
+	fmt.Println("add new todo task")
+	fmt.Printf("\twith content: %s\n", tan.content)
 	// tan.taskAddOptionNode.explain()
 }
 func (tan *TaskAddNode) restore() string {
-	return "task list " // + tan.taskAddOptionNode.restore()
+	return "todo add " // + tan.taskAddOptionNode.restore()
 }
 
 type TaskAddOptionNode struct {

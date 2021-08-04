@@ -12,6 +12,8 @@ goyacc -o ..\parser\parser.go ..\parser\parser.y
 golex -o ..\parser\lex.go ..\parser\lex.l
 
 go test -v ../parser
+@REM go test -v ../controller
+@REM go test -v ../data
 
 cd ..
 

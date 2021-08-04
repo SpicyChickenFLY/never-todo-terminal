@@ -31,7 +31,7 @@ import (
   assignGroupNode *ast.AssignGroupNode
 }
 
-%token <str> NUM IDENT
+%token <str> NUM IDENT WHITE
 
 %right <str> PLUS MINUS
 %token <str> COLON QUOTE DQUOTE
@@ -52,7 +52,7 @@ import (
 
 %type <taskListNode> task_list
 %type <taskListFilterNode> task_list_filter
-%type <indefiniteTaskListFilterNode> indefinite_task_list_filter itlf_1 itlf_2 itlf_3
+%type <indefiniteTaskListFilterNode> indefinite_task_list_filter itlf_p3 itlf_p2 itlf_p1
 %type <taskAddNode> task_add
 %type <taskDeleteNode> task_delete
 %type <taskDoneNode> task_done
@@ -87,14 +87,12 @@ stmt:
       log_list  {if debug {fmt.Println("stmt_log_list")}}
     | undo_log {if debug {fmt.Println("stmt_undo_log")}}
 
-    | task_help {if debug {fmt.Println("stmt_task_help")}}
     | task_list { $$ = &$1 }
-    | task_add {if debug {fmt.Println("stmt_task_add")}}
+    | task_add { $$ = &$1 }
     | task_delete { $$ = &$1 }
     | task_update { $$ = &$1 }
     | task_done { $$ = &$1 }
     
-    | tag_help {if debug {fmt.Println("stmt_tag_help")}}
     | tag_list { $$ = &$1 }
     | tag_set {if debug {fmt.Println("stmt_tag_set")}}
     ;
@@ -107,11 +105,11 @@ help:
     | tag_help {}
 
 task_help:
-      TASK HELP {/*if debug {fmt.Println("task_help")}*/}
-    | task_list HELP {/*if debug {fmt.Println("task_help")}*/}
-    | task_add HELP {/*if debug {fmt.Println("task_help")}*/}
-    | task_delete HELP {/*if debug {fmt.Println("task_help")}*/}
-    | task_update HELP {/*if debug {fmt.Println("task_help")}*/}
+      TASK HELP {}
+    | task_list HELP {}
+    | task_add HELP {}
+    | task_delete HELP {}
+    | task_update HELP {}
     ;
 
 tag_help:
@@ -138,16 +136,14 @@ task_list:
     ;
 
 task_add:
-      TASK ADD indefinite_content { $$ = ast.NewTaskAddNode() }
-    | ADD indefinite_content { $$ = ast.NewTaskAddNode() }
-    | TASK ADD definite_content task_add_option { $$ = ast.NewTaskAddNode() }
-    | ADD definite_content task_add_option { $$ = ast.NewTaskAddNode() }
-    | definite_content ADD task_add_option { $$ = ast.NewTaskAddNode() }
+      TASK ADD indefinite_content { $$ = ast.NewTaskAddNode($3) }
+    | ADD indefinite_content { $$ = ast.NewTaskAddNode($2) }
+    | TASK ADD definite_content task_add_option { $$ = ast.NewTaskAddNode($3) }
+    | ADD definite_content task_add_option { $$ = ast.NewTaskAddNode($2) }
     ;
 
 task_done:
-      TASK DONE id_group { $$ = ast.NewTaskDoneNode($3) }
-    | DONE id_group { $$= ast.NewTaskDoneNode($2) }
+       DONE id_group { $$= ast.NewTaskDoneNode($2) }
     | id_group DONE { $$= ast.NewTaskDoneNode($1) }
     ;
 
@@ -174,12 +170,14 @@ task_list_filter:
     ;
 
 indefinite_task_list_filter:
-      itlf_1 { $$ = $1 }
-    |  content_filter itlf_1 {
+      itlf_p3 { 
+        $$ = $1
+      }
+    |  content_filter itlf_p3 {
         $$ = $2
         $$.SetContentFilter($1)
       }
-    | itlf_1 content_filter {
+    | itlf_p3 content_filter {
         $$ = $1
         $$.SetContentFilter($2)
       }
@@ -190,31 +188,31 @@ content_filter:
     | content_group { $$ = $1}
     ;
 
-itlf_1:
-      itlf_2 { $$ = $1 }
-    | assign_group itlf_2 {
+itlf_p3:
+      itlf_p2 { $$ = $1 }
+    | assign_group itlf_p2 {
         $$ = $2
         $$.SetAssignFilter($1)
       }
-    | itlf_2 assign_group {
+    | itlf_p2 assign_group {
         $$ = $1
         $$.SetAssignFilter($2)
       }
     ;
 
-itlf_2:
-      itlf_3 { $$ = $1 }
-    | AGE COLON time_list_filter itlf_3 {
+itlf_p2:
+      itlf_p1 { $$ = $1 }
+    | AGE COLON time_list_filter itlf_p1 {
         $$ = $4
         $$.SetAgeFilter($3)
       }
-    | itlf_3 AGE COLON time_list_filter {
+    | itlf_p1 AGE COLON time_list_filter {
         $$ = $1
         $$.SetAgeFilter($4)
       }
     ;
 
-itlf_3:
+itlf_p1:
       { $$ = ast.NewIndefiniteTaskListFilterNode() }
     | DUE COLON time_list_filter { $$.SetDueFilter($3) }
     ;
@@ -275,23 +273,24 @@ id:
     ; 
 
 content_group:
-      content_logic_p3 { 
-        $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$1})
-      }
+        content_logic_p3 { $$ = $1 }
+      | NOT content_logic_p3 { 
+          $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2})
+        }
       | indefinite_content {
         $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{})
       }
     ;
 
 content_logic_p3:
-      content_logic_p2 {}
+      content_logic_p2 { $$ = $1 }
     | content_logic_p2 AND content_logic_p2 {
         $$ = ast.NewContentGroupNode("", ast.OPAND, []*ast.ContentGroupNode{$1, $3})
       }
     ;
 
 content_logic_p2:
-      content_logic_p1 {}
+      content_logic_p1 { $$ = $1 }
     | content_logic_p2 OR content_logic_p2 { 
         $$ = ast.NewContentGroupNode("", ast.OPOR, []*ast.ContentGroupNode{$1, $3})
       }
@@ -312,43 +311,41 @@ definite_content:
     | QUOTE shard_content QUOTE { $$ = $2 }
     | DQUOTE definite_content DQUOTE { $$ = $2 }
     | QUOTE definite_content QUOTE { $$ = $2 }
-    | DQUOTE indefinite_content DQUOTE {}
-    | QUOTE indefinite_content QUOTE {}
+    | DQUOTE indefinite_content DQUOTE { $$ = $2 }
+    | QUOTE indefinite_content QUOTE { $$ = $2 }
     ;
 
 indefinite_content:
       shard_content { $$ = $1 }
 
-    | indefinite_content TASK { $$ = $1 + $2 }
-    | indefinite_content TAG { $$ = $1 + $2 }
+    | indefinite_content TASK { $$ = $1 + " " + $2 }
+    | indefinite_content TAG { $$ = $1 + " " + $2 }
 
-    | indefinite_content ADD { $$ = $1 + $2 }
-    | indefinite_content DELETE { $$ = $1 + $2 }
-    | indefinite_content SET { $$ = $1 + $2 }
-    | indefinite_content DONE { $$ = $1 + $2 }
+    | indefinite_content ADD { $$ = $1 + " " + $2 }
+    | indefinite_content DELETE { $$ = $1 + " " + $2 }
+    | indefinite_content SET { $$ = $1 + " " + $2 }
+    | indefinite_content DONE { $$ = $1 + " " + $2 }
 
-    | indefinite_content AGE { $$ = $1 + $2 }
-    | indefinite_content DUE { $$ = $1 + $2 }
-    | indefinite_content LIKE { $$ = $1 + $2 }
-    | indefinite_content LOOP { $$ = $1 + $2 }
+    | indefinite_content AGE { $$ = $1 + " " + $2 }
+    | indefinite_content DUE { $$ = $1 + " " + $2 }
+    | indefinite_content LIKE { $$ = $1 + " " + $2 }
+    | indefinite_content LOOP { $$ = $1 + " " + $2 }
 
-    | indefinite_content COLON { $$ = $1 + $2 }
-    | indefinite_content PLUS { $$ = $1 + $2 }
-    | indefinite_content MINUS { $$ = $1 + $2 }
-    | indefinite_content AND { $$ = $1 + $2 }
-    | indefinite_content OR { $$ = $1 + $2 }
-    | indefinite_content XOR { $$ = $1 + $2 }
-    | indefinite_content NOT { $$ = $1 + $2 }
-    | indefinite_content NUM  { $$ = $1 + fmt.Sprint($2) }
+    | indefinite_content COLON { $$ = $1 + " " + $2 }
+    | indefinite_content PLUS { $$ = $1 + " " + $2 }
+    | indefinite_content MINUS { $$ = $1 + " " + $2 }
+    | indefinite_content AND { $$ = $1 + " " + $2 }
+    | indefinite_content OR { $$ = $1 + " " + $2 }
+    | indefinite_content XOR { $$ = $1 + " " + $2 }
+    | indefinite_content NOT { $$ = $1 + " " + $2 }
+    | indefinite_content NUM  { $$ = $1 + " " + fmt.Sprint($2) }
     ;
 
 
 // 转义所有关键字
 shard_content:
       { $$ = "" }
-    | id_group shard_content { $$ = $1.Restore() + $2}
-    | IDENT shard_content { $$ = $1 + $2 }
-    
+    | IDENT shard_content { $$ = $1 + " " + $2 }
     ;
 
 assign_group:

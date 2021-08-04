@@ -59,7 +59,7 @@ func (ign *IDGroupNode) restore() string {
 
 // Explain which id will be used
 func (ign *IDGroupNode) explain() {
-	fmt.Println("with following ID: ", ign.idGroup)
+	fmt.Println("\twith ID: ", ign.idGroup)
 }
 
 func (ign *IDGroupNode) sortID() {
@@ -70,8 +70,8 @@ func (ign *IDGroupNode) removeRepeatedIDs() {
 	if len(ign.idGroup) == 0 {
 		return
 	}
-	temp := []int{ign.idGroup[0]}
 	ign.sortID()
+	temp := []int{ign.idGroup[0]}
 	for i := 1; i < len(ign.idGroup); i++ {
 		if ign.idGroup[i] != ign.idGroup[i-1] {
 			temp = append(temp, ign.idGroup[i])
@@ -100,24 +100,27 @@ const ( // operator type
 // ContentGroupNode is node include contents
 type ContentGroupNode struct {
 	content  string
-	operands []*ContentGroupNode
 	operator int
+	operands []*ContentGroupNode
 }
 
 // NewContentGroupNode return ContentGroupNode
 func NewContentGroupNode(
 	content string, operator int, operands []*ContentGroupNode) *ContentGroupNode {
-	return &ContentGroupNode{content, operands, operator}
+	return &ContentGroupNode{content, operator, operands}
 }
 
 func (cgn *ContentGroupNode) filter(tags []data.Tag) []data.Tag {
 	switch cgn.operator {
 	case OPNone:
 		return tags
-
 	default:
 		return tags
 	}
+}
+
+func (cgn *ContentGroupNode) explain() {
+	fmt.Println(cgn.content)
 }
 
 // ============================

@@ -60,6 +60,7 @@ digit  [0-9]+
 letter        [_a-zA-Z]
 identifier    {letter}({letter}|{digit})*
 white		[ \t\n\r]+
+setence [\'{3}*\'{3}']
 %%
 
     y.buf = y.buf[:0]
@@ -154,6 +155,7 @@ white		[ \t\n\r]+
     return NUM
 
 {identifier}
+    lval.str = string(y.buf)
     return IDENT
 
 {white} {}

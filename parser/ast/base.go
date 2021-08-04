@@ -67,9 +67,22 @@ func (rn *RootNode) Execute() error {
 
 // Explain should explain from root
 func (rn *RootNode) Explain() {
-	fmt.Println("Command type: ", rn.getCmdType())
-	if rn.stmtNode != nil {
-		rn.stmtNode.explain()
+	switch rn.getCmdType() {
+	case CMDSummary:
+		fmt.Println("show summary")
+	case CMDHelp:
+		fmt.Println("show help")
+	case CMDUI:
+		fmt.Println("show UI")
+	case CMDGUI:
+		fmt.Println("show GUI")
+	case CMDExplain:
+		fmt.Println("show explaination")
+
+	case CMDStmt:
+		if rn.stmtNode != nil {
+			rn.stmtNode.explain()
+		}
 	}
 }
 
