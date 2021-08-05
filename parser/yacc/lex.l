@@ -60,10 +60,12 @@ digit  [0-9]+
 letter        [_a-zA-Z]
 identifier    {letter}({letter}|{digit})*
 white		[ \t\n\r]+
-setence [\'{3}*\'{3}']
+setence \".*?\"
 %%
 
     y.buf = y.buf[:0]
+
+
 
 "'" 
     lval.str = string(y.buf)
@@ -71,10 +73,6 @@ setence [\'{3}*\'{3}']
 "\"" 
     lval.str = string(y.buf)
     return DQUOTE
-
-":" 
-    lval.str = string(y.buf)
-    return COLON
 "+" 
     lval.str = string(y.buf)
     return PLUS
@@ -82,18 +80,15 @@ setence [\'{3}*\'{3}']
     lval.str = string(y.buf)
     return MINUS
 
-"&" 
+"AND" 
     lval.str = string(y.buf)
     return AND
-"|" 
+"OR" 
     lval.str = string(y.buf)
     return OR
-"!" 
+"NOT" 
     lval.str = string(y.buf)
     return NOT
-"^" 
-    lval.str = string(y.buf)
-    return XOR
 
 "-h" 
     lval.str = string(y.buf)
@@ -101,9 +96,6 @@ setence [\'{3}*\'{3}']
 "ui" 
     lval.str = string(y.buf)
     return UI
-"gui" 
-    lval.str = string(y.buf)
-    return GUI
 "explain" 
     lval.str = string(y.buf)
     return EXPLAIN
@@ -114,39 +106,34 @@ setence [\'{3}*\'{3}']
     lval.str = string(y.buf)
     return UNDO
 
-"todo"|"task" 
+"todo" | "task" 
     lval.str = string(y.buf)
     return TASK
 "tag" 
     lval.str = string(y.buf)
     return TAG
 
-"add"|"create" 
+"add" | "create" 
     lval.str = string(y.buf)
     return ADD
-"del"|"delete"|"remove" 
+"del" | "delete" | "remove" 
     lval.str = string(y.buf)
     return DELETE
-"set"|"edit" 
+"set" | "edit" | "update" 
     lval.str = string(y.buf)
     return SET
-"done"|"complete" 
+"done" | "complete" 
     lval.str = string(y.buf)
     return DONE
 
-"age" 
+":age" 
     lval.str = string(y.buf)
     return AGE
-
-"due" 
+":due" 
     lval.str = string(y.buf)
     return DUE
 
-"like" 
-    lval.str = string(y.buf)
-    return LIKE
-
-"loop" 
+":loop" 
     lval.str = string(y.buf)
     return LOOP
 
@@ -157,6 +144,11 @@ setence [\'{3}*\'{3}']
 {identifier}
     lval.str = string(y.buf)
     return IDENT
+
+{setence} {
+    lval.str = string(y.buf[1:len(y.buf)-1])
+    return SETENCE
+}
 
 {white} {}
 

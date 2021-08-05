@@ -4,7 +4,7 @@ package parser
 import (
   "fmt"
   "strconv"
-  "github.com/SpicyChickenFLY/never-todo-cmd/parser/ast"
+  "github.com/SpicyChickenFLY/never-todo-cmd/ast"
 )
 %}
 
@@ -31,17 +31,15 @@ import (
   assignGroupNode *ast.AssignGroupNode
 }
 
-%token <str> NUM IDENT WHITE
+%token <str> NUM IDENT SETENCE WHITE 
 
 %right <str> PLUS MINUS
-%token <str> COLON QUOTE DQUOTE
 %token <str> LBRACK RBRACK
 
 %token <str> NOT
 %left <str> AND OR 
-%left <str> XOR
 
-%token <str> UI GUI EXPLAIN LOG UNDO 
+%token <str> UI EXPLAIN LOG UNDO 
 %token <str> TASK TAG ADD DELETE SET DONE
 %token <str> AGE DUE LIKE LOOP 
 %token <str> HELP
@@ -77,7 +75,6 @@ import (
 root:
       { result = ast.NewRootNode(ast.CMDSummary, nil) }
     | UI { result = ast.NewRootNode(ast.CMDUI, nil) }
-    | GUI { result = ast.NewRootNode(ast.CMDGUI, nil) }
     | EXPLAIN stmt { result = ast.NewRootNode(ast.CMDExplain, $2) }
     | stmt { result = ast.NewRootNode(ast.CMDStmt, $1) }
     | help { result = ast.NewRootNode(ast.CMDHelp, nil) }
@@ -105,33 +102,33 @@ help:
     | tag_help {}
 
 task_help:
-      TASK HELP {}
-    | task_list HELP {}
-    | task_add HELP {}
-    | task_delete HELP {}
-    | task_update HELP {}
+      TASK WHITE HELP {}
+    | task_list WHITE HELP {}
+    | task_add WHITE HELP {}
+    | task_delete WHITE HELP {}
+    | task_update WHITE HELP {}
     ;
 
 tag_help:
-      TAG HELP {/*if debug {fmt.Println("tag_help")}*/}
-    | tag_list HELP {/*if debug {fmt.Println("tag_help")}*/}
-    | tag_set HELP  {/*if debug {fmt.Println("tag_help")}*/}
+      TAG WHITE HELP {/*if debug {fmt.Println("tag_help")}*/}
+    | tag_list WHITE HELP {/*if debug {fmt.Println("tag_help")}*/}
+    | tag_set WHITE HELP  {/*if debug {fmt.Println("tag_help")}*/}
     ;
 
 // ========== LOG =============
 log_list:
       LOG {/*if debug {fmt.Println("log")}*/}
-    | LOG NUM {/*if debug {fmt.Println("log")}*/}
+    | LOG WHITE NUM {/*if debug {fmt.Println("log")}*/}
     ;
 
 undo_log:
       UNDO {/*if debug {fmt.Println("log")}*/}
-    | UNDO id {/*if debug {fmt.Println("log")}*/}
+    | UNDO WHITE id {/*if debug {fmt.Println("log")}*/}
     ;
 
 // ========== TASK COMMAND ==============
 task_list:
-      TASK task_list_filter { $$ = ast.NewTaskListNode($2) }
+      TASK WHITE task_list_filter { $$ = ast.NewTaskListNode($3) }
     | task_list_filter { $$ = ast.NewTaskListNode($1) }
     ;
 
@@ -183,11 +180,6 @@ indefinite_task_list_filter:
       }
     ;
 
-content_filter:
-      LIKE content_group { $$ = $2 }
-    | content_group { $$ = $1}
-    ;
-
 itlf_p3:
       itlf_p2 { $$ = $1 }
     | assign_group itlf_p2 {
@@ -202,11 +194,11 @@ itlf_p3:
 
 itlf_p2:
       itlf_p1 { $$ = $1 }
-    | AGE COLON time_list_filter itlf_p1 {
+    | AGE time_list_filter itlf_p1 {
         $$ = $4
         $$.SetAgeFilter($3)
       }
-    | itlf_p1 AGE COLON time_list_filter {
+    | itlf_p1 AGE time_list_filter {
         $$ = $1
         $$.SetAgeFilter($4)
       }
@@ -214,7 +206,7 @@ itlf_p2:
 
 itlf_p1:
       { $$ = ast.NewIndefiniteTaskListFilterNode() }
-    | DUE COLON time_list_filter { $$.SetDueFilter($3) }
+    | DUE time_list_filter { $$.SetDueFilter($3) }
     ;
 
 task_add_option:
@@ -272,7 +264,7 @@ id:
       }
     ; 
 
-content_group:
+content_filter:
         content_logic_p3 { $$ = $1 }
       | NOT content_logic_p3 { 
           $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2})
@@ -307,45 +299,23 @@ content_logic_p1:
     ;
 
 definite_content:
-      DQUOTE shard_content DQUOTE { $$ = $2 }
-    | QUOTE shard_content QUOTE { $$ = $2 }
-    | DQUOTE definite_content DQUOTE { $$ = $2 }
-    | QUOTE definite_content QUOTE { $$ = $2 }
-    | DQUOTE indefinite_content DQUOTE { $$ = $2 }
-    | QUOTE indefinite_content QUOTE { $$ = $2 }
+      SETENCE { $$ = $2 }
     ;
 
 indefinite_content:
-      shard_content { $$ = $1 }
-
-    | indefinite_content TASK { $$ = $1 + " " + $2 }
-    | indefinite_content TAG { $$ = $1 + " " + $2 }
-
-    | indefinite_content ADD { $$ = $1 + " " + $2 }
-    | indefinite_content DELETE { $$ = $1 + " " + $2 }
-    | indefinite_content SET { $$ = $1 + " " + $2 }
-    | indefinite_content DONE { $$ = $1 + " " + $2 }
-
-    | indefinite_content AGE { $$ = $1 + " " + $2 }
-    | indefinite_content DUE { $$ = $1 + " " + $2 }
-    | indefinite_content LIKE { $$ = $1 + " " + $2 }
-    | indefinite_content LOOP { $$ = $1 + " " + $2 }
-
-    | indefinite_content COLON { $$ = $1 + " " + $2 }
-    | indefinite_content PLUS { $$ = $1 + " " + $2 }
-    | indefinite_content MINUS { $$ = $1 + " " + $2 }
-    | indefinite_content AND { $$ = $1 + " " + $2 }
-    | indefinite_content OR { $$ = $1 + " " + $2 }
-    | indefinite_content XOR { $$ = $1 + " " + $2 }
-    | indefinite_content NOT { $$ = $1 + " " + $2 }
-    | indefinite_content NUM  { $$ = $1 + " " + fmt.Sprint($2) }
-    ;
-
-
-// 转义所有关键字
-shard_content:
       { $$ = "" }
-    | IDENT shard_content { $$ = $1 + " " + $2 }
+
+    | indefinite_content NUM  { $$ = $1 + fmt.Sprint($2) }
+    | indefinite_content IDENT {$$ = $1 + $2}
+    | indefinite_content WHITE {$$ = $1 + $2}
+
+    | indefinite_content TASK { $$ = $1 + $2 }
+    | indefinite_content TAG { $$ = $1 + $2 }
+
+    | indefinite_content ADD { $$ = $1 + $2 }
+    | indefinite_content DELETE { $$ = $1 + $2 }
+    | indefinite_content SET { $$ = $1 + $2 }
+    | indefinite_content DONE { $$ = $1 + $2 }
     ;
 
 assign_group:

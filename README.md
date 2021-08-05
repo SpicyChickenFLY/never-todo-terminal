@@ -47,7 +47,7 @@ never explain [<log_id>]
 never todo [<FILTER_TODO_LIST>]
     # FILTER_TODO_LIST
     <id>[-<id>] [<id>]                  # 通过ID直接定位
-    [like] <content> [and|or <content>]   # 通过内容模糊搜索
+    <content> [and|or <content>]   # 通过内容模糊搜索
     +<tag>|-<tag> [+<tag>|-<tag>]       # 通过标签筛选
     age:<age>|[<age>]-[<age>]                   # 通过创建时间筛选
     due:<due>|[<due>]-[<due>]                   # 通过截止时间筛选
