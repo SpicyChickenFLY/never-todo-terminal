@@ -16,8 +16,8 @@ type TaskListNode struct {
 }
 
 // NewTaskListNode return TaskListNode
-func NewTaskListNode(tlfn *TaskListFilterNode) TaskListNode {
-	return TaskListNode{tlfn}
+func NewTaskListNode(tlfn *TaskListFilterNode) *TaskListNode {
+	return &TaskListNode{tlfn}
 }
 
 func (tln *TaskListNode) execute() error { return nil }
@@ -86,23 +86,24 @@ func (itlfn *IndefiniteTaskListFilterNode) SetAssignFilter(agn *AssignGroupNode)
 }
 
 // SetAgeFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(str string) {
+func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(tfn *TimeFilterNode) {
 	fmt.Println("set age")
 }
 
 // SetDueFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(str string) {
+func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(tfn *TimeFilterNode) {
 	fmt.Println("set due")
 }
 
 func (itlfn *IndefiniteTaskListFilterNode) execute() error { return nil }
 func (itlfn *IndefiniteTaskListFilterNode) explain() {
 	if itlfn.contentGroup != nil {
-		fmt.Print("\tby content: ")
+		fmt.Print("\tby content ")
 		itlfn.contentGroup.explain()
+		fmt.Print("\n")
 	}
 	if itlfn.assignGroup != nil {
-		fmt.Print("\tby assign")
+		fmt.Print("\tby assign ")
 		itlfn.assignGroup.explain()
 	}
 }
@@ -114,24 +115,35 @@ func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
 
 type TaskAddNode struct {
 	content string
-	Option  *TaskAddOptionNode
+	option  *TaskAddOptionNode
 }
 
-func NewTaskAddNode(c string) TaskAddNode {
-	return TaskAddNode{c, nil}
+func NewTaskAddNode(c string, opt *TaskAddOptionNode) *TaskAddNode {
+	if len(c) > 0 && c[0] == ' ' {
+		c = c[1:]
+	}
+	return &TaskAddNode{c, opt}
 }
 
 func (tan *TaskAddNode) execute() error { return nil }
 func (tan *TaskAddNode) explain() {
 	fmt.Println("add new todo task")
-	fmt.Printf("\twith content: %s\n", tan.content)
-	// tan.taskAddOptionNode.explain()
+	fmt.Printf("\twith content `%s`\n", tan.content)
+	if tan.option != nil {
+		tan.option.explain()
+	}
+
 }
 func (tan *TaskAddNode) restore() string {
 	return "todo add " // + tan.taskAddOptionNode.restore()
 }
 
 type TaskAddOptionNode struct {
+	AssignGroupNode
+}
+
+func NewTaskAddOptionNode() *TaskAddOptionNode {
+	return &TaskAddOptionNode{}
 }
 
 // ============================
@@ -144,8 +156,8 @@ type TaskDoneNode struct {
 }
 
 // NewTaskDoneNode return TaskDoneNode
-func NewTaskDoneNode(ign *IDGroupNode) TaskDoneNode {
-	return TaskDoneNode{ign}
+func NewTaskDoneNode(ign *IDGroupNode) *TaskDoneNode {
+	return &TaskDoneNode{ign}
 }
 
 // Restore to statement
@@ -176,8 +188,8 @@ type TaskDeleteNode struct {
 }
 
 // NewTaskDeleteNode return TaskDeleteNode
-func NewTaskDeleteNode(ign *IDGroupNode) TaskDeleteNode {
-	return TaskDeleteNode{*ign}
+func NewTaskDeleteNode(ign *IDGroupNode) *TaskDeleteNode {
+	return &TaskDeleteNode{*ign}
 }
 
 func (tdn *TaskDeleteNode) restore() string {
@@ -207,8 +219,8 @@ type TaskUpdateNode struct {
 }
 
 // NewTaskUpdateNode return TaskUpdateNode
-func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) TaskUpdateNode {
-	return TaskUpdateNode{}
+func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) *TaskUpdateNode {
+	return &TaskUpdateNode{}
 }
 
 // Restore to statement

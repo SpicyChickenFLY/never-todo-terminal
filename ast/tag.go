@@ -6,8 +6,8 @@ type TagListNode struct {
 	tagListFilterNode *TagListFilterNode
 }
 
-func NewTagListNode(tlfn *TagListFilterNode) TagListNode {
-	return TagListNode{tlfn}
+func NewTagListNode(tlfn *TagListFilterNode) *TagListNode {
+	return &TagListNode{tlfn}
 }
 
 func (tln *TagListNode) execute() error { return nil }

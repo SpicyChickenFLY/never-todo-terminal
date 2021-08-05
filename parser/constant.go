@@ -4,10 +4,12 @@ import (
 	"bufio"
 	"strings"
 
-	"github.com/SpicyChickenFLY/never-todo-cmd/parser/ast"
+	"github.com/SpicyChickenFLY/never-todo-cmd/ast"
 )
 
 var debug = false
+
+// var debug = true
 
 var result ast.Node
 

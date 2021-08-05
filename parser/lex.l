@@ -56,29 +56,30 @@ func (y *yylexer) Lex(lval *yySymType) int {
 %yyc c
 %yyn c = y.getc()
 
-digit  [0-9]+
-letter        [_a-zA-Z]
-identifier    {letter}({letter}|{digit})*
-white		[ \t\n\r]+
-setence \".*?\"
+setence     \"[^"]*\"|'[^']*'|`[^`]*`
+letter      [_a-zA-Z]
+identifier  {letter}({letter}|{digit})*
+white       [ \t\n\r]+
+date        {digit}\/{digit}\/{digit}
+time        (20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d
+digit       [0-9]+
+
 %%
 
     y.buf = y.buf[:0]
 
-
-
-"'" 
-    lval.str = string(y.buf)
-    return QUOTE
-"\"" 
-    lval.str = string(y.buf)
-    return DQUOTE
 "+" 
     lval.str = string(y.buf)
     return PLUS
 "-" 
     lval.str = string(y.buf)
     return MINUS
+"(" 
+    lval.str = string(y.buf)
+    return LBRACK
+")" 
+    lval.str = string(y.buf)
+    return RBRACK
 
 "AND" 
     lval.str = string(y.buf)
@@ -106,51 +107,60 @@ setence \".*?\"
     lval.str = string(y.buf)
     return UNDO
 
-"todo" | "task" 
+"todo"|"task" 
     lval.str = string(y.buf)
     return TASK
 "tag" 
     lval.str = string(y.buf)
     return TAG
 
-"add" | "create" 
+"add"|"create" 
     lval.str = string(y.buf)
     return ADD
-"del" | "delete" | "remove" 
+"del"|"delete"|"remove" 
     lval.str = string(y.buf)
     return DELETE
-"set" | "edit" | "update" 
+"set"|"edit"|"update" 
     lval.str = string(y.buf)
     return SET
-"done" | "complete" 
+"done"|"complete" 
     lval.str = string(y.buf)
     return DONE
 
-":age" 
+"age:" 
     lval.str = string(y.buf)
     return AGE
-":due" 
+"due:" 
     lval.str = string(y.buf)
     return DUE
 
-":loop" 
+"loop:" 
     lval.str = string(y.buf)
     return LOOP
+
+{date}
+    lval.str = string(y.buf)
+    return DATE
+
+{time}
+    lval.str = string(y.buf)
+    return TIME
 
 {digit}
     lval.str = string(y.buf)
     return NUM
 
+{setence}
+    lval.str = string(y.buf[1:len(y.buf)-1])
+    return SETENCE
+
 {identifier}
     lval.str = string(y.buf)
     return IDENT
 
-{setence} {
-    lval.str = string(y.buf[1:len(y.buf)-1])
-    return SETENCE
-}
-
 {white} {}
+
+
 
 %%
     y.empty = true

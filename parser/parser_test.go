@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/SpicyChickenFLY/never-todo-cmd/parser/ast"
+	"github.com/SpicyChickenFLY/never-todo-cmd/ast"
 )
 
 type testCase struct {
@@ -22,9 +22,9 @@ func TestParser(t *testing.T) {
 		"tag -h",
 		// task
 		"todo",
-		"look for me",
-		"todo add remeber to go shopping",
-		"add 'del: 1 + 1 & 2 '",
+		"NOT('A' AND \"B\" OR `C`)",
+		"add 'del:  1 + 1 & 2 ' due:2020/04/3",
+		"todo add go shopping due:2015/3/12",
 		"done 1-4 20-15",
 		"del 20 2-5",
 		//

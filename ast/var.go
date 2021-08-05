@@ -3,8 +3,7 @@ package ast
 import (
 	"fmt"
 	"sort"
-
-	"github.com/SpicyChickenFLY/never-todo-cmd/data"
+	"time"
 )
 
 // ============================
@@ -59,7 +58,7 @@ func (ign *IDGroupNode) restore() string {
 
 // Explain which id will be used
 func (ign *IDGroupNode) explain() {
-	fmt.Println("\twith ID: ", ign.idGroup)
+	fmt.Printf("\twith ID: %v\n", ign.idGroup)
 }
 
 func (ign *IDGroupNode) sortID() {
@@ -110,17 +109,49 @@ func NewContentGroupNode(
 	return &ContentGroupNode{content, operator, operands}
 }
 
-func (cgn *ContentGroupNode) filter(tags []data.Tag) []data.Tag {
+func (cgn *ContentGroupNode) filter() {
 	switch cgn.operator {
 	case OPNone:
-		return tags
+		return
 	default:
-		return tags
+		return
 	}
 }
 
 func (cgn *ContentGroupNode) explain() {
-	fmt.Println(cgn.content)
+	switch cgn.operator {
+	case OPNone:
+		fmt.Printf("include `%s`", cgn.content)
+	case OPNOT:
+		fmt.Print("while not (")
+		cgn.operands[0].explain()
+		fmt.Print(")")
+	case OPAND:
+		fmt.Print("(")
+		cgn.operands[0].explain()
+		fmt.Print(" and ")
+		cgn.operands[1].explain()
+		fmt.Print(")")
+	case OPOR:
+		fmt.Print("(")
+		cgn.operands[0].explain()
+		fmt.Print(" or ")
+		cgn.operands[1].explain()
+		fmt.Print(")")
+	default:
+		return
+	}
+}
+
+func (cgn *ContentGroupNode) restore() string {
+	switch cgn.operator {
+	case OPNone:
+		return cgn.content
+	case OPAND:
+		return fmt.Sprint("%s and %s")
+	default:
+		return ""
+	}
 }
 
 // ============================
@@ -192,4 +223,28 @@ func (agn *AssignGroupNode) removeRepeatedTags() {
 		}
 		agn.unassignGroup = temp
 	}
+}
+
+// ============================
+// Time Filter
+// ============================
+type TimeFilterNode struct {
+	startTime *time.Time
+	endTime   *time.Time
+}
+
+func NewTimeFilterNode(s, e string) *TimeFilterNode {
+	loc, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		// TODO: handle this
+	}
+	st, err := time.ParseInLocation("2006/01/02 15:04:05", s, loc)
+	if err != nil {
+		// TODO: handle this
+	}
+	et, err := time.ParseInLocation("2006/01/02 15:04:05", e, loc)
+	if err != nil {
+		// TODO: handle this
+	}
+	return &TimeFilterNode{&st, &et}
 }
