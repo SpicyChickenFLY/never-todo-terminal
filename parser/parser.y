@@ -221,8 +221,14 @@ indefinite_task_list_filter_p1:
 
 task_add_option:
       task_add_option_p2 { $$ = $1 }
-    | positive_assign_group task_add_option {}
-    | task_add_option positive_assign_group {}
+    | positive_assign_group task_add_option {
+        $$ = $2
+        $$.SetAssignGroup($1)
+      }
+    | task_add_option positive_assign_group {
+        $$ = $1
+        $$.SetAssignGroup($2)
+      }
     ;
 
 task_add_option_p2:

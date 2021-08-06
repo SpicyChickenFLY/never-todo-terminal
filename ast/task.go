@@ -165,6 +165,11 @@ func NewTaskAddOptionNode() *TaskAddOptionNode {
 
 func (taon *TaskAddOptionNode) execute() error { return nil }
 func (taon *TaskAddOptionNode) explain() {
+	if taon.assignGroupNode != nil {
+		fmt.Print("\t")
+		taon.assignGroupNode.explain()
+		fmt.Print("\n")
+	}
 	if taon.due != nil {
 		fmt.Print("\twhich will due ")
 		taon.due.explain()
@@ -173,6 +178,10 @@ func (taon *TaskAddOptionNode) explain() {
 }
 func (taon *TaskAddOptionNode) restore() string {
 	return "todo add " // + tan.taskAddOptionNode.restore()
+}
+
+func (taon *TaskAddOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) {
+	taon.assignGroupNode = assignGourp
 }
 
 func (taon *TaskAddOptionNode) SetDue(due *TimeFilterNode) {

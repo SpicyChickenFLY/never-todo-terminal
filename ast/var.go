@@ -181,8 +181,8 @@ func (agn *AssignGroupNode) restore() string {
 }
 
 func (agn *AssignGroupNode) explain() {
-	fmt.Println("assign following tags: ", agn.assignGroup)
-	fmt.Println("unassign following tags: ", agn.unassignGroup)
+	fmt.Print("assign tags: ", agn.assignGroup)
+	fmt.Print(" unassign tags: ", agn.unassignGroup)
 }
 
 // AssignTag for task
