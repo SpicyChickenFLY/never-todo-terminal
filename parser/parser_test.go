@@ -23,8 +23,9 @@ func TestParser(t *testing.T) {
 		// task
 		"todo",
 		"NOT('A' AND \"B\" OR `C`)",
+		"todo age:2020/03/02-2021/02/03",
 		"add 'del:  1 + 1 & 2 ' due:2020/04/3",
-		"todo add go shopping due:2015/3/12",
+		"todo add go shopping due:2015/03/12",
 		"done 1-4 20-15",
 		"del 20 2-5",
 		//

@@ -228,23 +228,51 @@ func (agn *AssignGroupNode) removeRepeatedTags() {
 // ============================
 // Time Filter
 // ============================
+
 type TimeFilterNode struct {
-	startTime *time.Time
-	endTime   *time.Time
+	startTime *TimeNode
+	endTime   *TimeNode
 }
 
-func NewTimeFilterNode(s, e string) *TimeFilterNode {
+func NewTimeFilterNode(s, e *TimeNode) *TimeFilterNode {
+	return &TimeFilterNode{s, e}
+}
+
+func (tfn *TimeFilterNode) execute() error { return nil }
+func (tfn *TimeFilterNode) explain() {
+	if tfn.startTime != nil && tfn.endTime != nil {
+		fmt.Printf("from %s to %s",
+			tfn.startTime.restore(),
+			tfn.endTime.restore(),
+		)
+	} else if tfn.startTime != nil {
+		fmt.Printf("after %s", tfn.startTime.restore())
+	} else {
+		fmt.Printf("before %s", tfn.endTime.restore())
+	}
+}
+func (tfn *TimeFilterNode) restore() string {
+	return "todo add " // + tan.taskAddOptionNode.restore()
+}
+
+type TimeNode struct {
+	time *time.Time
+}
+
+func NewTimeNode(str, format string) *TimeNode {
 	loc, err := time.LoadLocation("Asia/Shanghai")
+	time, err := time.ParseInLocation(format, str, loc)
+	//TODO: handle this
 	if err != nil {
-		// TODO: handle this
+		fmt.Println(err.Error())
 	}
-	st, err := time.ParseInLocation("2006/01/02 15:04:05", s, loc)
-	if err != nil {
-		// TODO: handle this
-	}
-	et, err := time.ParseInLocation("2006/01/02 15:04:05", e, loc)
-	if err != nil {
-		// TODO: handle this
-	}
-	return &TimeFilterNode{&st, &et}
+	return &TimeNode{&time}
+}
+
+func (tn *TimeNode) execute() error { return nil }
+func (tn *TimeNode) explain() {
+	fmt.Print(tn.time.Format("2006/01/02 15:04:05"))
+}
+func (tn *TimeNode) restore() string {
+	return tn.time.Format("2006/01/02 15:04:05")
 }

@@ -31,6 +31,7 @@ import (
   contentGroupNode *ast.ContentGroupNode
   assignGroupNode *ast.AssignGroupNode
   timeFilterNode *ast.TimeFilterNode
+  timeNode *ast.TimeNode
 }
 
 
@@ -55,9 +56,9 @@ import (
 
 %type <taskListNode> task_list
 %type <taskListFilterNode> task_list_filter
-%type <indefiniteTaskListFilterNode> indefinite_task_list_filter itlf_p3 itlf_p2 itlf_p1
+%type <indefiniteTaskListFilterNode> indefinite_task_list_filter indefinite_task_list_filter_p3 indefinite_task_list_filter_p2 indefinite_task_list_filter_p1
 %type <taskAddNode> task_add
-%type <taskAddOptionNode> task_add_option
+%type <taskAddOptionNode> task_add_option task_add_option_p1 task_add_option_p2
 %type <taskDeleteNode> task_delete
 %type <taskDoneNode> task_done
 %type <taskUpdateNode> task_update
@@ -73,7 +74,7 @@ import (
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
 %type <timeFilterNode> time_filter
-%type <str> time_single
+%type <timeNode> time
 
 %start root
 
@@ -166,7 +167,7 @@ task_update:
     | id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($1, $2, $3) }
     ;
 
-// ========== TASK FILTER =============
+// ========== TASK LIST FILTER =============
 task_list_filter:
       { $$ = ast.NewTaskListFilterNode(nil, nil) }
     | id_group { $$ = ast.NewTaskListFilterNode($1, nil) }
@@ -174,54 +175,74 @@ task_list_filter:
     ;
 
 indefinite_task_list_filter:
-      itlf_p3 { 
+      indefinite_task_list_filter_p3 { 
         $$ = $1
       }
-    |  content_group itlf_p3 {
+    |  content_group indefinite_task_list_filter_p3 {
         $$ = $2
         $$.SetContentFilter($1)
       }
-    | itlf_p3 content_group {
+    | indefinite_task_list_filter_p3 content_group {
         $$ = $1
         $$.SetContentFilter($2)
       }
     ;
 
-itlf_p3:
-      itlf_p2 { $$ = $1 }
-    | assign_group itlf_p2 {
+indefinite_task_list_filter_p3:
+      indefinite_task_list_filter_p2 { $$ = $1 }
+    | assign_group indefinite_task_list_filter_p2 {
         $$ = $2
         $$.SetAssignFilter($1)
       }
-    | itlf_p2 assign_group {
+    | indefinite_task_list_filter_p2 assign_group {
         $$ = $1
         $$.SetAssignFilter($2)
       }
     ;
 
-itlf_p2:
-      itlf_p1 { $$ = $1 }
-    | AGE time_filter itlf_p1 {
+indefinite_task_list_filter_p2:
+      indefinite_task_list_filter_p1 { $$ = $1 }
+    | AGE time_filter indefinite_task_list_filter_p1 {
         $$ = $3
         $$.SetAgeFilter($2)
       }
-    | itlf_p1 AGE time_filter {
+    | indefinite_task_list_filter_p1 AGE time_filter {
         $$ = $1
         $$.SetAgeFilter($3)
       }
     ;
 
-itlf_p1:
+indefinite_task_list_filter_p1:
       { $$ = ast.NewIndefiniteTaskListFilterNode() }
     | DUE time_filter { $$.SetDueFilter($2) }
     ;
 
+// ========== TASK ADD OPTION =============
+
 task_add_option:
-      {}
+      task_add_option_p2 { $$ = $1 }
     | positive_assign_group task_add_option {}
-    | DUE time_filter {  }
-    /* | LOOP COLON loop_time {} */
+    | task_add_option positive_assign_group {}
     ;
+
+task_add_option_p2:
+      task_add_option_p1 { $$ = $1 }
+    | task_add_option_p1 DUE time_filter { 
+        $$ = $1
+        $$.SetDue($3) 
+      }
+    | DUE time_filter task_add_option_p1 { 
+        $$ = $3
+        $$.SetDue($2) 
+      }
+
+task_add_option_p1:
+      { $$ = ast.NewTaskAddOptionNode() }
+    /* | LOOP loop_time {} */
+    ;
+
+
+// ========== TASK UPDATE OPTION =============
 
 task_update_option:
       { $$ = ast.NewTaskUpdateOptionNode() }
@@ -359,14 +380,14 @@ unassign_tag:
 
 
 time_filter:
-      time_single { $$ = ast.NewTimeFilterNode ($1, "") }
-    | time_single MINUS time_single { $$ = ast.NewTimeFilterNode ($1, $3) }
+      time { $$ = ast.NewTimeFilterNode ($1, nil) }
+    | time MINUS time { $$ = ast.NewTimeFilterNode ($1, $3) }
     ;
 
-time_single:
-      DATE {}
-    | TIME { ast.NewTimeFilterNode (DATE, "") }
-    | DATE TIME { ast.NewTimeFilterNode (DATETIME, "") }
+time:
+      DATE { $$ = ast.NewTimeNode($1, "2006/01/02") }
+    | TIME { $$ = ast.NewTimeNode($1, "15:04:05") }
+    | DATE TIME { $$ = ast.NewTimeNode($1 + " " + $2, "2006/01/02 15:04:05") }
     ;
 
 /* loop_time:

@@ -68,6 +68,8 @@ func (tlfn *TaskListFilterNode) restore() string {
 type IndefiniteTaskListFilterNode struct {
 	contentGroup *ContentGroupNode
 	assignGroup  *AssignGroupNode
+	age          *TimeFilterNode
+	due          *TimeFilterNode
 }
 
 // NewIndefiniteTaskListFilterNode return IndefiniteTaskListFilterNode
@@ -87,12 +89,12 @@ func (itlfn *IndefiniteTaskListFilterNode) SetAssignFilter(agn *AssignGroupNode)
 
 // SetAgeFilter func
 func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(tfn *TimeFilterNode) {
-	fmt.Println("set age")
+	itlfn.age = tfn
 }
 
 // SetDueFilter func
 func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(tfn *TimeFilterNode) {
-	fmt.Println("set due")
+	itlfn.due = tfn
 }
 
 func (itlfn *IndefiniteTaskListFilterNode) execute() error { return nil }
@@ -105,6 +107,17 @@ func (itlfn *IndefiniteTaskListFilterNode) explain() {
 	if itlfn.assignGroup != nil {
 		fmt.Print("\tby assign ")
 		itlfn.assignGroup.explain()
+		fmt.Print("\n")
+	}
+	if itlfn.age != nil {
+		fmt.Print("\twhich created ")
+		itlfn.age.explain()
+		fmt.Print("\n")
+	}
+	if itlfn.due != nil {
+		fmt.Print("\twhich created ")
+		itlfn.due.explain()
+		fmt.Print("\n")
 	}
 }
 func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
@@ -113,11 +126,13 @@ func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
 // Task Add·
 // ============================
 
+// TaskAddNode include task content and add option
 type TaskAddNode struct {
 	content string
 	option  *TaskAddOptionNode
 }
 
+// NewTaskAddNode return *TaskAddNode
 func NewTaskAddNode(c string, opt *TaskAddOptionNode) *TaskAddNode {
 	if len(c) > 0 && c[0] == ' ' {
 		c = c[1:]
@@ -132,18 +147,36 @@ func (tan *TaskAddNode) explain() {
 	if tan.option != nil {
 		tan.option.explain()
 	}
-
 }
 func (tan *TaskAddNode) restore() string {
 	return "todo add " // + tan.taskAddOptionNode.restore()
 }
 
+// TaskAddOptionNode include add options
 type TaskAddOptionNode struct {
-	AssignGroupNode
+	assignGroupNode *AssignGroupNode
+	due             *TimeFilterNode
 }
 
+// NewTaskAddOptionNode return *TaskAddOptionNode
 func NewTaskAddOptionNode() *TaskAddOptionNode {
 	return &TaskAddOptionNode{}
+}
+
+func (taon *TaskAddOptionNode) execute() error { return nil }
+func (taon *TaskAddOptionNode) explain() {
+	if taon.due != nil {
+		fmt.Print("\twhich will due ")
+		taon.due.explain()
+		fmt.Print("\n")
+	}
+}
+func (taon *TaskAddOptionNode) restore() string {
+	return "todo add " // + tan.taskAddOptionNode.restore()
+}
+
+func (taon *TaskAddOptionNode) SetDue(due *TimeFilterNode) {
+	taon.due = due
 }
 
 // ============================
