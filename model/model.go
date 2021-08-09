@@ -1,13 +1,15 @@
-package data
+package model
 
 import "time"
 
 type Task struct {
-	ID        int    `json:"id" mapstructure:"id"`
-	Content   string `json:"content" mapstructure:"content"`
-	Deleted   bool   `json:"deleted" mapstructure:"deleted"`
-	Completed bool   `json:"completed" mapstructure:"completed"`
-	Important bool   `json:"important" mapstructure:"important"`
+	ID        int       `json:"id" mapstructure:"id"`
+	Content   string    `json:"content" mapstructure:"content"`
+	Deleted   bool      `json:"deleted" mapstructure:"deleted"`
+	Completed bool      `json:"completed" mapstructure:"completed"`
+	Important bool      `json:"important" mapstructure:"important"`
+	Due       time.Time `json:"due" mapstructure:"due"`
+	Loop      string    `json:"loop" mapstructure:"loop"`
 }
 
 type Tag struct {
@@ -23,17 +25,17 @@ type TaskTag struct {
 }
 
 type TimeGroup struct {
-	level int
-	start time.Time
-	end   time.Time
+	Level int
+	Start time.Time
+	End   time.Time
 }
 
 type Loop struct {
-	year   int
-	month  int
-	week   int
-	hour   int
-	minute int
+	Year   int
+	Month  int
+	Week   int
+	Hour   int
+	Minute int
 }
 
 type Log struct {

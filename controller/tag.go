@@ -3,7 +3,7 @@ package controller
 import (
 	"errors"
 
-	"github.com/SpicyChickenFLY/never-todo-cmd/data"
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
 // ShowTags called by parser
@@ -11,14 +11,11 @@ func ShowTags() {}
 
 // AddTag called by parser
 func AddTag(content string, color string) (int, error) {
-	if err := db.Read(model); err != nil {
-		return 0, err
-	}
 	id, ok := GetTagIDByName(content)
 	if ok {
 		return id, errors.New("")
 	}
-	model.Data.Tags = append(model.Data.Tags, data.Tag{Content: content, Color: color})
+	model.M.Data.Tags = append(model.M.Data.Tags, model.Tag{Content: content, Color: color})
 	return 0, nil
 }
 

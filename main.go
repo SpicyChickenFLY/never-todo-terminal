@@ -5,10 +5,12 @@ import (
 	"os"
 	"strings"
 
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/parser"
 )
 
 func main() {
+	model.StartTransaction()
 	// Restore the args to origin command string
 	args := strings.Join(os.Args[1:], " ")
 	// Parse command string to an AST
@@ -20,4 +22,5 @@ func main() {
 	} else {
 		fmt.Println("[INFO]: execute command successfully")
 	}
+	model.EndTransaction()
 }

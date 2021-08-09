@@ -1,14 +1,11 @@
 package controller
 
 import (
-	"github.com/SpicyChickenFLY/never-todo-cmd/data"
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
 // AddTaskTags called by parser
 func AddTaskTags(taskID int, assignTags []string) (err error) {
-	if err := db.Read(model); err != nil {
-		return err
-	}
 	for _, assignTag := range assignTags {
 		var tagID int
 		tagID, ok := GetTagIDByName(assignTag)
@@ -19,13 +16,10 @@ func AddTaskTags(taskID int, assignTags []string) (err error) {
 			}
 		}
 		if !checkTaskTagExist(taskID, tagID) {
-			model.Data.TaskTags = append(model.Data.TaskTags, data.TaskTag{TaskID: taskID, TagID: tagID})
-			if err := db.Write(model); err != nil {
-				return err
-			}
+			model.M.Data.TaskTags = append(model.M.Data.TaskTags, model.TaskTag{TaskID: taskID, TagID: tagID})
 		}
 	}
-	return db.Write(model)
+	return nil
 }
 
 // DeleteTaskTags called by parse
@@ -40,7 +34,7 @@ func DeleteTaskTags(taskID int, unassignTags []string) error {
 }
 
 func checkTaskTagExist(taskID, tagID int) bool {
-	for _, taskTag := range model.Data.TaskTags {
+	for _, taskTag := range model.M.Data.TaskTags {
 		if taskTag.TaskID == taskID && taskTag.TagID == tagID {
 			return true
 		}
@@ -49,11 +43,8 @@ func checkTaskTagExist(taskID, tagID int) bool {
 }
 
 func deleteTaskTag(taskID, tagID int) error {
-	if err := db.Read(model); err != nil {
-		return err
-	}
 	index := 0
-	for i, taskTag := range model.Data.TaskTags {
+	for i, taskTag := range model.M.Data.TaskTags {
 		if taskTag.TaskID == taskID && taskTag.TagID == tagID {
 			index = i
 			break
@@ -61,7 +52,7 @@ func deleteTaskTag(taskID, tagID int) error {
 	}
 	if index != 0 {
 		// FIXME: 会不会越界
-		model.Data.TaskTags = append(model.Data.TaskTags[:index], model.Data.TaskTags[index+1:]...)
+		model.M.Data.TaskTags = append(model.M.Data.TaskTags[:index], model.M.Data.TaskTags[index+1:]...)
 	}
-	return db.Write(model)
+	return nil
 }

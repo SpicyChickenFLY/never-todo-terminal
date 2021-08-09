@@ -4,18 +4,15 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/SpicyChickenFLY/never-todo-cmd/data"
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
 // ShowTasks with filter provided by params
 func ShowTasks(params []string) error {
-	if err := db.Read(model); err != nil {
-		return err
-	}
 	if len(params) > 0 { // search
 
 	} else { //list all
-		for _, task := range model.Data.Tasks {
+		for _, task := range model.M.Data.Tasks {
 			if !task.Deleted && !task.Completed {
 				fmt.Println(task.Content)
 			}
@@ -25,47 +22,38 @@ func ShowTasks(params []string) error {
 }
 
 // FindTaskByID called by parser
-func FindTaskByID(id int) (data.Task, bool, error) {
-	if err := db.Read(model); err != nil {
-		return data.Task{}, false, err
-	}
-	for _, task := range model.Data.Tasks {
+func FindTaskByID(id int) (model.Task, bool, error) {
+	for _, task := range model.M.Data.Tasks {
 		if task.ID == id {
 			return task, true, nil
 		}
 	}
-	return data.Task{}, false, nil
+	return model.Task{}, false, nil
 }
 
 // DeleteTask called by parser
 func DeleteTask(ids []int) error {
-	if err := db.Read(model); err != nil {
-		return err
-	}
 	// delete task
 	for _, id := range ids {
-		for _, task := range model.Data.Tasks {
+		for _, task := range model.M.Data.Tasks {
 			if task.ID == id {
 				task.Deleted = true
 			}
 		}
 	}
-	return db.Write(model)
+	return nil
 }
 
 // CompleteTask called by parse
 func CompleteTask(ids []int) error {
-	if err := db.Read(model); err != nil {
-		return err
-	}
 	for _, id := range ids {
-		for _, task := range model.Data.Tasks {
+		for _, task := range model.M.Data.Tasks {
 			if task.ID == id {
 				task.Completed = true
 			}
 		}
 	}
-	return db.Write(model)
+	return nil
 }
 
 // AddTask called by parser
@@ -75,11 +63,8 @@ func AddTask(
 	assignTags []int,
 	due time.Time,
 	loop string) (int, error) {
-	if err := db.Read(model); err != nil {
-		return 0, err
-	}
 	// add new task
-	return 0, db.Write(model)
+	return 0, nil
 }
 
 // UpdateTask called by parser
@@ -89,18 +74,16 @@ func UpdateTask(
 	importance int,
 	assignTags, unasssignTags []string,
 	due time.Time) error {
-	if err := db.Read(model); err != nil {
-		return err
-	}
-	for _, task := range model.Data.Tasks {
+	for _, task := range model.M.Data.Tasks {
 		if task.ID == id {
 			task.Content = content
 			task.Important = (importance > 0)
 			AddTaskTags(task.ID, assignTags)
 			DeleteTaskTags(task.ID, unasssignTags)
-			// TODO: Set due
+			task.Due = due
 			// TODO: Set Loop
+			// task.Loop = loop
 		}
 	}
-	return db.Write(model)
+	return nil
 }

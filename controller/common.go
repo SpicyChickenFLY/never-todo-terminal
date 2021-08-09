@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/constant"
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
 func ShowHelp() error {
@@ -24,11 +25,8 @@ func ShowSummary() error {
 	fmt.Println(constant.ColorfulLogo)
 	fmt.Println(constant.Descirption)
 	fmt.Println(constant.Separator)
-	if err := db.Read(model); err != nil {
-		return err
-	}
 	var todoTotal, doneTotal, tagTotal int
-	for _, task := range model.Data.Tasks {
+	for _, task := range model.M.Data.Tasks {
 		if !task.Deleted {
 			if !task.Completed {
 				todoTotal++
@@ -37,7 +35,7 @@ func ShowSummary() error {
 			}
 		}
 	}
-	for _, tag := range model.Data.Tags {
+	for _, tag := range model.M.Data.Tags {
 		if !tag.Deleted {
 			tagTotal++
 		}
