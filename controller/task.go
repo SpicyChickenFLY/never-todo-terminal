@@ -24,6 +24,20 @@ func ShowTasks(params []string) error {
 	return nil
 }
 
+// FindTaskByID called by parser
+func FindTaskByID(id int) (data.Task, bool, error) {
+	if err := db.Read(model); err != nil {
+		return data.Task{}, false, err
+	}
+	for _, task := range model.Data.Tasks {
+		if task.ID == id {
+			return task, true, nil
+		}
+	}
+	return data.Task{}, false, nil
+}
+
+// DeleteTask called by parser
 func DeleteTask(ids []int) error {
 	if err := db.Read(model); err != nil {
 		return err
@@ -39,6 +53,7 @@ func DeleteTask(ids []int) error {
 	return db.Write(model)
 }
 
+// CompleteTask called by parse
 func CompleteTask(ids []int) error {
 	if err := db.Read(model); err != nil {
 		return err
@@ -53,23 +68,38 @@ func CompleteTask(ids []int) error {
 	return db.Write(model)
 }
 
-func AddTasks(assign_tags []data.Tag, dueTime time.Time, loop string) error {
+// AddTask called by parser
+func AddTask(
+	content string,
+	importance int,
+	assignTags []int,
+	due time.Time,
+	loop string) (int, error) {
 	if err := db.Read(model); err != nil {
-		return err
+		return 0, err
 	}
 	// add new task
-	return db.Write(model)
+	return 0, db.Write(model)
 }
 
-func UpdateTask(id int, content string) error {
+// UpdateTask called by parser
+func UpdateTask(
+	id int,
+	content string,
+	importance int,
+	assignTags, unasssignTags []string,
+	due time.Time) error {
 	if err := db.Read(model); err != nil {
 		return err
 	}
 	for _, task := range model.Data.Tasks {
 		if task.ID == id {
 			task.Content = content
-			// TODO: update Option
-			task.Important = false
+			task.Important = (importance > 0)
+			AddTaskTags(task.ID, assignTags)
+			DeleteTaskTags(task.ID, unasssignTags)
+			// TODO: Set due
+			// TODO: Set Loop
 		}
 	}
 	return db.Write(model)

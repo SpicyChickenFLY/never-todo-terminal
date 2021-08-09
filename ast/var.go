@@ -160,8 +160,8 @@ func (cgn *ContentGroupNode) restore() string {
 
 // AssignGroupNode is node include id
 type AssignGroupNode struct {
-	assignGroup   []string
-	unassignGroup []string
+	assignTags   []string
+	unassignTags []string
 }
 
 // NewAssignGroupNode return IDGroup
@@ -171,57 +171,57 @@ func NewAssignGroupNode() *AssignGroupNode {
 
 func (agn *AssignGroupNode) restore() string {
 	result := ""
-	for _, assignTag := range agn.assignGroup {
+	for _, assignTag := range agn.assignTags {
 		result += fmt.Sprint(" +", assignTag)
 	}
-	for _, unassignTag := range agn.unassignGroup {
+	for _, unassignTag := range agn.unassignTags {
 		result += fmt.Sprint(" -", unassignTag)
 	}
 	return result
 }
 
 func (agn *AssignGroupNode) explain() {
-	fmt.Print("assign tags: ", agn.assignGroup)
-	fmt.Print(" unassign tags: ", agn.unassignGroup)
+	fmt.Print("assign tags: ", agn.assignTags)
+	fmt.Print(" unassign tags: ", agn.unassignTags)
 }
 
 // AssignTag for task
 func (agn *AssignGroupNode) AssignTag(tag string) {
-	agn.assignGroup = append(agn.assignGroup, tag)
+	agn.assignTags = append(agn.assignTags, tag)
 	agn.removeRepeatedTags()
 }
 
 // UnassignTag for task
 func (agn *AssignGroupNode) UnassignTag(tag string) {
-	agn.unassignGroup = append(agn.unassignGroup, tag)
+	agn.unassignTags = append(agn.unassignTags, tag)
 	agn.removeRepeatedTags()
 }
 
 func (agn *AssignGroupNode) sortTags() {
-	sort.Strings(agn.assignGroup)
-	sort.Strings(agn.unassignGroup)
+	sort.Strings(agn.assignTags)
+	sort.Strings(agn.unassignTags)
 }
 
 func (agn *AssignGroupNode) removeRepeatedTags() {
-	if len(agn.assignGroup) > 0 {
-		temp := []string{agn.assignGroup[0]}
+	if len(agn.assignTags) > 0 {
+		temp := []string{agn.assignTags[0]}
 		agn.sortTags()
-		for i := 1; i < len(agn.assignGroup); i++ {
-			if agn.assignGroup[i] != agn.assignGroup[i-1] {
-				temp = append(temp, agn.assignGroup[i])
+		for i := 1; i < len(agn.assignTags); i++ {
+			if agn.assignTags[i] != agn.assignTags[i-1] {
+				temp = append(temp, agn.assignTags[i])
 			}
 		}
-		agn.assignGroup = temp
+		agn.assignTags = temp
 	}
-	if len(agn.unassignGroup) > 0 {
-		temp := []string{agn.unassignGroup[0]}
+	if len(agn.unassignTags) > 0 {
+		temp := []string{agn.unassignTags[0]}
 		agn.sortTags()
-		for i := 1; i < len(agn.unassignGroup); i++ {
-			if agn.unassignGroup[i] != agn.unassignGroup[i-1] {
-				temp = append(temp, agn.unassignGroup[i])
+		for i := 1; i < len(agn.unassignTags); i++ {
+			if agn.unassignTags[i] != agn.unassignTags[i-1] {
+				temp = append(temp, agn.unassignTags[i])
 			}
 		}
-		agn.unassignGroup = temp
+		agn.unassignTags = temp
 	}
 }
 

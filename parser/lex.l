@@ -63,6 +63,7 @@ white       [ \t\n\r]+
 date        {digit}\/{digit}\/{digit}
 time        (20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d
 digit       [0-9]+
+importance  ![0-9]
 
 %%
 
@@ -159,6 +160,11 @@ digit       [0-9]+
     return IDENT
 
 {white} {}
+
+{importance} 
+    lval.str = string(y.buf[1:])
+    return IMPORTANCE
+
 
 
 

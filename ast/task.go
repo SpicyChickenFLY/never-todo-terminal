@@ -154,6 +154,7 @@ func (tan *TaskAddNode) restore() string {
 
 // TaskAddOptionNode include add options
 type TaskAddOptionNode struct {
+	importance      bool
 	assignGroupNode *AssignGroupNode
 	due             *TimeFilterNode
 }
@@ -165,6 +166,7 @@ func NewTaskAddOptionNode() *TaskAddOptionNode {
 
 func (taon *TaskAddOptionNode) execute() error { return nil }
 func (taon *TaskAddOptionNode) explain() {
+	fmt.Println("\tset importance: ", taon.importance)
 	if taon.assignGroupNode != nil {
 		fmt.Print("\t")
 		taon.assignGroupNode.explain()
@@ -178,6 +180,10 @@ func (taon *TaskAddOptionNode) explain() {
 }
 func (taon *TaskAddOptionNode) restore() string {
 	return "todo add " // + tan.taskAddOptionNode.restore()
+}
+
+func (taon *TaskAddOptionNode) SetImportance(importance int) {
+	taon.importance = (importance > 0)
 }
 
 func (taon *TaskAddOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) {
@@ -257,7 +263,7 @@ func (tdn *TaskDeleteNode) execute() error {
 type TaskUpdateNode struct {
 	id      int
 	content string
-	Option  TaskUpdateOptionNode
+	option  TaskUpdateOptionNode
 }
 
 // NewTaskUpdateNode return TaskUpdateNode
@@ -268,24 +274,25 @@ func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) *Task
 // Restore to statement
 func (tun *TaskUpdateNode) restore() string {
 	result := fmt.Sprintf("task set %d %s", tun.id, tun.content)
-	result += tun.Option.restore()
+	result += tun.option.restore()
 	return result
 }
 
 // Explain to statement
 func (tun *TaskUpdateNode) explain() {
 	fmt.Printf("Update task:%d to \"%s\"", tun.id, tun.content)
-	if len(tun.Option.assignGroup) > 0 {
-		fmt.Printf(",\nthen assign tags:%v for it", tun.Option.assignGroup)
+	if len(tun.option.assignGroupNode.assignTags) > 0 {
+		fmt.Printf(",\nthen assign tags:%v for it", tun.option.assignGroupNode)
 	}
-	if len(tun.Option.unassignGroup) > 0 {
-		fmt.Printf(",\nthen unassign tags:%v for it", tun.Option.unassignGroup)
+	if len(tun.option.assignGroupNode.unassignTags) > 0 {
+		fmt.Printf(",\nthen unassign tags:%v for it", tun.option.assignGroupNode.unassignTags)
 	}
 }
 
 // Execute complete task logic
 func (tun *TaskUpdateNode) execute() error {
-	return controller.UpdateTask(tun.id, tun.content)
+	// return controller.UpdateTask(tun.id, tun.content,tun)
+	return nil
 }
 
 // ============================
@@ -294,7 +301,9 @@ func (tun *TaskUpdateNode) execute() error {
 
 // TaskUpdateOptionNode is node for task update option
 type TaskUpdateOptionNode struct {
-	AssignGroupNode
+	importance      bool
+	assignGroupNode *AssignGroupNode
+	due             *TimeNode
 }
 
 // NewTaskUpdateOptionNode return *TaskUpdateOptionNode
@@ -302,10 +311,32 @@ func NewTaskUpdateOptionNode() *TaskUpdateOptionNode {
 	return &TaskUpdateOptionNode{}
 }
 
-func (tuon TaskUpdateOptionNode) restore() string {
-	return ""
+func (tuon *TaskUpdateOptionNode) execute() error { return nil }
+func (tuon *TaskUpdateOptionNode) explain() {
+	fmt.Println("\tset importance: ", tuon.importance)
+	if tuon.assignGroupNode != nil {
+		fmt.Print("\t")
+		tuon.assignGroupNode.explain()
+		fmt.Print("\n")
+	}
+	if tuon.due != nil {
+		fmt.Print("\twhich will due ")
+		tuon.due.explain()
+		fmt.Print("\n")
+	}
+}
+func (tuon *TaskUpdateOptionNode) restore() string {
+	return "todo set " // + tan.taskAddOptionNode.restore()
 }
 
-// AssignTag for task
-func (tuon TaskUpdateOptionNode) AssignTag(agn *AssignGroupNode) {
+func (tuon *TaskUpdateOptionNode) SetImportance(importance int) {
+	tuon.importance = (importance > 0)
+}
+
+func (tuon *TaskUpdateOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) {
+	tuon.assignGroupNode = assignGourp
+}
+
+func (tuon *TaskUpdateOptionNode) SetDue(due *TimeNode) {
+	tuon.due = due
 }
