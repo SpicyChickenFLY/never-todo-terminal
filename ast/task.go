@@ -21,11 +21,8 @@ func NewTaskListNode(tlfn *TaskListFilterNode) *TaskListNode {
 }
 
 func (tln *TaskListNode) execute() error { return nil }
-func (tln *TaskListNode) explain() {
-	tln.taskListFilterNode.explain()
-}
-func (tln *TaskListNode) restore() string {
-	return "todo list " + tln.taskListFilterNode.restore()
+func (tln *TaskListNode) explain() string {
+	return "todo list " + tln.taskListFilterNode.explain()
 }
 
 // TaskListFilterNode include idGroup OR indefiniteTaskListFilter
@@ -42,24 +39,17 @@ func NewTaskListFilterNode(
 }
 
 func (tlfn *TaskListFilterNode) execute() error { return nil }
-func (tlfn *TaskListFilterNode) explain() {
-	if tlfn.idGroup != nil {
-		fmt.Println("list todo tasks")
-		tlfn.idGroup.explain()
-	} else if tlfn.indefiniteTaskListFilter != nil {
-		fmt.Println("list todo tasks")
-		tlfn.indefiniteTaskListFilter.explain()
-	} else {
+func (tlfn *TaskListFilterNode) explain() string {
+	if tlfn.idGroup == nil && tlfn.indefiniteTaskListFilter == nil {
 		fmt.Println("list all todo tasks")
+		return ""
 	}
-}
-func (tlfn *TaskListFilterNode) restore() string {
 	result := ""
+	fmt.Println("list todo tasks")
 	if tlfn.idGroup != nil {
-		result += tlfn.idGroup.restore()
-	}
-	if tlfn.indefiniteTaskListFilter != nil {
-		result += tlfn.indefiniteTaskListFilter.restore()
+		result += tlfn.idGroup.explain()
+	} else if tlfn.indefiniteTaskListFilter != nil {
+		result += tlfn.indefiniteTaskListFilter.explain()
 	}
 	return result
 }
@@ -98,29 +88,30 @@ func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(tfn *TimeFilterNode) {
 }
 
 func (itlfn *IndefiniteTaskListFilterNode) execute() error { return nil }
-func (itlfn *IndefiniteTaskListFilterNode) explain() {
+func (itlfn *IndefiniteTaskListFilterNode) explain() string {
+	result := ""
 	if itlfn.contentGroup != nil {
 		fmt.Print("\tby content ")
-		itlfn.contentGroup.explain()
+		result += itlfn.contentGroup.explain() + " "
 		fmt.Print("\n")
 	}
 	if itlfn.assignGroup != nil {
 		fmt.Print("\tby assign ")
-		itlfn.assignGroup.explain()
+		result += itlfn.assignGroup.explain() + " "
 		fmt.Print("\n")
 	}
 	if itlfn.age != nil {
 		fmt.Print("\twhich created ")
-		itlfn.age.explain()
+		result += itlfn.age.explain() + " "
 		fmt.Print("\n")
 	}
 	if itlfn.due != nil {
 		fmt.Print("\twhich created ")
-		itlfn.due.explain()
+		result += itlfn.due.explain() + " "
 		fmt.Print("\n")
 	}
+	return result
 }
-func (itlfn *IndefiniteTaskListFilterNode) restore() string { return "" }
 
 // ============================
 // Task Add·
@@ -141,15 +132,15 @@ func NewTaskAddNode(c string, opt *TaskAddOptionNode) *TaskAddNode {
 }
 
 func (tan *TaskAddNode) execute() error { return nil }
-func (tan *TaskAddNode) explain() {
+func (tan *TaskAddNode) explain() string {
+	result := "todo add "
 	fmt.Println("add new todo task")
 	fmt.Printf("\twith content `%s`\n", tan.content)
+	result += fmt.Sprintf("`%s` ", tan.content)
 	if tan.option != nil {
-		tan.option.explain()
+		result += tan.option.explain()
 	}
-}
-func (tan *TaskAddNode) restore() string {
-	return "todo add " // + tan.taskAddOptionNode.restore()
+	return result
 }
 
 // TaskAddOptionNode include add options
@@ -165,21 +156,25 @@ func NewTaskAddOptionNode() *TaskAddOptionNode {
 }
 
 func (taon *TaskAddOptionNode) execute() error { return nil }
-func (taon *TaskAddOptionNode) explain() {
+func (taon *TaskAddOptionNode) explain() string {
+	result := ""
 	fmt.Println("\tset importance: ", taon.importance)
+	if taon.importance {
+		result += "!1 "
+	} else {
+		result += "!0 "
+	}
 	if taon.assignGroupNode != nil {
 		fmt.Print("\t")
-		taon.assignGroupNode.explain()
+		result += taon.assignGroupNode.explain() + " "
 		fmt.Print("\n")
 	}
 	if taon.due != nil {
 		fmt.Print("\twhich will due ")
-		taon.due.explain()
+		result += "due:" + taon.due.explain() + " "
 		fmt.Print("\n")
 	}
-}
-func (taon *TaskAddOptionNode) restore() string {
-	return "todo add " // + tan.taskAddOptionNode.restore()
+	return result
 }
 
 //
@@ -209,16 +204,12 @@ func NewTaskDoneNode(ign *IDGroupNode) *TaskDoneNode {
 	return &TaskDoneNode{ign}
 }
 
-func (tdn *TaskDoneNode) restore() string {
-	result := "task done "
-	result += tdn.idGroup.restore()
-	return result
-}
-
 // Explain to statement
-func (tdn *TaskDoneNode) explain() {
+func (tdn *TaskDoneNode) explain() string {
+	result := "task done "
 	fmt.Println("complete task ")
-	tdn.idGroup.explain()
+	result += tdn.idGroup.explain()
+	return result
 }
 
 // Execute complete task logic
@@ -240,15 +231,11 @@ func NewTaskDeleteNode(ign *IDGroupNode) *TaskDeleteNode {
 	return &TaskDeleteNode{*ign}
 }
 
-func (tdn *TaskDeleteNode) restore() string {
+func (tdn *TaskDeleteNode) explain() string {
 	result := "task del "
-	result += tdn.idGroup.restore()
-	return result
-}
-
-func (tdn *TaskDeleteNode) explain() {
 	fmt.Println("delete task ")
-	tdn.idGroup.explain()
+	result += tdn.idGroup.explain()
+	return result
 }
 
 func (tdn *TaskDeleteNode) execute() error {
@@ -271,17 +258,11 @@ func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) *Task
 	return &TaskUpdateNode{}
 }
 
-// Restore to statement
-func (tun *TaskUpdateNode) restore() string {
-	result := fmt.Sprintf("task set %d %s", tun.id, tun.content)
-	result += tun.option.restore()
-	return result
-}
-
-// Explain to statement
-func (tun *TaskUpdateNode) explain() {
+func (tun *TaskUpdateNode) explain() string {
+	result := fmt.Sprintf("task set %d %s ", tun.id, tun.content)
 	fmt.Printf("Update task:%d to \"%s\"", tun.id, tun.content)
-	tun.option.explain()
+	result += tun.option.explain()
+	return result
 }
 
 // Execute complete task logic
@@ -307,28 +288,28 @@ func NewTaskUpdateOptionNode() *TaskUpdateOptionNode {
 }
 
 func (tuon *TaskUpdateOptionNode) execute() error { return nil }
-func (tuon *TaskUpdateOptionNode) explain() {
+func (tuon *TaskUpdateOptionNode) explain() string {
+	result := ""
 	if len(tuon.assignGroupNode.assignTags) > 0 {
 		fmt.Printf("\tassign tags:%v for it", tuon.assignGroupNode.assignTags)
 	}
 	if len(tuon.assignGroupNode.unassignTags) > 0 {
 		fmt.Printf("\tunassign tags:%v for it", tuon.assignGroupNode.unassignTags)
 	}
+	result += tuon.assignGroupNode.explain() + " "
 
 	fmt.Println("\tset importance: ", tuon.importance)
-	if tuon.assignGroupNode != nil {
-		fmt.Print("\t")
-		tuon.assignGroupNode.explain()
-		fmt.Print("\n")
+	if tuon.importance {
+		result += "!1"
+	} else {
+		result += "!0"
 	}
 	if tuon.due != nil {
 		fmt.Print("\twhich will due ")
-		tuon.due.explain()
+		result += tuon.due.explain()
 		fmt.Print("\n")
 	}
-}
-func (tuon *TaskUpdateOptionNode) restore() string {
-	return "todo set " // + tan.taskAddOptionNode.restore()
+	return result
 }
 
 func (tuon *TaskUpdateOptionNode) SetImportance(importance int) {

@@ -47,9 +47,8 @@ func (rn *RootNode) Execute() error {
 		return controller.StartGUI()
 	case CMDExplain:
 		if rn.stmtNode != nil {
-			fmt.Println("rewrite command: ", rn.stmtNode.restore())
 			fmt.Println("==== Execute Plan ====")
-			rn.stmtNode.explain()
+			fmt.Println("rewrite command: ", rn.explain())
 		}
 		return nil
 	case CMDStmt:
@@ -61,45 +60,31 @@ func (rn *RootNode) Execute() error {
 
 // Explain should explain from root
 func (rn *RootNode) Explain() {
-	rn.explain()
+	fmt.Println("==== Execute Plan ====")
+	fmt.Println("==== rewrite command ====\n", rn.explain())
+
 }
 
-func (rn *RootNode) explain() {
+func (rn *RootNode) explain() string {
 	switch rn.cmdType {
 	case CMDSummary:
 		fmt.Println("show summary")
-	case CMDHelp:
-		fmt.Println("show help")
-	case CMDUI:
-		fmt.Println("show UI")
-	case CMDGUI:
-		fmt.Println("show GUI")
-	case CMDExplain:
-		fmt.Println("show explaination")
-
-	case CMDStmt:
-		if rn.stmtNode != nil {
-			rn.stmtNode.explain()
-		}
-	}
-}
-
-func (rn *RootNode) restore() string {
-	switch rn.cmdType {
-	case CMDSummary:
 		return "show summary"
 	case CMDHelp:
+		fmt.Println("show help")
 		return "show help"
 	case CMDUI:
+		fmt.Println("show UI")
 		return "show UI"
 	case CMDGUI:
+		fmt.Println("show GUI")
 		return "show GUI"
 	case CMDExplain:
+		fmt.Println("show explaination")
 		return "show explaination"
-
 	case CMDStmt:
 		if rn.stmtNode != nil {
-			rn.stmtNode.restore()
+			return rn.stmtNode.explain()
 		}
 	}
 	return ""
@@ -107,8 +92,7 @@ func (rn *RootNode) restore() string {
 
 // Node are all ast nodes
 type Node interface {
-	explain()
-	restore() string
+	explain() string
 }
 
 // StmtNode contain a complex statement

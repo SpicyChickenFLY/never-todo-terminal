@@ -39,23 +39,18 @@ func NewIDGroupNode(ids ...int) *IDGroupNode {
 
 // MergeIDNode merge with othen IDGroup
 func (ign *IDGroupNode) MergeIDNode(idNode *IDGroupNode) {
-	for _, id := range idNode.idGroup {
-		ign.idGroup = append(ign.idGroup, id)
-	}
+	ign.idGroup = append(ign.idGroup, idNode.idGroup...)
 	ign.removeRepeatedIDs()
 }
 
-func (ign *IDGroupNode) restore() string {
+// Explain which id will be used
+func (ign *IDGroupNode) explain() string {
+	fmt.Printf("\twith ID: %v\n", ign.idGroup)
 	result := ""
 	for _, id := range ign.idGroup {
 		result += fmt.Sprint(" ", id)
 	}
 	return result[1:]
-}
-
-// Explain which id will be used
-func (ign *IDGroupNode) explain() {
-	fmt.Printf("\twith ID: %v\n", ign.idGroup)
 }
 
 func (ign *IDGroupNode) sortID() {
@@ -104,77 +99,67 @@ func NewContentGroupNode(
 	return &ContentGroupNode{content, operator, operands}
 }
 
-func (cgn *ContentGroupNode) filter() {
-	switch cgn.operator {
-	case OPNone:
-		return
-	default:
-		return
-	}
-}
+// func (cgn *ContentGroupNode) filter() {
+// 	switch cgn.operator {
+// 	case OPNone:
+// 		return
+// 	default:
+// 		return
+// 	}
+// }
 
-func (cgn *ContentGroupNode) explain() {
+func (cgn *ContentGroupNode) explain() string {
+
 	switch cgn.operator {
 	case OPNone:
 		fmt.Printf("include `%s`", cgn.content)
-	case OPNOT:
-		fmt.Print("while not (")
-		cgn.operands[0].explain()
-		fmt.Print(")")
-	case OPAND:
-		fmt.Print("(")
-		cgn.operands[0].explain()
-		fmt.Print(" and ")
-		cgn.operands[1].explain()
-		fmt.Print(")")
-	case OPOR:
-		fmt.Print("(")
-		cgn.operands[0].explain()
-		fmt.Print(" or ")
-		cgn.operands[1].explain()
-		fmt.Print(")")
-	default:
-		return
-	}
-}
-
-func (cgn *ContentGroupNode) restore() string {
-	switch cgn.operator {
-	case OPNone:
 		return cgn.content
 	case OPNOT:
+		result := ""
+		fmt.Print("while not (")
 		if cgn.operands[0].operator != OPNone {
-			return fmt.Sprintf("!(%s)", cgn.operands[0].restore())
+			result = fmt.Sprintf("!(%s)", cgn.operands[0].explain())
+			fmt.Print(")")
+			return result
 		}
-		return fmt.Sprintf("!%s", cgn.operands[0].restore())
+		result = fmt.Sprintf("!%s", cgn.operands[0].explain())
+		fmt.Print(")")
+		return result
 	case OPAND:
-		v1, v2 := "", ""
+		r1, r2 := "", ""
+		fmt.Print("(")
 		if cgn.operands[0].operator != OPOR {
-			v1 = cgn.operands[0].restore()
+			r1 = cgn.operands[0].explain()
 		} else {
-			v1 = fmt.Sprintf("(%s)", cgn.operands[0].restore())
+			r1 = fmt.Sprintf("(%s)", cgn.operands[0].explain())
 		}
+		fmt.Print(" and ")
 		if cgn.operands[1].operator != OPOR {
-			v2 = cgn.operands[1].restore()
+			r2 = cgn.operands[1].explain()
 		} else {
-			v2 = fmt.Sprintf("(%s)", cgn.operands[1].restore())
+			r2 = fmt.Sprintf("(%s)", cgn.operands[1].explain())
 		}
-		return fmt.Sprintf("%s and %s", v1, v2)
+		fmt.Print(")")
+		return fmt.Sprintf("%s and %s", r1, r2)
 	case OPOR:
-		v1, v2 := "", ""
+		fmt.Print("(")
+		r1, r2 := "", ""
 		if cgn.operands[0].operator != OPAND {
-			v1 = cgn.operands[0].restore()
+			r1 = cgn.operands[0].explain()
 		} else {
-			v1 = fmt.Sprintf("(%s)", cgn.operands[0].restore())
+			r1 = fmt.Sprintf("(%s)", cgn.operands[0].explain())
 		}
+		fmt.Print(" or ")
 		if cgn.operands[1].operator != OPAND {
-			v2 = cgn.operands[1].restore()
+			r2 = cgn.operands[1].explain()
 		} else {
-			v2 = fmt.Sprintf("(%s)", cgn.operands[1].restore())
+			r2 = fmt.Sprintf("(%s)", cgn.operands[1].explain())
 		}
-		return fmt.Sprintf("%s or %s", v1, v2)
+		fmt.Print(")")
+		return fmt.Sprintf("%s or %s", r1, r2)
+	default:
+		return ""
 	}
-	return ""
 }
 
 // ============================
@@ -192,22 +177,6 @@ func NewAssignGroupNode() *AssignGroupNode {
 	return &AssignGroupNode{}
 }
 
-func (agn *AssignGroupNode) restore() string {
-	result := ""
-	for _, assignTag := range agn.assignTags {
-		result += fmt.Sprint(" +", assignTag)
-	}
-	for _, unassignTag := range agn.unassignTags {
-		result += fmt.Sprint(" -", unassignTag)
-	}
-	return result
-}
-
-func (agn *AssignGroupNode) explain() {
-	fmt.Print("assign tags: ", agn.assignTags)
-	fmt.Print(" unassign tags: ", agn.unassignTags)
-}
-
 // AssignTag for task
 func (agn *AssignGroupNode) AssignTag(tag string) {
 	agn.assignTags = append(agn.assignTags, tag)
@@ -218,6 +187,19 @@ func (agn *AssignGroupNode) AssignTag(tag string) {
 func (agn *AssignGroupNode) UnassignTag(tag string) {
 	agn.unassignTags = append(agn.unassignTags, tag)
 	agn.removeRepeatedTags()
+}
+
+func (agn *AssignGroupNode) explain() string {
+	result := ""
+	fmt.Print("assign tags: ", agn.assignTags)
+	for _, assignTag := range agn.assignTags {
+		result += fmt.Sprint(" +", assignTag)
+	}
+	fmt.Print(" unassign tags: ", agn.unassignTags)
+	for _, unassignTag := range agn.unassignTags {
+		result += fmt.Sprint(" -", unassignTag)
+	}
+	return result
 }
 
 func (agn *AssignGroupNode) sortTags() {
@@ -262,20 +244,20 @@ func NewTimeFilterNode(s, e *TimeNode) *TimeFilterNode {
 }
 
 func (tfn *TimeFilterNode) execute() error { return nil }
-func (tfn *TimeFilterNode) explain() {
+func (tfn *TimeFilterNode) explain() string {
 	if tfn.startTime != nil && tfn.endTime != nil {
-		fmt.Printf("from %s to %s",
-			tfn.startTime.restore(),
-			tfn.endTime.restore(),
-		)
+		rs, re := tfn.startTime.explain(), tfn.endTime.explain()
+		fmt.Printf("from %s to %s", rs, re)
+		return rs + "-" + re
 	} else if tfn.startTime != nil {
-		fmt.Printf("after %s", tfn.startTime.restore())
+		rs := tfn.startTime.explain()
+		fmt.Printf("after %s", rs)
+		return rs
 	} else {
-		fmt.Printf("before %s", tfn.endTime.restore())
+		re := tfn.endTime.explain()
+		fmt.Printf("before %s", re)
+		return "-" + re
 	}
-}
-func (tfn *TimeFilterNode) restore() string {
-	return "todo add " // + tan.taskAddOptionNode.restore()
 }
 
 type TimeNode struct {
@@ -284,6 +266,10 @@ type TimeNode struct {
 
 func NewTimeNode(str, format string) *TimeNode {
 	loc, err := time.LoadLocation("Asia/Shanghai")
+	//TODO: handle this
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 	time, err := time.ParseInLocation(format, str, loc)
 	//TODO: handle this
 	if err != nil {
@@ -293,9 +279,7 @@ func NewTimeNode(str, format string) *TimeNode {
 }
 
 func (tn *TimeNode) execute() error { return nil }
-func (tn *TimeNode) explain() {
+func (tn *TimeNode) explain() string {
 	fmt.Print(tn.time.Format("2006/01/02 15:04:05"))
-}
-func (tn *TimeNode) restore() string {
 	return tn.time.Format("2006/01/02 15:04:05")
 }
