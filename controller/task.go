@@ -7,8 +7,8 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
-// ShowTasks with filter provided by params
-func ShowTasks(params []string) error {
+// ListTasks with filter provided by params
+func ListTasks(params []string) error {
 	if len(params) > 0 { // search
 
 	} else { //list all

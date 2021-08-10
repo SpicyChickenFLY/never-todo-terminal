@@ -182,6 +182,7 @@ func (taon *TaskAddOptionNode) restore() string {
 	return "todo add " // + tan.taskAddOptionNode.restore()
 }
 
+//
 func (taon *TaskAddOptionNode) SetImportance(importance int) {
 	taon.importance = (importance > 0)
 }
@@ -208,10 +209,9 @@ func NewTaskDoneNode(ign *IDGroupNode) *TaskDoneNode {
 	return &TaskDoneNode{ign}
 }
 
-// Restore to statement
 func (tdn *TaskDoneNode) restore() string {
 	result := "task done "
-	result += tdn.idGroup.Restore()
+	result += tdn.idGroup.restore()
 	return result
 }
 
@@ -242,7 +242,7 @@ func NewTaskDeleteNode(ign *IDGroupNode) *TaskDeleteNode {
 
 func (tdn *TaskDeleteNode) restore() string {
 	result := "task del "
-	result += tdn.idGroup.Restore()
+	result += tdn.idGroup.restore()
 	return result
 }
 
@@ -281,12 +281,7 @@ func (tun *TaskUpdateNode) restore() string {
 // Explain to statement
 func (tun *TaskUpdateNode) explain() {
 	fmt.Printf("Update task:%d to \"%s\"", tun.id, tun.content)
-	if len(tun.option.assignGroupNode.assignTags) > 0 {
-		fmt.Printf(",\nthen assign tags:%v for it", tun.option.assignGroupNode)
-	}
-	if len(tun.option.assignGroupNode.unassignTags) > 0 {
-		fmt.Printf(",\nthen unassign tags:%v for it", tun.option.assignGroupNode.unassignTags)
-	}
+	tun.option.explain()
 }
 
 // Execute complete task logic
@@ -313,6 +308,13 @@ func NewTaskUpdateOptionNode() *TaskUpdateOptionNode {
 
 func (tuon *TaskUpdateOptionNode) execute() error { return nil }
 func (tuon *TaskUpdateOptionNode) explain() {
+	if len(tuon.assignGroupNode.assignTags) > 0 {
+		fmt.Printf("\tassign tags:%v for it", tuon.assignGroupNode.assignTags)
+	}
+	if len(tuon.assignGroupNode.unassignTags) > 0 {
+		fmt.Printf("\tunassign tags:%v for it", tuon.assignGroupNode.unassignTags)
+	}
+
 	fmt.Println("\tset importance: ", tuon.importance)
 	if tuon.assignGroupNode != nil {
 		fmt.Print("\t")

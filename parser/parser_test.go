@@ -9,7 +9,7 @@ import (
 
 type testCase struct {
 	input      string
-	output     ast.Node
+	output     ast.RootNode
 	supposeErr error
 }
 

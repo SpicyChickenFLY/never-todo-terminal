@@ -22,12 +22,6 @@ const ( // Command Type
 	CMDHelp
 )
 
-// Node is node of abstract syntax tree
-type Node interface {
-	Execute() error
-	Explain()
-}
-
 // RootNode is the root of ast
 type RootNode struct {
 	cmdType  int
@@ -41,8 +35,8 @@ func NewRootNode(cmdType int, sn StmtNode) *RootNode {
 
 // Execute should start from root
 func (rn *RootNode) Execute() error {
-	fmt.Println(rn.getCmdType())
-	switch rn.getCmdType() {
+	fmt.Println(rn.cmdType)
+	switch rn.cmdType {
 	case CMDSummary:
 		return controller.ShowSummary()
 	case CMDHelp:
@@ -67,7 +61,11 @@ func (rn *RootNode) Execute() error {
 
 // Explain should explain from root
 func (rn *RootNode) Explain() {
-	switch rn.getCmdType() {
+	rn.explain()
+}
+
+func (rn *RootNode) explain() {
+	switch rn.cmdType {
 	case CMDSummary:
 		fmt.Println("show summary")
 	case CMDHelp:
@@ -86,11 +84,35 @@ func (rn *RootNode) Explain() {
 	}
 }
 
-func (rn *RootNode) getCmdType() int { return rn.cmdType }
+func (rn *RootNode) restore() string {
+	switch rn.cmdType {
+	case CMDSummary:
+		return "show summary"
+	case CMDHelp:
+		return "show help"
+	case CMDUI:
+		return "show UI"
+	case CMDGUI:
+		return "show GUI"
+	case CMDExplain:
+		return "show explaination"
+
+	case CMDStmt:
+		if rn.stmtNode != nil {
+			rn.stmtNode.restore()
+		}
+	}
+	return ""
+}
+
+// Node are all ast nodes
+type Node interface {
+	explain()
+	restore() string
+}
 
 // StmtNode contain a complex statement
 type StmtNode interface {
 	execute() error
-	explain()
-	restore() string
+	Node
 }

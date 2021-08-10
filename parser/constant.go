@@ -11,10 +11,10 @@ var debug = false
 
 // var debug = true
 
-var result ast.Node
+var result *ast.RootNode
 
 // Parse expose yypase
-func Parse(args string) ast.Node {
+func Parse(args string) *ast.RootNode {
 	yyParse(newLexer(bufio.NewReader(strings.NewReader(args))))
 	return result
 }

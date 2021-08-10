@@ -45,9 +45,6 @@ func (ign *IDGroupNode) MergeIDNode(idNode *IDGroupNode) {
 	ign.removeRepeatedIDs()
 }
 
-// Restore to statement
-func (ign *IDGroupNode) Restore() string { return ign.restore() }
-
 func (ign *IDGroupNode) restore() string {
 	result := ""
 	for _, id := range ign.idGroup {
@@ -92,8 +89,6 @@ const ( // operator type
 	OPAND
 	// OPOR or
 	OPOR
-	// OPXOR xor
-	OPXOR
 )
 
 // ContentGroupNode is node include contents
@@ -147,11 +142,39 @@ func (cgn *ContentGroupNode) restore() string {
 	switch cgn.operator {
 	case OPNone:
 		return cgn.content
+	case OPNOT:
+		if cgn.operands[0].operator != OPNone {
+			return fmt.Sprintf("!(%s)", cgn.operands[0].restore())
+		}
+		return fmt.Sprintf("!%s", cgn.operands[0].restore())
 	case OPAND:
-		return fmt.Sprint("%s and %s")
-	default:
-		return ""
+		v1, v2 := "", ""
+		if cgn.operands[0].operator != OPOR {
+			v1 = cgn.operands[0].restore()
+		} else {
+			v1 = fmt.Sprintf("(%s)", cgn.operands[0].restore())
+		}
+		if cgn.operands[1].operator != OPOR {
+			v2 = cgn.operands[1].restore()
+		} else {
+			v2 = fmt.Sprintf("(%s)", cgn.operands[1].restore())
+		}
+		return fmt.Sprintf("%s and %s", v1, v2)
+	case OPOR:
+		v1, v2 := "", ""
+		if cgn.operands[0].operator != OPAND {
+			v1 = cgn.operands[0].restore()
+		} else {
+			v1 = fmt.Sprintf("(%s)", cgn.operands[0].restore())
+		}
+		if cgn.operands[1].operator != OPAND {
+			v2 = cgn.operands[1].restore()
+		} else {
+			v2 = fmt.Sprintf("(%s)", cgn.operands[1].restore())
+		}
+		return fmt.Sprintf("%s or %s", v1, v2)
 	}
+	return ""
 }
 
 // ============================

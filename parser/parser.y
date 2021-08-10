@@ -11,7 +11,8 @@ import (
 %union {
   str string
   num int
-  root ast.Node
+  
+  root *ast.RootNode
   stmt ast.StmtNode
 
   taskListNode *ast.TaskListNode
