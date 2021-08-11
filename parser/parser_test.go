@@ -36,7 +36,7 @@ func TestParser(t *testing.T) {
 	for _, tc := range testcases {
 		fmt.Printf("testcase: %s\n", tc)
 		Parse(tc)
-		result.Explain()
+		ast.Result.Explain()
 		// if err := result.Execute(); err != nil {
 		// 	fmt.Println(err.Error())
 		// }

@@ -11,10 +11,8 @@ import (
 %union {
   str string
   num int
-  
   root *ast.RootNode
   stmt ast.StmtNode
-
   taskListNode *ast.TaskListNode
   taskListFilterNode *ast.TaskListFilterNode
   indefiniteTaskListFilterNode *ast.IndefiniteTaskListFilterNode
@@ -24,10 +22,8 @@ import (
   taskDoneNode *ast.TaskDoneNode
   taskUpdateNode *ast.TaskUpdateNode
   taskUpdateOptionNode *ast.TaskUpdateOptionNode
-
   tagListNode *ast.TagListNode
   tagListFilterNode *ast.TagListFilterNode
-
   idGroupNode *ast.IDGroupNode
   contentGroupNode *ast.ContentGroupNode
   assignGroupNode *ast.AssignGroupNode
@@ -35,39 +31,30 @@ import (
   timeNode *ast.TimeNode
 }
 
-
-
 %left PLUS MINUS
 %left LBRACK RBRACK
 
-
 %left <str> NOT
 %left <str> AND OR 
-
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
-
 %token <str> UI EXPLAIN LOG UNDO 
 %token <str> TASK TAG ADD DELETE SET DONE
 %token <str> AGE DUE LOOP IMPORTANCE
 %token <str> HELP
 
-
 %type <root> root
 %type <stmt> stmt
-
 %type <taskListNode> task_list
 %type <taskListFilterNode> task_list_filter
-%type <indefiniteTaskListFilterNode> indefinite_task_list_filter indefinite_task_list_filter_p3 indefinite_task_list_filter_p2 indefinite_task_list_filter_p1
+%type <indefiniteTaskListFilterNode> indefinite_task_list_filter 
 %type <taskAddNode> task_add
 %type <taskAddOptionNode> task_add_option task_add_option_p1 task_add_option_p2 task_add_option_p3
 %type <taskDeleteNode> task_delete 
 %type <taskDoneNode> task_done
 %type <taskUpdateNode> task_update
 %type <taskUpdateOptionNode> task_update_option task_update_option_p1 task_update_option_p2 task_update_option_p3
-
 %type <tagListNode> tag_list
 %type <tagListFilterNode> tag_list_filter
-
 %type <num> id 
 %type <idGroupNode> id_group
 %type <str> content definite_content indefinite_content 
@@ -83,23 +70,21 @@ import (
 %%
 
 root:
-      { result = ast.NewRootNode(ast.CMDSummary, nil) }
-    | UI { result = ast.NewRootNode(ast.CMDUI, nil) }
-    | EXPLAIN stmt { result = ast.NewRootNode(ast.CMDExplain, $2) }
-    | stmt { result = ast.NewRootNode(ast.CMDStmt, $1) }
-    | help { result = ast.NewRootNode(ast.CMDHelp, nil) }
+      { ast.Result = ast.NewRootNode(ast.CMDSummary, nil) }
+    | UI { ast.Result = ast.NewRootNode(ast.CMDUI, nil) }
+    | EXPLAIN stmt { ast.Result = ast.NewRootNode(ast.CMDExplain, $2) }
+    | stmt { ast.Result = ast.NewRootNode(ast.CMDStmt, $1) }
+    | help { ast.Result = ast.NewRootNode(ast.CMDHelp, nil) }
     ;
 
 stmt:
       log_list  {if debug {fmt.Println("stmt_log_list")}}
     | undo_log {if debug {fmt.Println("stmt_undo_log")}}
-
     | task_list { $$ = $1 }
     | task_add { $$ = $1 }
     | task_delete { $$ = $1 }
     | task_update { $$ = $1 }
     | task_done { $$ = $1 }
-    
     | tag_list { $$ = $1 }
     | tag_set {if debug {fmt.Println("stmt_tag_set")}}
     ;
@@ -151,7 +136,7 @@ task_add:
     ;
 
 task_done:
-       DONE id_group { $$= ast.NewTaskDoneNode($2) }
+      DONE id_group { $$= ast.NewTaskDoneNode($2) }
     | id_group DONE { $$= ast.NewTaskDoneNode($1) }
     ;
 
@@ -178,84 +163,37 @@ task_list_filter:
     ;
 
 indefinite_task_list_filter:
-      indefinite_task_list_filter_p3 { 
-        $$ = $1
-      }
-    |  content_group indefinite_task_list_filter_p3 {
-        $$ = $2
-        $$.SetContentFilter($1)
-      }
-    | indefinite_task_list_filter_p3 content_group {
-        $$ = $1
-        $$.SetContentFilter($2)
-      }
-    ;
-
-indefinite_task_list_filter_p3:
-      indefinite_task_list_filter_p2 { $$ = $1 }
-    | assign_group indefinite_task_list_filter_p2 {
-        $$ = $2
-        $$.SetAssignFilter($1)
-      }
-    | indefinite_task_list_filter_p2 assign_group {
-        $$ = $1
-        $$.SetAssignFilter($2)
-      }
-    ;
-
-indefinite_task_list_filter_p2:
-      indefinite_task_list_filter_p1 { $$ = $1 }
-    | AGE time_filter indefinite_task_list_filter_p1 {
-        $$ = $3
-        $$.SetAgeFilter($2)
-      }
-    | indefinite_task_list_filter_p1 AGE time_filter {
-        $$ = $1
-        $$.SetAgeFilter($3)
-      }
-    ;
-
-indefinite_task_list_filter_p1:
       { $$ = ast.NewIndefiniteTaskListFilterNode() }
-    | DUE time_filter { $$.SetDueFilter($2) }
+    |  content_group indefinite_task_list_filter { $$ = $2.SetContentGroup($1) }
+    | indefinite_task_list_filter content_group { $$ = $1.SetContentGroup($2) }
+    | importance indefinite_task_list_filter { $$ = $2.SetImportance($1) }
+    | indefinite_task_list_filter importance { $$ = $1.SetImportance($2) }
+    | assign_group indefinite_task_list_filter { $$ = $2.MergeAssignGroup($1) }
+    | indefinite_task_list_filter assign_group { $$ = $1.MergeAssignGroup($2) }
+    | AGE time_filter indefinite_task_list_filter { $$ = $3.SetAge($2) }
+    | indefinite_task_list_filter AGE time_filter { $$ = $1.SetAge($3) }
+    | DUE time_filter indefinite_task_list_filter { $$ = $3.SetDue($2) }
+    | indefinite_task_list_filter DUE time_filter { $$ = $1.SetDue($3) }
     ;
 
 // ========== TASK ADD OPTION =============
 
 task_add_option:
       task_add_option_p3 { $$ = $1 }
-    | positive_assign_group task_add_option {
-        $$ = $2
-        $$.SetAssignGroup($1)
-      }
-    | task_add_option positive_assign_group {
-        $$ = $1
-        $$.SetAssignGroup($2)
-      }
+    | positive_assign_group task_add_option { $$ = $2.SetAssignGroup($1) }
+    | task_add_option positive_assign_group { $$ = $1.SetAssignGroup($2) }
     ;
 
 task_add_option_p3:
       task_add_option_p2 { $$ = $1 }
-    | task_add_option_p2 importance { 
-        $$ = $1
-        $$.SetImportance($2) 
-      }
-    | importance task_add_option_p2 { 
-        $$ = $2
-        $$.SetImportance($1) 
-      }
+    | task_add_option_p2 importance { $$ = $1.SetImportance($2) }
+    | importance task_add_option_p2 { $$ = $2.SetImportance($1) }
     ;
 
 task_add_option_p2:
       task_add_option_p1 { $$ = $1 }
-    | task_add_option_p1 DUE time_filter { 
-        $$ = $1
-        $$.SetDue($3) 
-      }
-    | DUE time_filter task_add_option_p1 { 
-        $$ = $3
-        $$.SetDue($2) 
-      }
+    | task_add_option_p1 DUE time_filter { $$ = $1.SetDue($3) }
+    | DUE time_filter task_add_option_p1 { $$ = $3.SetDue($2) }
     ;
 
 task_add_option_p1:
@@ -268,38 +206,20 @@ task_add_option_p1:
 
 task_update_option:
       task_update_option_p3 { $$ = $1}
-    | assign_group task_update_option { 
-        $$ = $2 
-        $$.SetAssignGroup($1)
-      }
-    | task_update_option assign_group { 
-        $$ = $1
-        $$.SetAssignGroup($2)
-      }
+    | assign_group task_update_option { $$ = $2.SetAssignGroup($1) }
+    | task_update_option assign_group { $$ = $1.SetAssignGroup($2) }
     ;
 
 task_update_option_p3:
       task_update_option_p2 { $$ = $1 }
-    | task_update_option_p2 importance { 
-        $$ = $1
-        $$.SetImportance($2)
-      }
-    | importance task_update_option_p2 { 
-        $$ = $2
-        $$.SetImportance($1)
-      }
+    | task_update_option_p2 importance { $$ = $1.SetImportance($2) }
+    | importance task_update_option_p2 { $$ = $2.SetImportance($1) }
     ;
 
 task_update_option_p2: 
       task_update_option_p1 { $$ = $1 }
-    | task_update_option_p1 DUE time {
-        $$ = $1
-        $$.SetDue($3)
-      }
-    | DUE time task_update_option_p1 {
-        $$ = $3
-        $$.SetDue($2)
-      }
+    | task_update_option_p1 DUE time { $$ = $1.SetDue($3) }
+    | DUE time task_update_option_p1 { $$ = $3.SetDue($2) }
     ;
 
 task_update_option_p1:
@@ -326,40 +246,29 @@ tag_list_filter:
 
 // ========== UTILS =============
 id_group:
-      id_group id_group { 
-        $1.MergeIDNode($2)
-        $$ = $1 
-      }
+      id_group id_group { $$ = $1.MergeIDNode($2) }
     | id MINUS id { $$ = ast.NewIDGroupNode($1, $3) }
     | id { $$ = ast.NewIDGroupNode($1) }
     ;
 
 id: 
-      NUM {
-        val, err := strconv.Atoi($1)
-        if err != nil {
-          panic(err)
-        }
-        $$ = val
-      }
+      NUM { $$, _ = strconv.Atoi($1) }
     ; 
 
 content_group:
-        content_logic_p3 { $$ = $1 }
-      | NOT content_logic_p3 { $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2}) }
-      | indefinite_content { $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) }
+      content_logic_p3 { $$ = $1 }
+    | NOT content_logic_p3 { $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2}) }
+    | indefinite_content { $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) }
     ;
 
 content_logic_p3:
       content_logic_p2 { $$ = $1 }
-    | content_logic_p2 AND content_logic_p2 { $$ = ast.NewContentGroupNode("", ast.OPAND, []*ast.ContentGroupNode{$1, $3}) }
+    | content_logic_p3 AND content_logic_p3 { $$ = ast.NewContentGroupNode("", ast.OPAND, []*ast.ContentGroupNode{$1, $3}) }
     ;
 
 content_logic_p2:
       content_logic_p1 { $$ = $1 }
-    | content_logic_p2 OR content_logic_p2 { 
-        $$ = ast.NewContentGroupNode("", ast.OPOR, []*ast.ContentGroupNode{$1, $3})
-      }
+    | content_logic_p2 OR content_logic_p2 { $$ = ast.NewContentGroupNode("", ast.OPOR, []*ast.ContentGroupNode{$1, $3}) }
     ;
 
 content_logic_p1:
@@ -387,33 +296,27 @@ indefinite_content:
     | indefinite_content DELETE { $$ = $1 + " " + $2 }
     | indefinite_content SET { $$ = $1 + " " + $2 }
     | indefinite_content DONE { $$ = $1 + " " + $2 }
+    | indefinite_content DATE { $$ = $1 + " " + $2 }
+    | indefinite_content TIME { $$ = $1 + " " + $2 }
     ;
 
 assign_group:
       { $$ = ast.NewAssignGroupNode() }
-    | assign_tag assign_group {
-        $$ = $2
-        $$.AssignTag($1)
-      }
-    | unassign_tag assign_group {
-        $$ = $2
-        $$.UnassignTag($1)
-      }
+    | assign_tag assign_group { $$ = $2.AssignTag($1) }
+    | unassign_tag assign_group { $$ = $2.UnassignTag($1) }
     ;
 
 positive_assign_group:
       { $$ = ast.NewAssignGroupNode() }
-    | assign_tag positive_assign_group {
-        $$ = $2
-        $$.AssignTag($1)}
+    | assign_tag positive_assign_group { $$ = $2.AssignTag($1) }
     ;
 
 assign_tag: 
-      PLUS IDENT  { $$ = $2 }
+      PLUS IDENT  { $$ = $2 } 
     ;
 
 unassign_tag: 
-      MINUS IDENT  { $$ = $2 }
+      MINUS IDENT  { $$ = $2 } 
     ;
 
 time_filter:
@@ -422,19 +325,13 @@ time_filter:
     ;
 
 time:
-      DATE { $$ = ast.NewTimeNode($1, "2006/01/02") }
-    | TIME { $$ = ast.NewTimeNode($1, "15:04:05") }
-    | DATE TIME { $$ = ast.NewTimeNode($1 + " " + $2, "2006/01/02 15:04:05") }
+      DATE { $$ = ast.NewTimeNode($1, ast.TimeFormatDate) }
+    | TIME { $$ = ast.NewTimeNode($1, ast.TimeFormatTime) }
+    | DATE TIME { $$ = ast.NewTimeNode($1 + " " + $2, ast.TimeFormatDateTime) }
     ;
 
 importance:
-      IMPORTANCE {
-        val, err := strconv.Atoi($1)
-        if err != nil {
-          panic(err)
-        }
-        $$ = val
-      }
+      IMPORTANCE { $$, _ = strconv.Atoi($1) }
     ;
 
 /* loop_time:

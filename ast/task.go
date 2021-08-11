@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
+	"github.com/SpicyChickenFLY/never-todo-cmd/render"
 )
 
 // ============================
@@ -20,7 +21,7 @@ func NewTaskListNode(tlfn *TaskListFilterNode) *TaskListNode {
 	return &TaskListNode{tlfn}
 }
 
-func (tln *TaskListNode) execute() error { return nil }
+func (tln *TaskListNode) execute() { tln.taskListFilterNode.execute() }
 func (tln *TaskListNode) explain() string {
 	return "todo list " + tln.taskListFilterNode.explain()
 }
@@ -38,7 +39,21 @@ func NewTaskListFilterNode(
 	return &TaskListFilterNode{idGroup, itlf}
 }
 
-func (tlfn *TaskListFilterNode) execute() error { return nil }
+func (tlfn *TaskListFilterNode) execute() {
+	if tlfn.idGroup != nil {
+		tasks, warnList := controller.FindTasksByIDGroup(tlfn.idGroup.idGroup)
+		render.Tasks(tasks)
+		warnList = append(warnList, warnList...)
+		return
+	} else if tlfn.indefiniteTaskListFilter != nil {
+		tlfn.indefiniteTaskListFilter.execute()
+	} else {
+		tasks := controller.ListTasks()
+		render.Tasks(tasks)
+		return
+	}
+}
+
 func (tlfn *TaskListFilterNode) explain() string {
 	if tlfn.idGroup == nil && tlfn.indefiniteTaskListFilter == nil {
 		fmt.Println("list all todo tasks")
@@ -56,6 +71,7 @@ func (tlfn *TaskListFilterNode) explain() string {
 
 // IndefiniteTaskListFilterNode include content assignGroup age due
 type IndefiniteTaskListFilterNode struct {
+	importance   bool
 	contentGroup *ContentGroupNode
 	assignGroup  *AssignGroupNode
 	age          *TimeFilterNode
@@ -67,27 +83,14 @@ func NewIndefiniteTaskListFilterNode() *IndefiniteTaskListFilterNode {
 	return &IndefiniteTaskListFilterNode{}
 }
 
-// SetContentFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetContentFilter(cgn *ContentGroupNode) {
-	itlfn.contentGroup = cgn
+func (itlfn *IndefiniteTaskListFilterNode) execute() {
+	tasks := controller.ListTasks()
+	tasks = itlfn.contentGroup.filter(tasks)
+	tasks = itlfn.assignGroup.filter(tasks)
+	tasks = itlfn.age.filter(tasks)
+	tasks = itlfn.due.filter(tasks)
+	render.Tasks(tasks)
 }
-
-// SetAssignFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetAssignFilter(agn *AssignGroupNode) {
-	itlfn.assignGroup = agn
-}
-
-// SetAgeFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetAgeFilter(tfn *TimeFilterNode) {
-	itlfn.age = tfn
-}
-
-// SetDueFilter func
-func (itlfn *IndefiniteTaskListFilterNode) SetDueFilter(tfn *TimeFilterNode) {
-	itlfn.due = tfn
-}
-
-func (itlfn *IndefiniteTaskListFilterNode) execute() error { return nil }
 func (itlfn *IndefiniteTaskListFilterNode) explain() string {
 	result := ""
 	if itlfn.contentGroup != nil {
@@ -113,6 +116,52 @@ func (itlfn *IndefiniteTaskListFilterNode) explain() string {
 	return result
 }
 
+// SetImportance for TaskUpdateOptionNode
+func (itlfn *IndefiniteTaskListFilterNode) SetImportance(importance int) *IndefiniteTaskListFilterNode {
+	itlfn.importance = (importance > 0)
+	return itlfn
+}
+
+// SetContentGroup alway keep the first one
+func (itlfn *IndefiniteTaskListFilterNode) SetContentGroup(cgn *ContentGroupNode) *IndefiniteTaskListFilterNode {
+	if itlfn.contentGroup != nil {
+		WarnList = append(WarnList, "Only one content will be accepted")
+	}
+	itlfn.contentGroup = cgn
+	return itlfn
+}
+
+// MergeAssignGroup merge assign group
+func (itlfn *IndefiniteTaskListFilterNode) MergeAssignGroup(agn *AssignGroupNode) *IndefiniteTaskListFilterNode {
+	if itlfn.assignGroup != nil {
+		itlfn.assignGroup.assignTags = append(itlfn.assignGroup.assignTags, agn.assignTags...)
+		itlfn.assignGroup.unassignTags = append(itlfn.assignGroup.unassignTags, agn.unassignTags...)
+	} else {
+		itlfn.assignGroup = agn
+	}
+	return itlfn
+}
+
+// SetAge func
+func (itlfn *IndefiniteTaskListFilterNode) SetAge(tfn *TimeFilterNode) *IndefiniteTaskListFilterNode {
+	if itlfn.age != nil {
+		WarnList = append(WarnList, "Only one age filter will be accepted")
+	} else {
+		itlfn.age = tfn
+	}
+	return itlfn
+}
+
+// SetDue func
+func (itlfn *IndefiniteTaskListFilterNode) SetDue(tfn *TimeFilterNode) *IndefiniteTaskListFilterNode {
+	if itlfn.due != nil {
+		WarnList = append(WarnList, "Only one due filter will be accepted")
+	} else {
+		itlfn.due = tfn
+	}
+	return itlfn
+}
+
 // ============================
 // Task Add·
 // ============================
@@ -131,7 +180,15 @@ func NewTaskAddNode(c string, opt *TaskAddOptionNode) *TaskAddNode {
 	return &TaskAddNode{c, opt}
 }
 
-func (tan *TaskAddNode) execute() error { return nil }
+func (tan *TaskAddNode) execute() {
+	controller.AddTask(
+		tan.content,
+		tan.option.importance,
+		tan.option.assignGroupNode.assignTags,
+		tan.option.due.startTime.time,
+		"",
+	)
+}
 func (tan *TaskAddNode) explain() string {
 	result := "todo add "
 	fmt.Println("add new todo task")
@@ -155,7 +212,6 @@ func NewTaskAddOptionNode() *TaskAddOptionNode {
 	return &TaskAddOptionNode{}
 }
 
-func (taon *TaskAddOptionNode) execute() error { return nil }
 func (taon *TaskAddOptionNode) explain() string {
 	result := ""
 	fmt.Println("\tset importance: ", taon.importance)
@@ -177,17 +233,22 @@ func (taon *TaskAddOptionNode) explain() string {
 	return result
 }
 
-//
-func (taon *TaskAddOptionNode) SetImportance(importance int) {
+// SetImportance for TaskAddOptionNode
+func (taon *TaskAddOptionNode) SetImportance(importance int) *TaskAddOptionNode {
 	taon.importance = (importance > 0)
+	return taon
 }
 
-func (taon *TaskAddOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) {
+// SetAssignGroup for TaskAddOptionNode
+func (taon *TaskAddOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) *TaskAddOptionNode {
 	taon.assignGroupNode = assignGourp
+	return taon
 }
 
-func (taon *TaskAddOptionNode) SetDue(due *TimeFilterNode) {
+// SetDue for TaskAddOptionNode
+func (taon *TaskAddOptionNode) SetDue(due *TimeFilterNode) *TaskAddOptionNode {
 	taon.due = due
+	return taon
 }
 
 // ============================
@@ -213,8 +274,8 @@ func (tdn *TaskDoneNode) explain() string {
 }
 
 // Execute complete task logic
-func (tdn *TaskDoneNode) execute() error {
-	return controller.CompleteTask(tdn.idGroup.idGroup)
+func (tdn *TaskDoneNode) execute() {
+	controller.CompleteTask(tdn.idGroup.idGroup)
 }
 
 // ============================
@@ -238,8 +299,8 @@ func (tdn *TaskDeleteNode) explain() string {
 	return result
 }
 
-func (tdn *TaskDeleteNode) execute() error {
-	return controller.DeleteTask(tdn.idGroup.idGroup)
+func (tdn *TaskDeleteNode) execute() {
+	controller.CompleteTask(tdn.idGroup.idGroup)
 }
 
 // ============================
@@ -266,9 +327,15 @@ func (tun *TaskUpdateNode) explain() string {
 }
 
 // Execute complete task logic
-func (tun *TaskUpdateNode) execute() error {
-	// return controller.UpdateTask(tun.id, tun.content,tun)
-	return nil
+func (tun *TaskUpdateNode) execute() {
+	controller.UpdateTask(
+		tun.id,
+		tun.content,
+		tun.option.importance,
+		tun.option.assignGroupNode.assignTags,
+		tun.option.assignGroupNode.unassignTags,
+		tun.option.due.time,
+	)
 }
 
 // ============================
@@ -287,7 +354,6 @@ func NewTaskUpdateOptionNode() *TaskUpdateOptionNode {
 	return &TaskUpdateOptionNode{}
 }
 
-func (tuon *TaskUpdateOptionNode) execute() error { return nil }
 func (tuon *TaskUpdateOptionNode) explain() string {
 	result := ""
 	if len(tuon.assignGroupNode.assignTags) > 0 {
@@ -312,14 +378,20 @@ func (tuon *TaskUpdateOptionNode) explain() string {
 	return result
 }
 
-func (tuon *TaskUpdateOptionNode) SetImportance(importance int) {
+// SetImportance for TaskUpdateOptionNode
+func (tuon *TaskUpdateOptionNode) SetImportance(importance int) *TaskUpdateOptionNode {
 	tuon.importance = (importance > 0)
+	return tuon
 }
 
-func (tuon *TaskUpdateOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) {
+// SetAssignGroup for TaskUpdateOptionNode
+func (tuon *TaskUpdateOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) *TaskUpdateOptionNode {
 	tuon.assignGroupNode = assignGourp
+	return tuon
 }
 
-func (tuon *TaskUpdateOptionNode) SetDue(due *TimeNode) {
+// SetDue for TaskUpdateOptionNode
+func (tuon *TaskUpdateOptionNode) SetDue(due *TimeNode) *TaskUpdateOptionNode {
 	tuon.due = due
+	return tuon
 }

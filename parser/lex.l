@@ -60,7 +60,7 @@ setence     (\"[^"]*\"|'[^']*'|`[^`]*`)
 letter      [_a-zA-Z]
 identifier  {letter}({letter}|{digit})*
 white       [ \t\n\r]+
-date        {digit}\/{digit}\/{digit}
+date        {digit}\/{digit}\/{digit}|{digit}\/{digit}
 time        (20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d
 digit       [0-9]+
 importance  ![0-9]

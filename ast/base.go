@@ -7,19 +7,21 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 )
 
-const ( // Command Type
-	// CMDSummary 0
+// Command Type
+const (
 	CMDSummary = 0 + iota
-	// CMDUI 1
 	CMDUI
-	// CMDGUI 2
 	CMDGUI
-	// CMDExplain 3
 	CMDExplain
-	// CMDStmt 4
 	CMDStmt
-	// CMDHelp 5
 	CMDHelp
+)
+
+// export for parser
+var (
+	Result    *RootNode
+	ErrorList = []error{}
+	WarnList  = []string{}
 )
 
 // RootNode is the root of ast
@@ -52,7 +54,9 @@ func (rn *RootNode) Execute() error {
 		}
 		return nil
 	case CMDStmt:
-		return rn.stmtNode.execute()
+		rn.stmtNode.execute()
+		// TODO: handle error list
+		return errors.New("语句执行失败")
 	default:
 		return errors.New("目前不支持的命令类型")
 	}
@@ -97,6 +101,6 @@ type Node interface {
 
 // StmtNode contain a complex statement
 type StmtNode interface {
-	execute() error
+	execute()
 	Node
 }

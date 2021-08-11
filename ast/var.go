@@ -3,7 +3,17 @@ package ast
 import (
 	"fmt"
 	"sort"
+	"strings"
 	"time"
+
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
+)
+
+// Time format
+const (
+	TimeFormatDate = 0 + iota
+	TimeFormatTime
+	TimeFormatDateTime
 )
 
 // ============================
@@ -38,12 +48,12 @@ func NewIDGroupNode(ids ...int) *IDGroupNode {
 }
 
 // MergeIDNode merge with othen IDGroup
-func (ign *IDGroupNode) MergeIDNode(idNode *IDGroupNode) {
+func (ign *IDGroupNode) MergeIDNode(idNode *IDGroupNode) *IDGroupNode {
 	ign.idGroup = append(ign.idGroup, idNode.idGroup...)
 	ign.removeRepeatedIDs()
+	return ign
 }
 
-// Explain which id will be used
 func (ign *IDGroupNode) explain() string {
 	fmt.Printf("\twith ID: %v\n", ign.idGroup)
 	result := ""
@@ -75,14 +85,11 @@ func (ign *IDGroupNode) removeRepeatedIDs() {
 // Content Group
 // ============================
 
-const ( // operator type
-	// OPNone indicate none command
+// operator type
+const (
 	OPNone = iota + 0
-	// OPNOT not
 	OPNOT
-	// OPAND and
 	OPAND
-	// OPOR or
 	OPOR
 )
 
@@ -98,15 +105,6 @@ func NewContentGroupNode(
 	content string, operator int, operands []*ContentGroupNode) *ContentGroupNode {
 	return &ContentGroupNode{content, operator, operands}
 }
-
-// func (cgn *ContentGroupNode) filter() {
-// 	switch cgn.operator {
-// 	case OPNone:
-// 		return
-// 	default:
-// 		return
-// 	}
-// }
 
 func (cgn *ContentGroupNode) explain() string {
 
@@ -162,6 +160,10 @@ func (cgn *ContentGroupNode) explain() string {
 	}
 }
 
+func (cgn *ContentGroupNode) filter(tasks []model.Task) []model.Task {
+	return tasks
+}
+
 // ============================
 // Assign Group
 // ============================
@@ -178,15 +180,17 @@ func NewAssignGroupNode() *AssignGroupNode {
 }
 
 // AssignTag for task
-func (agn *AssignGroupNode) AssignTag(tag string) {
+func (agn *AssignGroupNode) AssignTag(tag string) *AssignGroupNode {
 	agn.assignTags = append(agn.assignTags, tag)
 	agn.removeRepeatedTags()
+	return agn
 }
 
 // UnassignTag for task
-func (agn *AssignGroupNode) UnassignTag(tag string) {
+func (agn *AssignGroupNode) UnassignTag(tag string) *AssignGroupNode {
 	agn.unassignTags = append(agn.unassignTags, tag)
 	agn.removeRepeatedTags()
+	return agn
 }
 
 func (agn *AssignGroupNode) explain() string {
@@ -200,6 +204,10 @@ func (agn *AssignGroupNode) explain() string {
 		result += fmt.Sprint(" -", unassignTag)
 	}
 	return result
+}
+
+func (agn *AssignGroupNode) filter(tasks []model.Task) []model.Task {
+	return tasks
 }
 
 func (agn *AssignGroupNode) sortTags() {
@@ -234,52 +242,130 @@ func (agn *AssignGroupNode) removeRepeatedTags() {
 // Time Filter
 // ============================
 
+// TimeFilterNode contains start/end TimeNode
 type TimeFilterNode struct {
 	startTime *TimeNode
 	endTime   *TimeNode
 }
 
+// NewTimeFilterNode return *TimeFilterNode
 func NewTimeFilterNode(s, e *TimeNode) *TimeFilterNode {
 	return &TimeFilterNode{s, e}
 }
 
-func (tfn *TimeFilterNode) execute() error { return nil }
+func (tfn *TimeFilterNode) filter(tasks []model.Task) []model.Task {
+	return tasks
+}
+
 func (tfn *TimeFilterNode) explain() string {
 	if tfn.startTime != nil && tfn.endTime != nil {
-		rs, re := tfn.startTime.explain(), tfn.endTime.explain()
-		fmt.Printf("from %s to %s", rs, re)
+
+		fmt.Printf("from ")
+		rs := tfn.startTime.explain()
+		fmt.Printf(" to ")
+		re := tfn.endTime.explain()
+		fmt.Print("\n")
 		return rs + "-" + re
 	} else if tfn.startTime != nil {
+		fmt.Print("after ")
 		rs := tfn.startTime.explain()
-		fmt.Printf("after %s", rs)
+		fmt.Print("\n")
 		return rs
 	} else {
+		fmt.Print("before")
 		re := tfn.endTime.explain()
-		fmt.Printf("before %s", re)
+		fmt.Print("\n")
 		return "-" + re
 	}
 }
 
+// TimeNode contains a single time
 type TimeNode struct {
 	time *time.Time
 }
 
-func NewTimeNode(str, format string) *TimeNode {
+// NewTimeNode return *TimeNode
+func NewTimeNode(str string, dtType int) *TimeNode {
 	loc, err := time.LoadLocation("Asia/Shanghai")
-	//TODO: handle this
 	if err != nil {
 		fmt.Println(err.Error())
+		ErrorList = append(ErrorList, err)
 	}
-	time, err := time.ParseInLocation(format, str, loc)
-	//TODO: handle this
+	str = completeDateTime(str, dtType)
+	time, err := time.ParseInLocation("2006/01/02 15:04:05", str, loc)
 	if err != nil {
 		fmt.Println(err.Error())
+		ErrorList = append(ErrorList, err)
 	}
 	return &TimeNode{&time}
 }
 
-func (tn *TimeNode) execute() error { return nil }
+func (tn *TimeNode) execute() {}
+
 func (tn *TimeNode) explain() string {
 	fmt.Print(tn.time.Format("2006/01/02 15:04:05"))
 	return tn.time.Format("2006/01/02 15:04:05")
+}
+
+func completeDateTime(str string, dtType int) string {
+	now := time.Now()
+	d, t := now.Format("2006/01/02"), "00:00:00"
+	switch dtType {
+	case TimeFormatDate:
+		d = completeDate(str)
+	case TimeFormatTime:
+		t = completeTime(str)
+	case TimeFormatDateTime:
+		dateTimeParts := strings.Split(str, " ")
+		d, t = completeDate(dateTimeParts[0]), completeTime(dateTimeParts[1])
+	}
+	return d + " " + t
+}
+
+func completeDate(d string) string {
+	now := strings.Split(time.Now().Format("2006/01/02"), "/")
+	var year, month, day string
+	dateParts := strings.Split(d, "/")
+	switch len(dateParts) {
+	case 3: // year/month/day
+		year, month, day = dateParts[0], dateParts[1], dateParts[2]
+	case 2: // month/day
+		year, month, day = now[0], dateParts[0], dateParts[1]
+	case 1: // day
+		year, month, day = now[0], now[1], dateParts[0]
+	}
+	if len(year) == 2 { // complete year
+		year = now[0][:2] + year
+	}
+	if len(month) == 1 { // complete month
+		month = "0" + month
+	}
+	if len(day) == 1 { // complete day
+		day = "0" + day
+	}
+	return fmt.Sprintf("%s/%s/%s", year, month, day)
+}
+
+func completeTime(t string) string {
+	now := strings.Split(time.Now().Format("15:04:05"), ":")
+	var hour, minute, second string
+	dateParts := strings.Split(t, ":")
+	switch len(dateParts) {
+	case 3: // hour/minute/second
+		hour, minute, second = dateParts[0], dateParts[1], dateParts[2]
+	case 2: // minute/second
+		hour, minute, second = dateParts[0], dateParts[1], now[2]
+	case 1: // second
+		hour, minute, second = dateParts[0], now[1], now[2]
+	}
+	if len(hour) == 1 { // complete hour
+		hour = "0" + hour
+	}
+	if len(minute) == 1 { // complete minute
+		minute = "0" + minute
+	}
+	if len(second) == 1 { // complete second
+		second = "0" + second
+	}
+	return fmt.Sprintf("%s:%s:%s", hour, minute, second)
 }
