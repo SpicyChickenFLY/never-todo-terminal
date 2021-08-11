@@ -15,7 +15,7 @@ func AddTag(content string, color string) (int, error) {
 	if ok {
 		return id, errors.New("")
 	}
-	model.M.Data.Tags = append(model.M.Data.Tags, model.Tag{Content: content, Color: color})
+	model.DB.Data.Tags = append(model.DB.Data.Tags, model.Tag{Content: content, Color: color})
 	return 0, nil
 }
 

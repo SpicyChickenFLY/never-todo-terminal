@@ -16,7 +16,7 @@ func AddTaskTags(taskID int, assignTags []string) (err error) {
 			}
 		}
 		if !checkTaskTagExist(taskID, tagID) {
-			model.M.Data.TaskTags = append(model.M.Data.TaskTags, model.TaskTag{TaskID: taskID, TagID: tagID})
+			model.DB.Data.TaskTags = append(model.DB.Data.TaskTags, model.TaskTag{TaskID: taskID, TagID: tagID})
 		}
 	}
 	return nil
@@ -34,7 +34,7 @@ func DeleteTaskTags(taskID int, unassignTags []string) error {
 }
 
 func checkTaskTagExist(taskID, tagID int) bool {
-	for _, taskTag := range model.M.Data.TaskTags {
+	for _, taskTag := range model.DB.Data.TaskTags {
 		if taskTag.TaskID == taskID && taskTag.TagID == tagID {
 			return true
 		}
@@ -44,7 +44,7 @@ func checkTaskTagExist(taskID, tagID int) bool {
 
 func deleteTaskTag(taskID, tagID int) error {
 	index := 0
-	for i, taskTag := range model.M.Data.TaskTags {
+	for i, taskTag := range model.DB.Data.TaskTags {
 		if taskTag.TaskID == taskID && taskTag.TagID == tagID {
 			index = i
 			break
@@ -52,7 +52,7 @@ func deleteTaskTag(taskID, tagID int) error {
 	}
 	if index != 0 {
 		// FIXME: 会不会越界
-		model.M.Data.TaskTags = append(model.M.Data.TaskTags[:index], model.M.Data.TaskTags[index+1:]...)
+		model.DB.Data.TaskTags = append(model.DB.Data.TaskTags[:index], model.DB.Data.TaskTags[index+1:]...)
 	}
 	return nil
 }

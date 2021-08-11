@@ -1,20 +1,31 @@
 package model
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"path"
+	"runtime"
+	"strings"
 )
 
-const (
-	defaultFilePath = "%APPDATA%\\.nevertodo\\data.json"
-)
-
-var dbFilePath = defaultFilePath
-var M *Model
+var dbFilePath = ""
+var DB *Model
 
 // Init DB with specified file
-func Init() error {
+func Init(filePath string) error {
+	dbFilePath = filePath
+	if dbFilePath == "" {
+		homePath, err := getHome()
+		if err != nil {
+			return err
+		}
+		dbFilePath = path.Join(homePath, ".nevertodo/data.json")
+	}
 	if _, err := os.Stat(dbFilePath); err != nil {
 		// 创建文件
 		_, err := os.Create(dbFilePath)
@@ -23,6 +34,8 @@ func Init() error {
 		}
 		// TODO: 写入默认数据
 
+	} else {
+		fmt.Println("[INFO] init db successfully")
 	}
 	return nil
 }
@@ -48,12 +61,12 @@ func StartTransaction() error {
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(b, M)
+	return json.Unmarshal(b, DB)
 }
 
 // EndTransaction record model data into file
 func EndTransaction() error {
-	data, err := json.Marshal(M)
+	data, err := json.Marshal(DB)
 	if err != nil {
 		return err
 	}
@@ -64,4 +77,55 @@ func EndTransaction() error {
 	defer fp.Close()
 	_, err = fp.Write(data)
 	return err
+}
+
+func getHome() (string, error) {
+	// user, err := user.Current()
+	// if nil == err {
+	// 	return user.HomeDir, nil
+	// }
+
+	if runtime.GOOS == "windows" {
+		return homeDataWindows()
+	}
+	// Unix-like system, so just assume Unix
+	return homeUnix()
+}
+
+func homeUnix() (string, error) {
+	// First prefer the HOME environmental variable
+	if home := os.Getenv("HOME"); home != "" {
+		return home, nil
+	}
+	// If that fails, try the shell
+	var stdout bytes.Buffer
+	cmd := exec.Command("sh", "-c", "eval echo ~$USER")
+	cmd.Stdout = &stdout
+	if err := cmd.Run(); err != nil {
+		return "", err
+	}
+
+	result := strings.TrimSpace(stdout.String())
+	if result == "" {
+		return "", errors.New("blank output when reading home directory")
+	}
+
+	return result, nil
+}
+
+func homeDataWindows() (string, error) {
+	// drive := os.Getenv("HOMEDRIVE")
+	// path := os.Getenv("HOMEPATH")
+	// home := drive + path
+	// if drive == "" || path == "" {
+	// 	home = os.Getenv("USERPROFILE")
+	// }
+	// if home == "" {
+	// 	return "", errors.New("HOMEDRIVE, HOMEPATH, and USERPROFILE are blank")
+	// }
+	home := os.Getenv("APPDATA")
+	if home == "" {
+		return "", errors.New("APPDATA are blank")
+	}
+	return home, nil
 }

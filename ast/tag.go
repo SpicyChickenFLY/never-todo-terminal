@@ -24,6 +24,6 @@ type TagListFilterNode struct {
 }
 
 // NewTagListFilterNode return *TagListFilterNode
-func NewTagListFilterNode(ign *IDGroupNode, cgn *ContentGroupNode) *TagListFilterNode {
+func NewTagListFilterNode(ign *IDGroupNode, content string) *TagListFilterNode {
 	return &TagListFilterNode{}
 }

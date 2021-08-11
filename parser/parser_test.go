@@ -31,6 +31,7 @@ func TestParser(t *testing.T) {
 		"del 20 2-5",
 		//
 		"tag 9",
+		"tag add oweh",
 		// err
 	}
 	for _, tc := range testcases {

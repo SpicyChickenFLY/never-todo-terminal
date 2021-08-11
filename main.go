@@ -10,7 +10,13 @@ import (
 )
 
 func main() {
-	model.StartTransaction()
+
+	if err := model.Init(""); err != nil {
+		fmt.Println("[ERROR]: ", err.Error())
+	}
+	if err := model.StartTransaction(); err != nil {
+		fmt.Println("[ERROR]: ", err.Error())
+	}
 	// Restore the args to origin command string
 	args := strings.Join(os.Args[1:], " ")
 	// Parse command string to an AST
@@ -22,5 +28,7 @@ func main() {
 	} else {
 		fmt.Println("[INFO]: execute command successfully")
 	}
-	model.EndTransaction()
+	if err := model.EndTransaction(); err != nil {
+		fmt.Println("[ERROR]: ", err.Error())
+	}
 }

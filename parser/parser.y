@@ -78,15 +78,16 @@ root:
     ;
 
 stmt:
-      log_list  {if debug {fmt.Println("stmt_log_list")}}
-    | undo_log {if debug {fmt.Println("stmt_undo_log")}}
+      log_list  {}
+    | undo_log {}
     | task_list { $$ = $1 }
     | task_add { $$ = $1 }
     | task_delete { $$ = $1 }
     | task_update { $$ = $1 }
     | task_done { $$ = $1 }
     | tag_list { $$ = $1 }
-    | tag_set {if debug {fmt.Println("stmt_tag_set")}}
+    | tag_add {}
+    | tag_set {}
     ;
 
 
@@ -233,15 +234,19 @@ tag_list:
       TAG tag_list_filter { $$ = ast.NewTagListNode($2) }
     ;
 
+tag_add:
+      TAG ADD IDENT {  }
+    ;
+
 tag_set:
-      TAG SET id definite_content {  }
+      TAG SET id IDENT {  }
     ;
 
 // ========== TAG FILTER =============
 tag_list_filter:
-      { $$ = ast.NewTagListFilterNode(nil, nil) }
-    | id_group { $$ = ast.NewTagListFilterNode($1, nil) }
-    | content_group { $$ = ast.NewTagListFilterNode(nil, $1) }
+      { $$ = ast.NewTagListFilterNode(nil, "") }
+    | id_group { $$ = ast.NewTagListFilterNode($1, "") }
+    | IDENT { $$ = ast.NewTagListFilterNode(nil, $1) }
     ;
 
 // ========== UTILS =============

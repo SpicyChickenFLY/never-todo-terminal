@@ -9,7 +9,8 @@ import (
 
 // ListTasks with filter provided by params
 func ListTasks() (tasks []model.Task) {
-	for _, task := range model.M.Data.Tasks {
+	fmt.Println(model.DB)
+	for _, task := range model.DB.Data.Tasks {
 		if !task.Deleted && !task.Completed {
 			tasks = append(tasks, task)
 		}
@@ -19,7 +20,7 @@ func ListTasks() (tasks []model.Task) {
 
 // FindTaskByID called by parser
 func FindTaskByID(id int) (model.Task, bool) {
-	for _, task := range model.M.Data.Tasks {
+	for _, task := range model.DB.Data.Tasks {
 		if task.ID == id {
 			return task, true
 		}
@@ -44,7 +45,7 @@ func FindTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
 func DeleteTask(ids []int) {
 	// delete task
 	for _, id := range ids {
-		for _, task := range model.M.Data.Tasks {
+		for _, task := range model.DB.Data.Tasks {
 			if task.ID == id {
 				task.Deleted = true
 			}
@@ -55,7 +56,7 @@ func DeleteTask(ids []int) {
 // CompleteTask called by parse
 func CompleteTask(ids []int) {
 	for _, id := range ids {
-		for _, task := range model.M.Data.Tasks {
+		for _, task := range model.DB.Data.Tasks {
 			if task.ID == id {
 				task.Completed = true
 			}
@@ -81,7 +82,7 @@ func UpdateTask(
 	importance bool,
 	assignTags, unasssignTags []string,
 	due *time.Time) error {
-	for _, task := range model.M.Data.Tasks {
+	for _, task := range model.DB.Data.Tasks {
 		if task.ID == id {
 			task.Content = content
 			task.Important = importance

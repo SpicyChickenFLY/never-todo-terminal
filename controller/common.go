@@ -26,7 +26,7 @@ func ShowSummary() error {
 	fmt.Println(constant.Descirption)
 	fmt.Println(constant.Separator)
 	var todoTotal, doneTotal, tagTotal int
-	for _, task := range model.M.Data.Tasks {
+	for _, task := range model.DB.Data.Tasks {
 		if !task.Deleted {
 			if !task.Completed {
 				todoTotal++
@@ -35,7 +35,7 @@ func ShowSummary() error {
 			}
 		}
 	}
-	for _, tag := range model.M.Data.Tags {
+	for _, tag := range model.DB.Data.Tags {
 		if !tag.Deleted {
 			tagTotal++
 		}
