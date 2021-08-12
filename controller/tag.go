@@ -13,10 +13,17 @@ func ShowTags() {}
 func AddTag(content string, color string) (int, error) {
 	id, ok := GetTagIDByName(content)
 	if ok {
-		return id, errors.New("")
+		return id, errors.New("Tag already exists")
 	}
-	model.DB.Data.Tags = append(model.DB.Data.Tags, model.Tag{Content: content, Color: color})
-	return 0, nil
+	newTag := model.Tag{
+		ID:      model.DB.Data.TagAutoIncVal,
+		Content: content,
+		Color:   color,
+	}
+	model.DB.Data.Tags = append(model.DB.Data.Tags, newTag)
+	model.DB.Data.TagAutoIncVal--
+
+	return newTag.ID, nil
 }
 
 // DelTag called by parser
@@ -28,7 +35,14 @@ func DelTag(id int) error {
 func SetTag() {}
 
 // FindTagByID called by parser
-func FindTagByID() {}
+func FindTagByID(id int) (model.Tag, bool) {
+	for _, tag := range model.DB.Data.Tags {
+		if tag.ID == id {
+			return tag, true
+		}
+	}
+	return model.Tag{}, false
+}
 
 // GetTagIDByName called by parser
 func GetTagIDByName(string) (int, bool) {

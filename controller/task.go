@@ -9,7 +9,6 @@ import (
 
 // ListTasks with filter provided by params
 func ListTasks() (tasks []model.Task) {
-	fmt.Println(model.DB)
 	for _, task := range model.DB.Data.Tasks {
 		if !task.Deleted && !task.Completed {
 			tasks = append(tasks, task)
@@ -70,9 +69,21 @@ func AddTask(
 	importance bool,
 	assignTags []string,
 	due *time.Time,
-	loop string) (int, error) {
-	// TODO: add new task
-	return 0, nil
+	loop string) (taskID int, err error) {
+	newTask := model.Task{
+		ID:        model.DB.Data.TaskAutoIncVal,
+		Content:   content,
+		Important: importance,
+	}
+	if due != nil {
+		newTask.Due = *due
+	}
+
+	model.DB.Data.Tasks = append(model.DB.Data.Tasks, newTask)
+	model.DB.Data.TaskAutoIncVal--
+
+	err = AddTaskTags(newTask.ID, assignTags)
+	return newTask.ID, err
 }
 
 // UpdateTask called by parser

@@ -1,11 +1,13 @@
 package ast
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"strings"
 	"time"
 
+	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
@@ -161,6 +163,7 @@ func (cgn *ContentGroupNode) explain() string {
 }
 
 func (cgn *ContentGroupNode) filter(tasks []model.Task) []model.Task {
+
 	return tasks
 }
 
@@ -206,7 +209,23 @@ func (agn *AssignGroupNode) explain() string {
 	return result
 }
 
-func (agn *AssignGroupNode) filter(tasks []model.Task) []model.Task {
+func (agn *AssignGroupNode) filter(tasks []model.Task) (result []model.Task) {
+	result = tasks
+	realTagIDs := []int{}
+	for _, tag := range agn.assignTags {
+		tagID, ok := controller.GetTagIDByName(tag)
+		if !ok {
+			ErrorList = append(ErrorList, errors.New("Got inexist tag while finding tasks"))
+		} else {
+			realTagIDs = append(realTagIDs, tagID)
+		}
+
+	}
+	for _, task := range tasks {
+		if controller.CheckTaskByTags(task.ID, realTagIDs) {
+			result = append(result, task)
+		}
+	}
 	return tasks
 }
 

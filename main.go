@@ -10,25 +10,30 @@ import (
 )
 
 func main() {
-
-	if err := model.Init(""); err != nil {
-		fmt.Println("[ERROR]: ", err.Error())
+	if err := model.Init("./static/data.json"); err != nil {
+		panic(err)
 	}
-	if err := model.StartTransaction(); err != nil {
-		fmt.Println("[ERROR]: ", err.Error())
+	if err := model.Begin(); err != nil {
+		panic(err)
 	}
 	// Restore the args to origin command string
-	args := strings.Join(os.Args[1:], " ")
+	for i, arg := range os.Args[1:] {
+		if len(strings.Split(arg, " ")) > 1 {
+			os.Args[i] = fmt.Sprintf("`%s`", arg)
+		}
+	}
+	cmd := strings.Join(os.Args[1:], " ")
+	// fmt.Println("[INFO]: ", cmd)
 	// Parse command string to an AST
-	result := parser.Parse(args)
-	fmt.Println("[INFO]: parse command string successfully")
+	result := parser.Parse(cmd)
+	// fmt.Println("[INFO]: parse command string successfully")
 	// Execute the AST
 	if err := result.Execute(); err != nil {
-		fmt.Println("[ERROR]: ", err.Error())
+		model.RollBack()
 	} else {
-		fmt.Println("[INFO]: execute command successfully")
+		if err := model.Commit(); err != nil {
+			panic(err)
+		}
 	}
-	if err := model.EndTransaction(); err != nil {
-		fmt.Println("[ERROR]: ", err.Error())
-	}
+
 }

@@ -1,8 +1,23 @@
 package controller
 
 import (
+	"fmt"
+
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
+
+func FindTagsByTask(taskID int) (tags []model.Tag, warnList []string) {
+	for _, taskTag := range model.DB.Data.TaskTags {
+		if taskTag.TaskID == taskID {
+			tag, ok := FindTagByID(taskTag.TagID)
+			if !ok {
+				warnList = append(warnList, fmt.Sprintf("查询到无效的链接:%d, %d", taskTag.TaskID, taskTag.TagID))
+			}
+			tags = append(tags, tag)
+		}
+	}
+	return
+}
 
 // AddTaskTags called by parser
 func AddTaskTags(taskID int, assignTags []string) (err error) {
@@ -40,6 +55,16 @@ func checkTaskTagExist(taskID, tagID int) bool {
 		}
 	}
 	return false
+}
+
+// CheckTaskByTags filter tasks
+func CheckTaskByTags(taskID int, tagIDs []int) bool {
+	for _, tagID := range tagIDs {
+		if !checkTaskTagExist(taskID, tagID) {
+			return false
+		}
+	}
+	return true
 }
 
 func deleteTaskTag(taskID, tagID int) error {

@@ -1,6 +1,13 @@
 package model
 
-import "time"
+import (
+	"time"
+)
+
+type FullTask struct {
+	Task Task
+	Tags []Tag
+}
 
 type Task struct {
 	ID        int       `json:"id" mapstructure:"id"`
@@ -8,8 +15,8 @@ type Task struct {
 	Deleted   bool      `json:"deleted" mapstructure:"deleted"`
 	Completed bool      `json:"completed" mapstructure:"completed"`
 	Important bool      `json:"important" mapstructure:"important"`
-	Due       time.Time `json:"due" mapstructure:"due"`
-	Loop      string    `json:"loop" mapstructure:"loop"`
+	Due       time.Time `json:"due,omitempty" mapstructure:"due"`
+	Loop      string    `json:"loop,omitempty" mapstructure:"loop"`
 }
 
 type Tag struct {
@@ -44,13 +51,15 @@ type Log struct {
 	Data   map[string]interface{} `json:"data" mapstructure:"data"`
 }
 
+type Data struct {
+	Tasks          []Task    `json:"tasks" mapstructure:"tasks"`
+	Tags           []Tag     `json:"tags" mapstructure:"tags"`
+	TaskTags       []TaskTag `json:"task_tags" mapstructure:"task_tags"`
+	TaskAutoIncVal int       `json:"taskAutoIncVal" mapstructure:"taskAutoIncVal"`
+	TagAutoIncVal  int       `json:"tagAutoIncVal" mapstructure:"tagAutoIncVal"`
+}
+
 type Model struct {
-	Data struct {
-		Tasks          []Task    `json:"tasks" mapstructure:"tasks"`
-		Tags           []Tag     `json:"tags" mapstructure:"tags"`
-		TaskTags       []TaskTag `json:"task_tags" mapstructure:"task_tags"`
-		TaskAutoIncVal int       `json:"taskAutoIncVal" mapstructure:"taskAutoIncVal"`
-		TagAutoIncVal  int       `json:"tagAutoIncVal" mapstructure:"tagAutoIncVal"`
-	}
-	Log []Log `json:"log" mapstructure:"log"`
+	Data Data  `json:"data", mapstructure:"data"`
+	Log  []Log `json:"log" mapstructure:"log"`
 }

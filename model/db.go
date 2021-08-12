@@ -4,16 +4,20 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"os/user"
 	"path"
 	"runtime"
 	"strings"
+
+	"github.com/SpicyChickenFLY/never-todo-cmd/constant"
 )
 
 var dbFilePath = ""
+
+// DB exported for dao
 var DB *Model
 
 // Init DB with specified file
@@ -33,9 +37,12 @@ func Init(filePath string) error {
 			return err
 		}
 		// TODO: 写入默认数据
-
-	} else {
-		fmt.Println("[INFO] init db successfully")
+		fp, err := os.OpenFile(dbFilePath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0755)
+		if err != nil {
+			return err
+		}
+		defer fp.Close()
+		_, err = fp.Write([]byte(constant.DBInitData))
 	}
 	return nil
 }
@@ -50,8 +57,8 @@ func Export(filePath string) {
 
 }
 
-// StartTransaction return a model data
-func StartTransaction() error {
+// Begin return a model data
+func Begin() error {
 	fp, err := os.OpenFile(dbFilePath, os.O_RDONLY, 0755)
 	if err != nil {
 		return err
@@ -61,16 +68,25 @@ func StartTransaction() error {
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(b, DB)
+	DB = &Model{}
+	// var m map[string]interface{}
+	// if err := json.Unmarshal(b, &m); err != nil {
+	// 	return err
+	// }
+	// mapstructure.Decode(m, DB)
+	// return nil
+	return json.Unmarshal(b, &DB)
+
 }
 
-// EndTransaction record model data into file
-func EndTransaction() error {
+// Commit record model data into file
+func Commit() error {
 	data, err := json.Marshal(DB)
 	if err != nil {
 		return err
 	}
-	fp, err := os.OpenFile(dbFilePath, os.O_RDWR|os.O_CREATE, 0755)
+	// fmt.Println(string(data))
+	fp, err := os.OpenFile(dbFilePath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0755)
 	if err != nil {
 		return err
 	}
@@ -79,15 +95,21 @@ func EndTransaction() error {
 	return err
 }
 
-func getHome() (string, error) {
-	// user, err := user.Current()
-	// if nil == err {
-	// 	return user.HomeDir, nil
-	// }
+// RollBack wrap begin
+func RollBack() error {
+	return Begin()
+}
 
+func getHome() (string, error) {
 	if runtime.GOOS == "windows" {
 		return homeDataWindows()
 	}
+
+	user, err := user.Current()
+	if nil == err {
+		return user.HomeDir, nil
+	}
+
 	// Unix-like system, so just assume Unix
 	return homeUnix()
 }
@@ -114,15 +136,6 @@ func homeUnix() (string, error) {
 }
 
 func homeDataWindows() (string, error) {
-	// drive := os.Getenv("HOMEDRIVE")
-	// path := os.Getenv("HOMEPATH")
-	// home := drive + path
-	// if drive == "" || path == "" {
-	// 	home = os.Getenv("USERPROFILE")
-	// }
-	// if home == "" {
-	// 	return "", errors.New("HOMEDRIVE, HOMEPATH, and USERPROFILE are blank")
-	// }
 	home := os.Getenv("APPDATA")
 	if home == "" {
 		return "", errors.New("APPDATA are blank")

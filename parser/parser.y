@@ -31,8 +31,8 @@ import (
   timeNode *ast.TimeNode
 }
 
-%left PLUS MINUS
-%left LBRACK RBRACK
+%left <str> PLUS MINUS
+%left <str> LBRACK RBRACK
 
 %left <str> NOT
 %left <str> AND OR 
@@ -258,6 +258,7 @@ id_group:
 
 id: 
       NUM { $$, _ = strconv.Atoi($1) }
+    | MINUS NUM { $$, _ = strconv.Atoi("-"+$2) }
     ; 
 
 content_group:

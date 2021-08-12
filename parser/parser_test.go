@@ -21,7 +21,7 @@ func TestParser(t *testing.T) {
 		"todo add me -h",
 		"tag -h",
 		// task
-		"todo",
+		"todo 29",
 		"NOT('A' AND \"B\" OR `C`)",
 		"todo age:2020/03/02-2021/02/03",
 		"add play ball +exercise !3",
@@ -38,9 +38,6 @@ func TestParser(t *testing.T) {
 		fmt.Printf("testcase: %s\n", tc)
 		Parse(tc)
 		ast.Result.Explain()
-		// if err := result.Execute(); err != nil {
-		// 	fmt.Println(err.Error())
-		// }
 		fmt.Println("")
 	}
 }

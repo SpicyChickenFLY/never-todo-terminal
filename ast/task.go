@@ -1,9 +1,12 @@
 package ast
 
 import (
+	"errors"
 	"fmt"
+	"time"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/render"
 )
 
@@ -49,7 +52,7 @@ func (tlfn *TaskListFilterNode) execute() {
 		tlfn.indefiniteTaskListFilter.execute()
 	} else {
 		tasks := controller.ListTasks()
-		render.Tasks(tasks)
+		WarnList = append(WarnList, render.Tasks(tasks)...)
 		return
 	}
 }
@@ -181,13 +184,22 @@ func NewTaskAddNode(c string, opt *TaskAddOptionNode) *TaskAddNode {
 }
 
 func (tan *TaskAddNode) execute() {
-	controller.AddTask(
+	importance, assignTags, due, loop := tan.option.apply()
+	taskID, err := controller.AddTask(
 		tan.content,
-		tan.option.importance,
-		tan.option.assignGroupNode.assignTags,
-		tan.option.due.startTime.time,
-		"",
+		importance, assignTags, due, loop,
 	)
+	if err != nil {
+		ErrorList = append(ErrorList, err)
+		return
+	}
+	task, ok := controller.FindTaskByID(taskID)
+	if !ok {
+		ErrorList = append(ErrorList, errors.New("Added task is not found"))
+		return
+	}
+	render.Tasks([]model.Task{task})
+
 }
 func (tan *TaskAddNode) explain() string {
 	result := "todo add "
@@ -231,6 +243,18 @@ func (taon *TaskAddOptionNode) explain() string {
 		fmt.Print("\n")
 	}
 	return result
+}
+
+func (taon *TaskAddOptionNode) apply() (
+	importance bool, assignTags []string, due *time.Time, loop string) {
+	importance, assignTags, due, loop = taon.importance, []string{}, nil, ""
+	if taon.assignGroupNode != nil {
+		assignTags = taon.assignGroupNode.assignTags
+	}
+	if taon.due != nil {
+		due = taon.due.startTime.time
+	}
+	return
 }
 
 // SetImportance for TaskAddOptionNode

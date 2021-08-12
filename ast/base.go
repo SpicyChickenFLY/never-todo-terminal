@@ -11,7 +11,6 @@ import (
 const (
 	CMDSummary = 0 + iota
 	CMDUI
-	CMDGUI
 	CMDExplain
 	CMDStmt
 	CMDHelp
@@ -37,7 +36,6 @@ func NewRootNode(cmdType int, sn StmtNode) *RootNode {
 
 // Execute should start from root
 func (rn *RootNode) Execute() error {
-	fmt.Println(rn.cmdType)
 	switch rn.cmdType {
 	case CMDSummary:
 		return controller.ShowSummary()
@@ -45,18 +43,17 @@ func (rn *RootNode) Execute() error {
 		return controller.ShowHelp()
 	case CMDUI:
 		return controller.StartUI()
-	case CMDGUI:
-		return controller.StartGUI()
 	case CMDExplain:
 		if rn.stmtNode != nil {
 			fmt.Println("==== Execute Plan ====")
-			fmt.Println("rewrite command: ", rn.explain())
+			fmt.Println("==== rewrite ====\n", rn.explain())
 		}
 		return nil
 	case CMDStmt:
 		rn.stmtNode.execute()
 		// TODO: handle error list
-		return errors.New("语句执行失败")
+		// return errors.New("语句执行失败")
+		return nil
 	default:
 		return errors.New("目前不支持的命令类型")
 	}
@@ -80,12 +77,11 @@ func (rn *RootNode) explain() string {
 	case CMDUI:
 		fmt.Println("show UI")
 		return "show UI"
-	case CMDGUI:
-		fmt.Println("show GUI")
-		return "show GUI"
 	case CMDExplain:
-		fmt.Println("show explaination")
-		return "show explaination"
+		if rn.stmtNode != nil {
+			return rn.stmtNode.explain()
+		}
+		return "show help"
 	case CMDStmt:
 		if rn.stmtNode != nil {
 			return rn.stmtNode.explain()
