@@ -109,7 +109,6 @@ func NewContentGroupNode(
 }
 
 func (cgn *ContentGroupNode) explain() string {
-
 	switch cgn.operator {
 	case OPNone:
 		fmt.Printf("include `%s`", cgn.content)
@@ -163,9 +162,19 @@ func (cgn *ContentGroupNode) explain() string {
 }
 
 func (cgn *ContentGroupNode) filter(tasks []model.Task) []model.Task {
-
+	switch cgn.operator {
+	case OPNone:
+		result := []Model.Task{}
+		for _,task := range tasks {
+			if 
+			result = append(result, )
+			task
+		}
+	}
 	return tasks
 }
+
+func 
 
 // ============================
 // Assign Group
