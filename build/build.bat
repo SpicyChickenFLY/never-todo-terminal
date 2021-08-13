@@ -21,3 +21,4 @@ go test -v ../parser
 cd ..
 
 go build -o never.exe
+copy .\never.exe %USERPROFILE%\AppData\Local\Microsoft\WindowsApps

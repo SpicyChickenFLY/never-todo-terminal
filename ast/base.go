@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
+	"github.com/SpicyChickenFLY/never-todo-cmd/render"
 )
 
 // Command Type
@@ -21,6 +22,7 @@ var (
 	Result    *RootNode
 	ErrorList = []error{}
 	WarnList  = []string{}
+	VarMap    = map[string]string{}
 )
 
 // RootNode is the root of ast
@@ -35,10 +37,8 @@ func NewRootNode(cmdType int, sn StmtNode) *RootNode {
 }
 
 // Execute should start from root
-func (rn *RootNode) Execute() error {
+func (rn *RootNode) Execute(cmd string) error {
 	switch rn.cmdType {
-	case CMDSummary:
-		return controller.ShowSummary()
 	case CMDHelp:
 		return controller.ShowHelp()
 	case CMDUI:
@@ -51,8 +51,8 @@ func (rn *RootNode) Execute() error {
 		return nil
 	case CMDStmt:
 		rn.stmtNode.execute()
-		// TODO: handle error list
-		// return errors.New("语句执行失败")
+		render.Result(cmd, ErrorList, WarnList)
+
 		return nil
 	default:
 		return errors.New("目前不支持的命令类型")
@@ -68,9 +68,6 @@ func (rn *RootNode) Explain() {
 
 func (rn *RootNode) explain() string {
 	switch rn.cmdType {
-	case CMDSummary:
-		fmt.Println("show summary")
-		return "show summary"
 	case CMDHelp:
 		fmt.Println("show help")
 		return "show help"
@@ -99,4 +96,18 @@ type Node interface {
 type StmtNode interface {
 	execute()
 	Node
+}
+
+// SetVarMap set global var map
+func SetVarMap(varMap map[string]string) {
+	VarMap = varMap
+}
+
+// SearchVarMap convert variable to origin string
+func SearchVarMap(str string) string {
+	result, ok := VarMap[str]
+	if ok {
+		str = result
+	}
+	return str
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
+	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
 // Time format
@@ -24,14 +25,14 @@ const (
 
 // IDGroupNode is node include id
 type IDGroupNode struct {
-	idGroup []int
+	ids []int
 }
 
 // NewIDGroupNode return IDGroup
 func NewIDGroupNode(ids ...int) *IDGroupNode {
 	switch len(ids) {
 	case 1:
-		return &IDGroupNode{idGroup: []int{ids[0]}}
+		return &IDGroupNode{ids: []int{ids[0]}}
 	case 2:
 		temp := []int{}
 		if ids[0] < ids[1] {
@@ -43,44 +44,44 @@ func NewIDGroupNode(ids ...int) *IDGroupNode {
 				temp = append(temp, i)
 			}
 		}
-		return &IDGroupNode{idGroup: temp}
+		return &IDGroupNode{ids: temp}
 	default:
 		return &IDGroupNode{}
 	}
 }
 
 // MergeIDNode merge with othen IDGroup
-func (ign *IDGroupNode) MergeIDNode(idNode *IDGroupNode) *IDGroupNode {
-	ign.idGroup = append(ign.idGroup, idNode.idGroup...)
+func (ign *IDGroupNode) MergeIDNode(ign1 *IDGroupNode) *IDGroupNode {
+	ign.ids = append(ign.ids, ign1.ids...)
 	ign.removeRepeatedIDs()
 	return ign
 }
 
 func (ign *IDGroupNode) explain() string {
-	fmt.Printf("\twith ID: %v\n", ign.idGroup)
+	fmt.Printf("\twith ID: %v\n", ign.ids)
 	result := ""
-	for _, id := range ign.idGroup {
+	for _, id := range ign.ids {
 		result += fmt.Sprint(" ", id)
 	}
 	return result[1:]
 }
 
 func (ign *IDGroupNode) sortID() {
-	sort.Ints(ign.idGroup)
+	sort.Ints(ign.ids)
 }
 
 func (ign *IDGroupNode) removeRepeatedIDs() {
-	if len(ign.idGroup) == 0 {
+	if len(ign.ids) == 0 {
 		return
 	}
 	ign.sortID()
-	temp := []int{ign.idGroup[0]}
-	for i := 1; i < len(ign.idGroup); i++ {
-		if ign.idGroup[i] != ign.idGroup[i-1] {
-			temp = append(temp, ign.idGroup[i])
+	temp := []int{ign.ids[0]}
+	for i := 1; i < len(ign.ids); i++ {
+		if ign.ids[i] != ign.ids[i-1] {
+			temp = append(temp, ign.ids[i])
 		}
 	}
-	ign.idGroup = temp
+	ign.ids = temp
 }
 
 // ============================
@@ -161,20 +162,52 @@ func (cgn *ContentGroupNode) explain() string {
 	}
 }
 
-func (cgn *ContentGroupNode) filter(tasks []model.Task) []model.Task {
+func (cgn *ContentGroupNode) filter(tasks []model.Task) (result, negation []model.Task) {
 	switch cgn.operator {
 	case OPNone:
-		result := []Model.Task{}
-		for _,task := range tasks {
-			if 
-			result = append(result, )
-			task
+		for _, task := range tasks {
+			if utils.ContainStr(task.Content, cgn.content) {
+				result = append(result, task)
+			} else {
+				negation = append(negation, task)
+			}
+		}
+		return result, negation
+	case OPNOT:
+		negation, result = cgn.operands[0].filter(tasks)
+	case OPAND:
+		leftResult, leftNegation := cgn.operands[0].filter(tasks)
+		rightResult, _ := cgn.operands[1].filter(tasks)
+		negation = leftNegation
+		for _, lt := range leftResult {
+			for _, rt := range rightResult {
+				if lt.ID == rt.ID {
+					result = append(result, lt)
+					break
+				}
+			}
+			if len(result) == 0 || result[len(result)-1].ID != lt.ID {
+				negation = append(negation, lt)
+			}
+		}
+	case OPOR:
+		leftResult, leftNegation := cgn.operands[0].filter(tasks)
+		_, rightNegation := cgn.operands[1].filter(tasks)
+		result = leftResult
+		for _, ln := range leftNegation {
+			for _, rn := range rightNegation {
+				if ln.ID == rn.ID {
+					negation = append(negation, rn)
+					break
+				}
+			}
+			if len(negation) == 0 && negation[len(negation)-1].ID != ln.ID {
+				result = append(result, ln)
+			}
 		}
 	}
-	return tasks
+	return
 }
-
-func 
 
 // ============================
 // Assign Group

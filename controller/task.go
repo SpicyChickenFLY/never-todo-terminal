@@ -1,16 +1,41 @@
 package controller
 
 import (
+	"errors"
 	"fmt"
-	"time"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
-// ListTasks with filter provided by params
-func ListTasks() (tasks []model.Task) {
+// ListAllTasks with filter provided by params
+func ListAllTasks() (todo, done, deleted []model.Task) {
+	return ListTodoTasks(), ListDoneTasks(), ListDeletedTasks()
+}
+
+// ListTodoTasks with filter provided by params
+func ListTodoTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
 		if !task.Deleted && !task.Completed {
+			tasks = append(tasks, task)
+		}
+	}
+	return tasks
+}
+
+// ListDoneTasks with filter provided by params
+func ListDoneTasks() (tasks []model.Task) {
+	for _, task := range model.DB.Data.Tasks {
+		if !task.Deleted && task.Completed {
+			tasks = append(tasks, task)
+		}
+	}
+	return tasks
+}
+
+// ListDeletedTasks with filter provided by params
+func ListDeletedTasks() (tasks []model.Task) {
+	for _, task := range model.DB.Data.Tasks {
+		if task.Deleted {
 			tasks = append(tasks, task)
 		}
 	}
@@ -44,9 +69,9 @@ func FindTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
 func DeleteTask(ids []int) {
 	// delete task
 	for _, id := range ids {
-		for _, task := range model.DB.Data.Tasks {
-			if task.ID == id {
-				task.Deleted = true
+		for i := range model.DB.Data.Tasks {
+			if model.DB.Data.Tasks[i].ID == id {
+				model.DB.Data.Tasks[i].Deleted = true
 			}
 		}
 	}
@@ -64,43 +89,23 @@ func CompleteTask(ids []int) {
 }
 
 // AddTask called by parser
-func AddTask(
-	content string,
-	importance bool,
-	assignTags []string,
-	due *time.Time,
-	loop string) (taskID int, err error) {
+func AddTask(content string) (taskID int) {
 	newTask := model.Task{
-		ID:        model.DB.Data.TaskAutoIncVal,
-		Content:   content,
-		Important: importance,
+		ID:      model.DB.Data.TaskAutoIncVal,
+		Content: content,
 	}
-	if due != nil {
-		newTask.Due = *due
-	}
-
 	model.DB.Data.Tasks = append(model.DB.Data.Tasks, newTask)
 	model.DB.Data.TaskAutoIncVal--
-
-	err = AddTaskTags(newTask.ID, assignTags)
-	return newTask.ID, err
+	return newTask.ID
 }
 
 // UpdateTask called by parser
-func UpdateTask(
-	id int,
-	content string,
-	importance bool,
-	assignTags, unasssignTags []string,
-	due *time.Time) error {
-	for _, task := range model.DB.Data.Tasks {
-		if task.ID == id {
-			task.Content = content
-			task.Important = importance
-			AddTaskTags(task.ID, assignTags)
-			DeleteTaskTags(task.ID, unasssignTags)
-			task.Due = *due
+func UpdateTask(updateTask model.Task) error {
+	for i := range model.DB.Data.Tasks {
+		if model.DB.Data.Tasks[i].ID == updateTask.ID {
+			model.DB.Data.Tasks[i] = updateTask
+			return nil
 		}
 	}
-	return nil
+	return errors.New("Not found the task tobe updated")
 }

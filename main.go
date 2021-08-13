@@ -7,6 +7,7 @@ import (
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/parser"
+	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
 func main() {
@@ -16,19 +17,21 @@ func main() {
 	if err := model.Begin(); err != nil {
 		panic(err)
 	}
+
 	// Restore the args to origin command string
-	for i, arg := range os.Args[1:] {
-		if len(strings.Split(arg, " ")) > 1 {
-			os.Args[i] = fmt.Sprintf("`%s`", arg)
+	// varMap := make(map[string]string, 0)
+	for i := 1; i < len(os.Args); i++ {
+		if utils.ContainChinese(os.Args[i]) || len(strings.Split(os.Args[i], " ")) > 1 {
+			os.Args[i] = fmt.Sprintf("`%s`", os.Args[i])
 		}
 	}
 	cmd := strings.Join(os.Args[1:], " ")
-	// fmt.Println("[INFO]: ", cmd)
+
 	// Parse command string to an AST
 	result := parser.Parse(cmd)
-	// fmt.Println("[INFO]: parse command string successfully")
+
 	// Execute the AST
-	if err := result.Execute(); err != nil {
+	if err := result.Execute(cmd); err != nil {
 		model.RollBack()
 	} else {
 		if err := model.Commit(); err != nil {

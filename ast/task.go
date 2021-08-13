@@ -3,7 +3,6 @@ package ast
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
@@ -14,17 +13,45 @@ import (
 // Task List
 // ============================
 
+// list type
+const (
+	ListAll = iota + 0
+	ListTodo
+	ListDone
+	ListDeleted
+)
+
 // TaskListNode include task list filter
 type TaskListNode struct {
 	taskListFilterNode *TaskListFilterNode
+	listType           int
 }
 
 // NewTaskListNode return TaskListNode
-func NewTaskListNode(tlfn *TaskListFilterNode) *TaskListNode {
-	return &TaskListNode{tlfn}
+func NewTaskListNode(tlfn *TaskListFilterNode, listType int) *TaskListNode {
+	return &TaskListNode{tlfn, listType}
 }
 
-func (tln *TaskListNode) execute() { tln.taskListFilterNode.execute() }
+func (tln *TaskListNode) execute() {
+	switch tln.listType {
+	case ListAll:
+		todo, done, deleted := controller.ListAllTasks()
+		render.Tasks(tln.taskListFilterNode.filter(todo), "Todo")
+		render.Tasks(tln.taskListFilterNode.filter(done), "Done")
+		render.Tasks(tln.taskListFilterNode.filter(deleted), "Deleted")
+	case ListTodo:
+		todo := controller.ListTodoTasks()
+		render.Tasks(tln.taskListFilterNode.filter(todo), "Todo")
+	case ListDone:
+		done := controller.ListDoneTasks()
+		render.Tasks(tln.taskListFilterNode.filter(done), "Done")
+	case ListDeleted:
+		deleted := controller.ListDeletedTasks()
+		render.Tasks(tln.taskListFilterNode.filter(deleted), "Deleted")
+	}
+
+}
+
 func (tln *TaskListNode) explain() string {
 	return "todo list " + tln.taskListFilterNode.explain()
 }
@@ -42,18 +69,20 @@ func NewTaskListFilterNode(
 	return &TaskListFilterNode{idGroup, itlf}
 }
 
-func (tlfn *TaskListFilterNode) execute() {
+func (tlfn *TaskListFilterNode) filter(tasks []model.Task) (result []model.Task) {
 	if tlfn.idGroup != nil {
-		tasks, warnList := controller.FindTasksByIDGroup(tlfn.idGroup.idGroup)
-		render.Tasks(tasks)
-		warnList = append(warnList, warnList...)
-		return
+		for _, id := range tlfn.idGroup.ids {
+			for _, task := range tasks {
+				if id == task.ID {
+					result = append(result, task)
+				}
+			}
+		}
+		return result
 	} else if tlfn.indefiniteTaskListFilter != nil {
-		tlfn.indefiniteTaskListFilter.execute()
+		return tlfn.indefiniteTaskListFilter.filter(tasks)
 	} else {
-		tasks := controller.ListTasks()
-		WarnList = append(WarnList, render.Tasks(tasks)...)
-		return
+		return tasks
 	}
 }
 
@@ -74,7 +103,7 @@ func (tlfn *TaskListFilterNode) explain() string {
 
 // IndefiniteTaskListFilterNode include content assignGroup age due
 type IndefiniteTaskListFilterNode struct {
-	importance   bool
+	importance   int
 	contentGroup *ContentGroupNode
 	assignGroup  *AssignGroupNode
 	age          *TimeFilterNode
@@ -86,13 +115,13 @@ func NewIndefiniteTaskListFilterNode() *IndefiniteTaskListFilterNode {
 	return &IndefiniteTaskListFilterNode{}
 }
 
-func (itlfn *IndefiniteTaskListFilterNode) execute() {
-	tasks := controller.ListTasks()
-	tasks = itlfn.contentGroup.filter(tasks)
+func (itlfn *IndefiniteTaskListFilterNode) filter(tasks []model.Task) []model.Task {
+	// tasks := controller.ListTodoTasks()
+	tasks, _ = itlfn.contentGroup.filter(tasks)
 	tasks = itlfn.assignGroup.filter(tasks)
 	tasks = itlfn.age.filter(tasks)
 	tasks = itlfn.due.filter(tasks)
-	render.Tasks(tasks)
+	return tasks
 }
 func (itlfn *IndefiniteTaskListFilterNode) explain() string {
 	result := ""
@@ -121,7 +150,7 @@ func (itlfn *IndefiniteTaskListFilterNode) explain() string {
 
 // SetImportance for TaskUpdateOptionNode
 func (itlfn *IndefiniteTaskListFilterNode) SetImportance(importance int) *IndefiniteTaskListFilterNode {
-	itlfn.importance = (importance > 0)
+	itlfn.importance = importance
 	return itlfn
 }
 
@@ -184,21 +213,13 @@ func NewTaskAddNode(c string, opt *TaskAddOptionNode) *TaskAddNode {
 }
 
 func (tan *TaskAddNode) execute() {
-	importance, assignTags, due, loop := tan.option.apply()
-	taskID, err := controller.AddTask(
-		tan.content,
-		importance, assignTags, due, loop,
-	)
-	if err != nil {
-		ErrorList = append(ErrorList, err)
-		return
-	}
+	taskID := controller.AddTask(tan.content)
 	task, ok := controller.FindTaskByID(taskID)
 	if !ok {
 		ErrorList = append(ErrorList, errors.New("Added task is not found"))
 		return
 	}
-	render.Tasks([]model.Task{task})
+	tan.option.apply(task)
 
 }
 func (tan *TaskAddNode) explain() string {
@@ -214,23 +235,21 @@ func (tan *TaskAddNode) explain() string {
 
 // TaskAddOptionNode include add options
 type TaskAddOptionNode struct {
-	importance      bool
+	importance      int
 	assignGroupNode *AssignGroupNode
 	due             *TimeFilterNode
 }
 
 // NewTaskAddOptionNode return *TaskAddOptionNode
 func NewTaskAddOptionNode() *TaskAddOptionNode {
-	return &TaskAddOptionNode{}
+	return &TaskAddOptionNode{importance: -1}
 }
 
 func (taon *TaskAddOptionNode) explain() string {
 	result := ""
 	fmt.Println("\tset importance: ", taon.importance)
-	if taon.importance {
-		result += "!1 "
-	} else {
-		result += "!0 "
+	if taon.importance >= 0 {
+		result += fmt.Sprintf("!%d ", taon.importance)
 	}
 	if taon.assignGroupNode != nil {
 		fmt.Print("\t")
@@ -245,21 +264,26 @@ func (taon *TaskAddOptionNode) explain() string {
 	return result
 }
 
-func (taon *TaskAddOptionNode) apply() (
-	importance bool, assignTags []string, due *time.Time, loop string) {
-	importance, assignTags, due, loop = taon.importance, []string{}, nil, ""
+func (taon *TaskAddOptionNode) apply(task model.Task) {
 	if taon.assignGroupNode != nil {
-		assignTags = taon.assignGroupNode.assignTags
+		assignTags := taon.assignGroupNode.assignTags
+		if err := controller.AddTaskTags(task.ID, assignTags); err != nil {
+			ErrorList = append(ErrorList, err)
+		}
 	}
+	task.Important = taon.importance
 	if taon.due != nil {
-		due = taon.due.startTime.time
+		task.Due = *taon.due.startTime.time
 	}
-	return
+	if err := controller.UpdateTask(task); err != nil {
+		ErrorList = append(ErrorList, err)
+	}
+	render.Tasks([]model.Task{task}, "Add")
 }
 
 // SetImportance for TaskAddOptionNode
 func (taon *TaskAddOptionNode) SetImportance(importance int) *TaskAddOptionNode {
-	taon.importance = (importance > 0)
+	taon.importance = importance
 	return taon
 }
 
@@ -273,6 +297,130 @@ func (taon *TaskAddOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) *Tas
 func (taon *TaskAddOptionNode) SetDue(due *TimeFilterNode) *TaskAddOptionNode {
 	taon.due = due
 	return taon
+}
+
+// ============================
+// Task Update
+// ============================
+
+// TaskUpdateNode is node for task update
+type TaskUpdateNode struct {
+	id     int
+	option TaskUpdateOptionNode
+}
+
+// NewTaskUpdateNode return TaskUpdateNode
+func NewTaskUpdateNode(id int, tuon *TaskUpdateOptionNode) *TaskUpdateNode {
+	return &TaskUpdateNode{id, *tuon}
+}
+
+func (tun *TaskUpdateNode) explain() string {
+	result := fmt.Sprintf("task set %d ", tun.id)
+	fmt.Printf("Update task:%d ", tun.id)
+	result += tun.option.explain()
+	return result
+}
+
+// Execute complete task logic
+func (tun *TaskUpdateNode) execute() {
+	fmt.Println(tun.id)
+	task, ok := controller.FindTaskByID(tun.id)
+	if !ok {
+		ErrorList = append(ErrorList, errors.New("Updated task is not found"))
+		return
+	}
+	tun.option.apply(task)
+}
+
+// ============================
+// Task Update Filter
+// ============================
+
+// TaskUpdateOptionNode is node for task update option
+type TaskUpdateOptionNode struct {
+	content         string
+	importance      int
+	assignGroupNode *AssignGroupNode
+	due             *TimeNode
+}
+
+// NewTaskUpdateOptionNode return *TaskUpdateOptionNode
+func NewTaskUpdateOptionNode() *TaskUpdateOptionNode {
+	return &TaskUpdateOptionNode{importance: -1}
+}
+
+func (tuon *TaskUpdateOptionNode) explain() string {
+	result := ""
+	if tuon.content != "" {
+		fmt.Printf("\tset content:%s", tuon.content)
+		result += fmt.Sprintf("`%s` ", tuon.content)
+	}
+	if len(tuon.assignGroupNode.assignTags) > 0 {
+		fmt.Printf("\tassign tags:%v for it", tuon.assignGroupNode.assignTags)
+	}
+	if len(tuon.assignGroupNode.unassignTags) > 0 {
+		fmt.Printf("\tunassign tags:%v for it", tuon.assignGroupNode.unassignTags)
+	}
+	result += tuon.assignGroupNode.explain() + " "
+
+	fmt.Println("\tset importance: ", tuon.importance)
+	if tuon.importance >= 0 {
+		result += fmt.Sprintf("!%d ", tuon.importance)
+	}
+	if tuon.due != nil {
+		fmt.Print("\twhich will due ")
+		result += tuon.due.explain()
+		fmt.Print("\n")
+	}
+	return result
+}
+
+func (tuon *TaskUpdateOptionNode) apply(task model.Task) {
+	if tuon.assignGroupNode != nil {
+		assignTags := tuon.assignGroupNode.assignTags
+		if err := controller.AddTaskTags(task.ID, assignTags); err != nil {
+			ErrorList = append(ErrorList, err)
+		}
+		unassignTags := tuon.assignGroupNode.unassignTags
+		if err := controller.DeleteTaskTags(task.ID, unassignTags); err != nil {
+			ErrorList = append(ErrorList, err)
+		}
+	}
+	if tuon.content != "" {
+		task.Content = tuon.content
+	}
+	task.Important = tuon.importance
+	if tuon.due != nil {
+		task.Due = *tuon.due.time
+	}
+	if err := controller.UpdateTask(task); err != nil {
+		ErrorList = append(ErrorList, err)
+	}
+	render.Tasks([]model.Task{task}, "Update")
+}
+
+// SetContent for TaskUpdateOptionNode
+func (tuon *TaskUpdateOptionNode) SetContent(content string) *TaskUpdateOptionNode {
+	tuon.content = content
+	return tuon
+}
+
+// SetImportance for TaskUpdateOptionNode
+func (tuon *TaskUpdateOptionNode) SetImportance(importance int) *TaskUpdateOptionNode {
+	tuon.importance = importance
+	return tuon
+}
+
+// SetAssignGroup for TaskUpdateOptionNode
+func (tuon *TaskUpdateOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) *TaskUpdateOptionNode {
+	tuon.assignGroupNode = assignGourp
+	return tuon
+}
+
+// SetDue for TaskUpdateOptionNode
+func (tuon *TaskUpdateOptionNode) SetDue(due *TimeNode) *TaskUpdateOptionNode {
+	tuon.due = due
+	return tuon
 }
 
 // ============================
@@ -292,14 +440,14 @@ func NewTaskDoneNode(ign *IDGroupNode) *TaskDoneNode {
 // Explain to statement
 func (tdn *TaskDoneNode) explain() string {
 	result := "task done "
-	fmt.Println("complete task ")
+	fmt.Println("complete/uncomplete task ")
 	result += tdn.idGroup.explain()
 	return result
 }
 
 // Execute complete task logic
 func (tdn *TaskDoneNode) execute() {
-	controller.CompleteTask(tdn.idGroup.idGroup)
+	controller.CompleteTask(tdn.idGroup.ids)
 }
 
 // ============================
@@ -324,98 +472,5 @@ func (tdn *TaskDeleteNode) explain() string {
 }
 
 func (tdn *TaskDeleteNode) execute() {
-	controller.CompleteTask(tdn.idGroup.idGroup)
-}
-
-// ============================
-// Task Update
-// ============================
-
-// TaskUpdateNode is node for task update
-type TaskUpdateNode struct {
-	id      int
-	content string
-	option  TaskUpdateOptionNode
-}
-
-// NewTaskUpdateNode return TaskUpdateNode
-func NewTaskUpdateNode(id int, content string, tuon *TaskUpdateOptionNode) *TaskUpdateNode {
-	return &TaskUpdateNode{}
-}
-
-func (tun *TaskUpdateNode) explain() string {
-	result := fmt.Sprintf("task set %d %s ", tun.id, tun.content)
-	fmt.Printf("Update task:%d to \"%s\"", tun.id, tun.content)
-	result += tun.option.explain()
-	return result
-}
-
-// Execute complete task logic
-func (tun *TaskUpdateNode) execute() {
-	controller.UpdateTask(
-		tun.id,
-		tun.content,
-		tun.option.importance,
-		tun.option.assignGroupNode.assignTags,
-		tun.option.assignGroupNode.unassignTags,
-		tun.option.due.time,
-	)
-}
-
-// ============================
-// Task Update Filter
-// ============================
-
-// TaskUpdateOptionNode is node for task update option
-type TaskUpdateOptionNode struct {
-	importance      bool
-	assignGroupNode *AssignGroupNode
-	due             *TimeNode
-}
-
-// NewTaskUpdateOptionNode return *TaskUpdateOptionNode
-func NewTaskUpdateOptionNode() *TaskUpdateOptionNode {
-	return &TaskUpdateOptionNode{}
-}
-
-func (tuon *TaskUpdateOptionNode) explain() string {
-	result := ""
-	if len(tuon.assignGroupNode.assignTags) > 0 {
-		fmt.Printf("\tassign tags:%v for it", tuon.assignGroupNode.assignTags)
-	}
-	if len(tuon.assignGroupNode.unassignTags) > 0 {
-		fmt.Printf("\tunassign tags:%v for it", tuon.assignGroupNode.unassignTags)
-	}
-	result += tuon.assignGroupNode.explain() + " "
-
-	fmt.Println("\tset importance: ", tuon.importance)
-	if tuon.importance {
-		result += "!1"
-	} else {
-		result += "!0"
-	}
-	if tuon.due != nil {
-		fmt.Print("\twhich will due ")
-		result += tuon.due.explain()
-		fmt.Print("\n")
-	}
-	return result
-}
-
-// SetImportance for TaskUpdateOptionNode
-func (tuon *TaskUpdateOptionNode) SetImportance(importance int) *TaskUpdateOptionNode {
-	tuon.importance = (importance > 0)
-	return tuon
-}
-
-// SetAssignGroup for TaskUpdateOptionNode
-func (tuon *TaskUpdateOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) *TaskUpdateOptionNode {
-	tuon.assignGroupNode = assignGourp
-	return tuon
-}
-
-// SetDue for TaskUpdateOptionNode
-func (tuon *TaskUpdateOptionNode) SetDue(due *TimeNode) *TaskUpdateOptionNode {
-	tuon.due = due
-	return tuon
+	controller.DeleteTask(tdn.idGroup.ids)
 }

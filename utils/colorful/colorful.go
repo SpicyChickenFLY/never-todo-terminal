@@ -110,15 +110,23 @@ func GetStartMark(modeStr, bColorStr, fColorStr string) string {
 	if !ok {
 		mode = ModeDefault
 	}
-	bColor, ok := backMap[bColorStr]
-	if !ok {
-		bColor = BackBlack
+	if bColorStr != "" {
+		bColor, ok := backMap[bColorStr]
+		if !ok {
+			bColor = BackBlack
+		}
+		bColorStr = fmt.Sprintf(";%d", bColor)
 	}
-	fColor, ok := frontMap[fColorStr]
-	if !ok {
-		fColor = FrontGreen
+
+	if fColorStr != "" {
+		fColor, ok := frontMap[fColorStr]
+		if !ok {
+			fColor = FrontGreen
+		}
+		fColorStr = fmt.Sprintf(";%d", fColor)
 	}
-	return fmt.Sprintf("%c[%d;%d;%dm", MARK, mode, bColor, fColor)
+
+	return fmt.Sprintf("%c[%d%s%sm", MARK, mode, bColorStr, fColorStr)
 }
 
 func GetEndMark() string {

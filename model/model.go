@@ -14,7 +14,7 @@ type Task struct {
 	Content   string    `json:"content" mapstructure:"content"`
 	Deleted   bool      `json:"deleted" mapstructure:"deleted"`
 	Completed bool      `json:"completed" mapstructure:"completed"`
-	Important bool      `json:"important" mapstructure:"important"`
+	Important int       `json:"important" mapstructure:"important"`
 	Due       time.Time `json:"due,omitempty" mapstructure:"due"`
 	Loop      string    `json:"loop,omitempty" mapstructure:"loop"`
 }

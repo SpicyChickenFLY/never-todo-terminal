@@ -6,11 +6,18 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
-// ShowTags called by parser
-func ShowTags() {}
+// ListTags with filter provided by params
+func ListTags() (tags []model.Tag) {
+	for _, tag := range model.DB.Data.Tags {
+		if !tag.Deleted {
+			tags = append(tags, tag)
+		}
+	}
+	return tags
+}
 
 // AddTag called by parser
-func AddTag(content string, color string) (int, error) {
+func AddTag(content string) (int, error) {
 	id, ok := GetTagIDByName(content)
 	if ok {
 		return id, errors.New("Tag already exists")
@@ -18,7 +25,6 @@ func AddTag(content string, color string) (int, error) {
 	newTag := model.Tag{
 		ID:      model.DB.Data.TagAutoIncVal,
 		Content: content,
-		Color:   color,
 	}
 	model.DB.Data.Tags = append(model.DB.Data.Tags, newTag)
 	model.DB.Data.TagAutoIncVal--
@@ -32,7 +38,9 @@ func DelTag(id int) error {
 }
 
 // SetTag called by parser
-func SetTag() {}
+func SetTag(tag model.Tag) {
+
+}
 
 // FindTagByID called by parser
 func FindTagByID(id int) (model.Tag, bool) {

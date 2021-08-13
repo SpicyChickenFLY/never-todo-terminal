@@ -26,6 +26,7 @@ func TestParser(t *testing.T) {
 		"todo age:2020/03/02-2021/02/03",
 		"add play ball +exercise !3",
 		"add 'del:  1 + 1 & 2 ' due:2020/04/3",
+		"add `你好`",
 		"todo add go shopping due:2015/03/12",
 		"done 1-4 20-15",
 		"del 20 2-5",

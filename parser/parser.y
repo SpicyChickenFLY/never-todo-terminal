@@ -4,6 +4,7 @@ package parser
 import (
   "fmt"
   "strconv"
+  "strings"
   "github.com/SpicyChickenFLY/never-todo-cmd/ast"
 )
 %}
@@ -24,6 +25,9 @@ import (
   taskUpdateOptionNode *ast.TaskUpdateOptionNode
   tagListNode *ast.TagListNode
   tagListFilterNode *ast.TagListFilterNode
+  tagAddNode *ast.TagAddNode
+  tagUpdateNode *ast.TagUpdateNode
+  tagDeleteNode *ast.TagDeleteNode
   idGroupNode *ast.IDGroupNode
   contentGroupNode *ast.ContentGroupNode
   assignGroupNode *ast.AssignGroupNode
@@ -38,8 +42,8 @@ import (
 %left <str> AND OR 
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
 %token <str> UI EXPLAIN LOG UNDO 
-%token <str> TASK TAG ADD DELETE SET DONE
-%token <str> AGE DUE LOOP IMPORTANCE
+%token <str> TODO TAG ADD DELETE SET DONE
+%token <str> AGE DUE LOOP IMPORTANCE COLOR
 %token <str> HELP
 
 %type <root> root
@@ -48,14 +52,17 @@ import (
 %type <taskListFilterNode> task_list_filter
 %type <indefiniteTaskListFilterNode> indefinite_task_list_filter 
 %type <taskAddNode> task_add
-%type <taskAddOptionNode> task_add_option task_add_option_p1 task_add_option_p2 task_add_option_p3
+%type <taskAddOptionNode> task_add_option
 %type <taskDeleteNode> task_delete 
 %type <taskDoneNode> task_done
 %type <taskUpdateNode> task_update
-%type <taskUpdateOptionNode> task_update_option task_update_option_p1 task_update_option_p2 task_update_option_p3
+%type <taskUpdateOptionNode> task_update_option
 %type <tagListNode> tag_list
 %type <tagListFilterNode> tag_list_filter
-%type <num> id 
+%type <tagAddNode> tag_add
+%type <tagUpdateNode> tag_update
+%type <tagDeleteNode> tag_delete
+%type <num> id importance
 %type <idGroupNode> id_group
 %type <str> content definite_content indefinite_content 
 %type <contentGroupNode> content_group content_logic_p3 content_logic_p2 content_logic_p1
@@ -63,15 +70,13 @@ import (
 %type <str> assign_tag unassign_tag
 %type <timeFilterNode> time_filter
 %type <timeNode> time
-%type <num> importance
 
 %start root
 
 %%
 
 root:
-      { ast.Result = ast.NewRootNode(ast.CMDSummary, nil) }
-    | UI { ast.Result = ast.NewRootNode(ast.CMDUI, nil) }
+      UI { ast.Result = ast.NewRootNode(ast.CMDUI, nil) }
     | EXPLAIN stmt { ast.Result = ast.NewRootNode(ast.CMDExplain, $2) }
     | stmt { ast.Result = ast.NewRootNode(ast.CMDStmt, $1) }
     | help { ast.Result = ast.NewRootNode(ast.CMDHelp, nil) }
@@ -86,30 +91,23 @@ stmt:
     | task_update { $$ = $1 }
     | task_done { $$ = $1 }
     | tag_list { $$ = $1 }
-    | tag_add {}
-    | tag_set {}
+    | tag_add { $$ = $1 }
+    | tag_delete { $$ = $1 }
+    | tag_update { $$ = $1}
     ;
 
 
 // ========== HELP =============
 help:
       HELP {}
-    | task_help {}
-    | tag_help {}
-    ;
-
-task_help:
-      TASK HELP {}
     | task_list HELP {}
     | task_add HELP {}
     | task_delete HELP {}
     | task_update HELP {}
-    ;
-
-tag_help:
-      TAG HELP {}
     | tag_list HELP {}
-    | tag_set HELP  {}
+    | tag_add HELP {}
+    | tag_delete HELP {}
+    | tag_update HELP  {}
     ;
 
 // ========== LOG =============
@@ -125,15 +123,15 @@ undo_log:
 
 // ========== TASK COMMAND ==============
 task_list:
-      TASK task_list_filter { $$ = ast.NewTaskListNode($2) }
-    | task_list_filter { $$ = ast.NewTaskListNode($1) }
+      task_list_filter { $$ = ast.NewTaskListNode($1, ast.ListAll) } 
+    | TODO task_list_filter { $$ = ast.NewTaskListNode($2, ast.ListTodo) }
+    | DONE task_list_filter { $$ = ast.NewTaskListNode($2, ast.ListDone) }
+    | DELETE task_list_filter { $$ = ast.NewTaskListNode($2, ast.ListDeleted) }
     ;
 
 task_add:
-      TASK ADD indefinite_content task_add_option { $$ = ast.NewTaskAddNode($3, $4) }
-    | ADD indefinite_content task_add_option { $$ = ast.NewTaskAddNode($2, $3) }
-    | TASK ADD definite_content task_add_option { $$ = ast.NewTaskAddNode($3, $4) }
-    | ADD definite_content task_add_option { $$ = ast.NewTaskAddNode($2, $3) }
+      ADD content task_add_option { $$ = ast.NewTaskAddNode($2, $3) }
+    | TODO ADD content task_add_option { $$ = ast.NewTaskAddNode($3, $4) }
     ;
 
 task_done:
@@ -142,18 +140,16 @@ task_done:
     ;
 
 task_delete:
-      TASK DELETE id_group {$$ = ast.NewTaskDeleteNode($3)}
-    | DELETE id_group {$$ = ast.NewTaskDeleteNode($2)}
+      DELETE id_group {$$ = ast.NewTaskDeleteNode($2)}
     | id_group DELETE {$$ = ast.NewTaskDeleteNode($1)}
+    | TODO DELETE id_group {$$ = ast.NewTaskDeleteNode($3)}
     ;
 
 task_update:
-      TASK SET id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($3, $4, $5) }
-    | SET id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
-    | TASK id SET definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $4, $5) }
-    | id SET definite_content task_update_option { $$ = ast.NewTaskUpdateNode($1, $3, $4) }
-    | TASK id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($2, $3, $4) }
-    | id definite_content task_update_option { $$ = ast.NewTaskUpdateNode($1, $2, $3) }
+      SET id task_update_option { $$ = ast.NewTaskUpdateNode($2, $3) }
+    | TODO id SET task_update_option { $$ = ast.NewTaskUpdateNode($2, $4) }
+    | TODO SET id task_update_option { $$ = ast.NewTaskUpdateNode($3, $4) }
+    | id SET task_update_option { $$ = ast.NewTaskUpdateNode($1, $3) }
     ;
 
 // ========== TASK LIST FILTER =============
@@ -180,25 +176,13 @@ indefinite_task_list_filter:
 // ========== TASK ADD OPTION =============
 
 task_add_option:
-      task_add_option_p3 { $$ = $1 }
+      { $$ = ast.NewTaskAddOptionNode() }
     | positive_assign_group task_add_option { $$ = $2.SetAssignGroup($1) }
     | task_add_option positive_assign_group { $$ = $1.SetAssignGroup($2) }
-    ;
-
-task_add_option_p3:
-      task_add_option_p2 { $$ = $1 }
-    | task_add_option_p2 importance { $$ = $1.SetImportance($2) }
-    | importance task_add_option_p2 { $$ = $2.SetImportance($1) }
-    ;
-
-task_add_option_p2:
-      task_add_option_p1 { $$ = $1 }
-    | task_add_option_p1 DUE time_filter { $$ = $1.SetDue($3) }
-    | DUE time_filter task_add_option_p1 { $$ = $3.SetDue($2) }
-    ;
-
-task_add_option_p1:
-      { $$ = ast.NewTaskAddOptionNode() }
+    | task_add_option importance { $$ = $1.SetImportance($2) }
+    | importance task_add_option { $$ = $2.SetImportance($1) }
+    | task_add_option DUE time_filter { $$ = $1.SetDue($3) }
+    | DUE time_filter task_add_option { $$ = $3.SetDue($2) }    
     /* | LOOP loop_time {} */
     ;
 
@@ -206,26 +190,15 @@ task_add_option_p1:
 // ========== TASK UPDATE OPTION =============
 
 task_update_option:
-      task_update_option_p3 { $$ = $1}
+      { $$ = ast.NewTaskUpdateOptionNode() }
+    | content task_update_option { $$ = $2.SetContent($1) }
+    | task_update_option content { $$ = $1.SetContent($2) }
     | assign_group task_update_option { $$ = $2.SetAssignGroup($1) }
     | task_update_option assign_group { $$ = $1.SetAssignGroup($2) }
-    ;
-
-task_update_option_p3:
-      task_update_option_p2 { $$ = $1 }
-    | task_update_option_p2 importance { $$ = $1.SetImportance($2) }
-    | importance task_update_option_p2 { $$ = $2.SetImportance($1) }
-    ;
-
-task_update_option_p2: 
-      task_update_option_p1 { $$ = $1 }
-    | task_update_option_p1 DUE time { $$ = $1.SetDue($3) }
-    | DUE time task_update_option_p1 { $$ = $3.SetDue($2) }
-    ;
-
-task_update_option_p1:
-      { $$ = ast.NewTaskUpdateOptionNode() }
-    /*| LOOP COLON loop_time {} */
+    | task_update_option importance { $$ = $1.SetImportance($2) }
+    | importance task_update_option { $$ = $2.SetImportance($1) }
+    | task_update_option DUE time { $$ = $1.SetDue($3) }
+    | DUE time task_update_option { $$ = $3.SetDue($2) }
     ;
 
 // ========== TAG COMMAND =============
@@ -235,19 +208,27 @@ tag_list:
     ;
 
 tag_add:
-      TAG ADD IDENT {  }
+      TAG ADD content { $$ = ast.NewTagAddNode($3, "") }
+    | TAG ADD content COLOR { $$ = ast.NewTagAddNode($3, $4) }
     ;
 
-tag_set:
-      TAG SET id IDENT {  }
+tag_delete:
+      TAG DELETE id_group { $$ = ast.NewTagDeleteNode() }
+
+tag_update:
+      TAG SET id content { $$ = ast.NewTagUpdateNode() }
+    | TAG SET id COLOR { $$ = ast.NewTagUpdateNode() }
+    | TAG SET id content COLOR { $$ = ast.NewTagUpdateNode() }
     ;
 
 // ========== TAG FILTER =============
 tag_list_filter:
       { $$ = ast.NewTagListFilterNode(nil, "") }
     | id_group { $$ = ast.NewTagListFilterNode($1, "") }
-    | IDENT { $$ = ast.NewTagListFilterNode(nil, $1) }
+    | content { $$ = ast.NewTagListFilterNode(nil, $1) }
     ;
+
+// ========== TAG OPTION =============
 
 // ========== UTILS =============
 id_group:
@@ -263,8 +244,6 @@ id:
 
 content_group:
       content_logic_p3 { $$ = $1 }
-    | NOT content_logic_p3 { $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2}) }
-    | indefinite_content { $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) }
     ;
 
 content_logic_p3:
@@ -285,18 +264,18 @@ content_logic_p1:
 
 content:
       definite_content { $$ = $1 }
-    | indefinite_content { $$ = $1 }
+    | indefinite_content { $$ = strings.Trim($1, " ")}
     ;
 
 definite_content:
-      SETENCE { $$ = $1 }
+      SETENCE { $$ = ast.SearchVarMap($1) }
     ;
 
 indefinite_content:
       { $$ = "" }
     | indefinite_content NUM  { $$ = $1 + " " + fmt.Sprint($2) }
     | indefinite_content IDENT {$$ = $1 + " " + $2}
-    | indefinite_content TASK { $$ = $1 + " " + $2 }
+    | indefinite_content TODO { $$ = $1 + " " + $2 }
     | indefinite_content TAG { $$ = $1 + " " + $2 }
     | indefinite_content ADD { $$ = $1 + " " + $2 }
     | indefinite_content DELETE { $$ = $1 + " " + $2 }
@@ -318,11 +297,11 @@ positive_assign_group:
     ;
 
 assign_tag: 
-      PLUS IDENT  { $$ = $2 } 
+      PLUS content  { $$ = $2 } 
     ;
 
 unassign_tag: 
-      MINUS IDENT  { $$ = $2 } 
+      MINUS content  { $$ = $2 } 
     ;
 
 time_filter:

@@ -1,8 +1,19 @@
 package utils
 
-// func ContainStr(sentence, word string) bool {
-// 	sentence =
-// }
+import (
+	"regexp"
+	"strings"
+	"unicode"
+)
+
+func ContainStr(sentence, word string) bool {
+	sentence = strings.ToLower(sentence)
+	word = strings.ToLower(word)
+	reg := regexp.MustCompile("\\s+")
+	sentence = reg.ReplaceAllString(sentence, "")
+	word = reg.ReplaceAllString(word, "")
+	return strings.Contains(sentence, word)
+}
 
 func MinDistance(word1 string, word2 string) int {
 	dp := make([][]int, len(word1)+1)
@@ -35,4 +46,15 @@ func min(x int, y int, z int) int {
 		x = z
 	}
 	return x
+}
+
+func ContainChinese(str string) bool {
+	for _, r := range str {
+		if unicode.Is(unicode.Scripts["Han"], r) ||
+			(regexp.MustCompile(
+				"[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b]").MatchString(string(r))) {
+			return true
+		}
+	}
+	return false
 }
