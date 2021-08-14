@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
@@ -75,36 +76,132 @@ func NewTagAddNode(content, color string) *TagAddNode {
 	return &TagAddNode{content, color}
 }
 
-func (tln *TagAddNode) execute() {
-	tagID, err := controller.AddTag(tln.content)
+func (tan *TagAddNode) execute() {
+	tagID, err := controller.AddTag(tan.content)
 	if err != nil {
 		ErrorList = append(ErrorList, err)
 	}
 	tag, ok := controller.FindTagByID(tagID)
 	if !ok {
+		WarnList = append(WarnList, fmt.Sprintf("Task(%d) Not Found", tagID))
 	}
 	controller.SetTag(tag)
 	render.Tags([]model.Tag{tag})
 }
-func (tln *TagAddNode) explain() string {
-
+func (tan *TagAddNode) explain() string {
+	result := "tag add "
+	fmt.Println("Add new tag")
+	fmt.Printf("\twith content `%s`\n", tan.content)
+	result += fmt.Sprintf("`%s` ", tan.content)
+	if tan.color != "" {
+		fmt.Printf("\twith color `%s`\n", tan.color)
+		result += fmt.Sprintf("#%s ", tan.color)
+	}
+	return result
 }
 
-// TagUpdatedNode include tag list filter
-type TagUpdatedNode struct {
-	id      int
+// TagUpdateNode include tag list filter
+type TagUpdateNode struct {
+	id     int
+	option *TagUpdateOptionNode
+}
+
+// NewTagUpdateNode return *TagUpdateNode
+func NewTagUpdateNode(id int, tuon *TagUpdateOptionNode) *TagUpdateNode {
+	return &TagUpdateNode{id, tuon}
+}
+
+func (tun *TagUpdateNode) execute() {
+	fmt.Println(tun.id)
+	tag, ok := controller.FindTagByID(tun.id)
+	if !ok {
+		ErrorList = append(ErrorList, errors.New("updated tag is not found"))
+		return
+	}
+	tun.option.apply(tag)
+
+}
+func (tun *TagUpdateNode) explain() string {
+	result := fmt.Sprintf("tag set %d ", tun.id)
+	fmt.Printf("Update tag:%d ", tun.id)
+	result += tun.option.explain()
+	return result
+}
+
+// ============================
+// Tag Update Option
+// ============================
+
+// TagUpdateOptionNode is node for tag update option
+type TagUpdateOptionNode struct {
 	content string
 	color   string
 }
 
-// NewTagUpdatedNode return *TagUpdatedNode
-func NewTagUpdatedNode(id int, content, color string) *TagUpdatedNode {
-	return &TagUpdatedNode{id, content, color}
+// NewTagUpdateOptionNode return *TagUpdateOptionNode
+func NewTagUpdateOptionNode() *TagUpdateOptionNode {
+	return &TagUpdateOptionNode{}
 }
 
-func (tln *TagUpdatedNode) execute() {
-
+func (tuon *TagUpdateOptionNode) explain() string {
+	result := ""
+	if tuon.content != "" {
+		fmt.Printf("\tset content:%s", tuon.content)
+		result += fmt.Sprintf("`%s` ", tuon.content)
+	}
+	if tuon.content != "" {
+		fmt.Printf("\tset color:%s", tuon.color)
+		result += fmt.Sprintf("`%s` ", tuon.color)
+	}
+	return result
 }
-func (tln *TagUpdatedNode) explain() string {
 
+func (tuon *TagUpdateOptionNode) apply(tag model.Tag) {
+	if tuon.content != "" {
+		tag.Content = tuon.content
+	}
+	if tuon.color != "" {
+		tag.Color = tuon.color
+	}
+	if err := controller.UpdateTag(tag); err != nil {
+		ErrorList = append(ErrorList, err)
+	}
+	render.Tags([]model.Tag{tag})
+}
+
+// SetContent for TagUpdateOptionNode
+func (tuon *TagUpdateOptionNode) SetContent(content string) *TagUpdateOptionNode {
+	tuon.content = content
+	return tuon
+}
+
+// SetColor for TagUpdateOptionNode
+func (tuon *TagUpdateOptionNode) SetColor(color string) *TagUpdateOptionNode {
+	tuon.color = color
+	return tuon
+}
+
+// ============================
+// Tag Delete
+// ============================
+
+// TagDeleteNode is node for delete tag
+type TagDeleteNode struct {
+	idGroup IDGroupNode
+}
+
+// NewTagDeleteNode return TagDeleteNode
+func NewTagDeleteNode(ign *IDGroupNode) *TagDeleteNode {
+	return &TagDeleteNode{*ign}
+}
+
+func (tdn *TagDeleteNode) explain() string {
+	result := "tag del "
+	fmt.Println("delete tag ")
+	result += tdn.idGroup.explain()
+	return result
+}
+
+func (tdn *TagDeleteNode) execute() {
+	controller.DeleteTags(tdn.idGroup.ids)
 }

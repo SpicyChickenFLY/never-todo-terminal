@@ -216,7 +216,7 @@ func (tan *TaskAddNode) execute() {
 	taskID := controller.AddTask(tan.content)
 	task, ok := controller.FindTaskByID(taskID)
 	if !ok {
-		ErrorList = append(ErrorList, errors.New("Added task is not found"))
+		ErrorList = append(ErrorList, errors.New("ddded task is not found"))
 		return
 	}
 	tan.option.apply(task)
@@ -326,14 +326,14 @@ func (tun *TaskUpdateNode) execute() {
 	fmt.Println(tun.id)
 	task, ok := controller.FindTaskByID(tun.id)
 	if !ok {
-		ErrorList = append(ErrorList, errors.New("Updated task is not found"))
+		ErrorList = append(ErrorList, errors.New("updated task is not found"))
 		return
 	}
 	tun.option.apply(task)
 }
 
 // ============================
-// Task Update Filter
+// Task Update Option
 // ============================
 
 // TaskUpdateOptionNode is node for task update option

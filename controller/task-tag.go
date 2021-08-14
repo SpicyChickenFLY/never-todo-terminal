@@ -11,7 +11,7 @@ func FindTagsByTask(taskID int) (tags []model.Tag, warnList []string) {
 		if taskTag.TaskID == taskID {
 			tag, ok := FindTagByID(taskTag.TagID)
 			if !ok {
-				warnList = append(warnList, fmt.Sprintf("查询到无效的链接:%d, %d", taskTag.TaskID, taskTag.TagID))
+				warnList = append(warnList, fmt.Sprintf("TaskTag(%d, %d) not Found", taskTag.TaskID, taskTag.TagID))
 			}
 			tags = append(tags, tag)
 		}
@@ -25,7 +25,7 @@ func AddTaskTags(taskID int, assignTags []string) (err error) {
 		var tagID int
 		tagID, ok := GetTagIDByName(assignTag)
 		if !ok {
-			tagID, err = AddTag(assignTag, "#AAAAAA")
+			tagID, err = AddTag(assignTag)
 			if err != nil {
 				return err
 			}

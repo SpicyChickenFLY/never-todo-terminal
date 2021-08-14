@@ -59,7 +59,7 @@ func FindTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
 		if ok {
 			tasks = append(tasks, task)
 		} else {
-			warnList = append(warnList, fmt.Sprintf("task(id:%d) not found", id))
+			warnList = append(warnList, fmt.Sprintf("Task(id:%d) not found", id))
 		}
 	}
 	return tasks, warnList
@@ -107,5 +107,5 @@ func UpdateTask(updateTask model.Task) error {
 			return nil
 		}
 	}
-	return errors.New("Not found the task tobe updated")
+	return errors.New("not found the task to be updated")
 }

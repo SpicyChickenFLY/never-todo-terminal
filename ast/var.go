@@ -257,7 +257,7 @@ func (agn *AssignGroupNode) filter(tasks []model.Task) (result []model.Task) {
 	for _, tag := range agn.assignTags {
 		tagID, ok := controller.GetTagIDByName(tag)
 		if !ok {
-			ErrorList = append(ErrorList, errors.New("Got inexist tag while finding tasks"))
+			ErrorList = append(ErrorList, errors.New("got inexist tag while finding tasks"))
 		} else {
 			realTagIDs = append(realTagIDs, tagID)
 		}
@@ -268,7 +268,7 @@ func (agn *AssignGroupNode) filter(tasks []model.Task) (result []model.Task) {
 			result = append(result, task)
 		}
 	}
-	return tasks
+	return
 }
 
 func (agn *AssignGroupNode) sortTags() {

@@ -20,11 +20,12 @@ func ListTags() (tags []model.Tag) {
 func AddTag(content string) (int, error) {
 	id, ok := GetTagIDByName(content)
 	if ok {
-		return id, errors.New("Tag already exists")
+		return id, errors.New("tag already exists")
 	}
 	newTag := model.Tag{
 		ID:      model.DB.Data.TagAutoIncVal,
 		Content: content,
+		Color:   "white",
 	}
 	model.DB.Data.Tags = append(model.DB.Data.Tags, newTag)
 	model.DB.Data.TagAutoIncVal--
@@ -32,9 +33,27 @@ func AddTag(content string) (int, error) {
 	return newTag.ID, nil
 }
 
-// DelTag called by parser
-func DelTag(id int) error {
-	return nil
+// UpdateTag called by parser
+func UpdateTag(updateTag model.Tag) error {
+	for i := range model.DB.Data.Tags {
+		if model.DB.Data.Tags[i].ID == updateTag.ID {
+			model.DB.Data.Tags[i] = updateTag
+			return nil
+		}
+	}
+	return errors.New("not found the tag to be updated")
+}
+
+// DeleteTags called by parser
+func DeleteTags(ids []int) {
+	// delete tag
+	for _, id := range ids {
+		for i := range model.DB.Data.Tags {
+			if model.DB.Data.Tags[i].ID == id {
+				model.DB.Data.Tags[i].Deleted = true
+			}
+		}
+	}
 }
 
 // SetTag called by parser

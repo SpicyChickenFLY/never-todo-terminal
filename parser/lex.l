@@ -57,7 +57,6 @@ func (y *yylexer) Lex(lval *yySymType) int {
 %yyn c = y.getc()
 
 variable @{digit}
-color #{identifier}
 setence     \"[^"]*\"|'[^']*'|`[^`]*`
 letter      [_a-zA-Z]
 identifier  {letter}({letter}|{digit})*
@@ -123,22 +122,19 @@ importance  ![0-9]
 "del"|"delete"|"remove" 
     lval.str = string(y.buf)
     return DELETE
-"set"|"edit"|"update" 
-    lval.str = string(y.buf)
-    return SET
 "done"|"complete" 
     lval.str = string(y.buf)
     return DONE
 
 "age:" 
-    lval.str = string(y.buf)
     return AGE
 "due:" 
-    lval.str = string(y.buf)
     return DUE
 "loop:" 
-    lval.str = string(y.buf)
     return LOOP
+
+"color:"
+    return COLOR
 
 {date}
     lval.str = string(y.buf)
@@ -170,9 +166,7 @@ importance  ![0-9]
     lval.str = string(y.buf[1:])
     return IMPORTANCE
 
-{color}
-    lval.str = string(y.buf[1:])
-    return COLOR
+
 
 %%
     y.empty = true

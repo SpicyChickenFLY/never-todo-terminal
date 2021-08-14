@@ -42,7 +42,7 @@ import (
 %left <str> AND OR 
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
 %token <str> UI EXPLAIN LOG UNDO 
-%token <str> TODO TAG ADD DELETE SET DONE
+%token <str> TODO TAG ADD DELETE DONE
 %token <str> AGE DUE LOOP IMPORTANCE COLOR
 %token <str> HELP
 
@@ -64,7 +64,7 @@ import (
 %type <tagDeleteNode> tag_delete
 %type <num> id importance
 %type <idGroupNode> id_group
-%type <str> content definite_content indefinite_content 
+%type <str> content definite_content indefinite_content color
 %type <contentGroupNode> content_group content_logic_p3 content_logic_p2 content_logic_p1
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
@@ -146,10 +146,7 @@ task_delete:
     ;
 
 task_update:
-      SET id task_update_option { $$ = ast.NewTaskUpdateNode($2, $3) }
-    | TODO id SET task_update_option { $$ = ast.NewTaskUpdateNode($2, $4) }
-    | TODO SET id task_update_option { $$ = ast.NewTaskUpdateNode($3, $4) }
-    | id SET task_update_option { $$ = ast.NewTaskUpdateNode($1, $3) }
+      id task_update_option {$$ = ast.NewTaskUpdateNode($1, $2)}
     ;
 
 // ========== TASK LIST FILTER =============
@@ -209,16 +206,17 @@ tag_list:
 
 tag_add:
       TAG ADD content { $$ = ast.NewTagAddNode($3, "") }
-    | TAG ADD content COLOR { $$ = ast.NewTagAddNode($3, $4) }
+    | TAG ADD content color { $$ = ast.NewTagAddNode($3, $4) }
     ;
 
 tag_delete:
-      TAG DELETE id_group { $$ = ast.NewTagDeleteNode() }
+      TAG DELETE id_group { $$ = ast.NewTagDeleteNode($3) }
+    ;
 
 tag_update:
-      TAG SET id content { $$ = ast.NewTagUpdateNode() }
-    | TAG SET id COLOR { $$ = ast.NewTagUpdateNode() }
-    | TAG SET id content COLOR { $$ = ast.NewTagUpdateNode() }
+      TAG id content { $$ = ast.NewTagUpdateNode($2, $3, "") }
+    | TAG id color { $$ = ast.NewTagUpdateNode($2, "", $3) }
+    | TAG id content color { $$ = ast.NewTagUpdateNode($2, $3, $4) }
     ;
 
 // ========== TAG FILTER =============
@@ -227,8 +225,6 @@ tag_list_filter:
     | id_group { $$ = ast.NewTagListFilterNode($1, "") }
     | content { $$ = ast.NewTagListFilterNode(nil, $1) }
     ;
-
-// ========== TAG OPTION =============
 
 // ========== UTILS =============
 id_group:
@@ -279,7 +275,6 @@ indefinite_content:
     | indefinite_content TAG { $$ = $1 + " " + $2 }
     | indefinite_content ADD { $$ = $1 + " " + $2 }
     | indefinite_content DELETE { $$ = $1 + " " + $2 }
-    | indefinite_content SET { $$ = $1 + " " + $2 }
     | indefinite_content DONE { $$ = $1 + " " + $2 }
     | indefinite_content DATE { $$ = $1 + " " + $2 }
     | indefinite_content TIME { $$ = $1 + " " + $2 }
@@ -317,6 +312,10 @@ time:
 
 importance:
       IMPORTANCE { $$, _ = strconv.Atoi($1) }
+    ;
+
+color:
+      COLOR content { $$ = $2 }
     ;
 
 /* loop_time:
