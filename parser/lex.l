@@ -4,8 +4,9 @@ package parser
 import (
     "fmt"
     "bufio"
-    "log"
     "os"
+    "errors"
+    "github.com/SpicyChickenFLY/never-todo-cmd/ast"
 )
 
 var (
@@ -42,7 +43,7 @@ func (y *yylexer) getc() byte {
 }
 
 func (y yylexer) Error(e string) {
-    log.Fatal(e)
+    ast.ErrorList = append(ast.ErrorList, errors.New(e))
 }
 
 func (y *yylexer) Lex(lval *yySymType) int {

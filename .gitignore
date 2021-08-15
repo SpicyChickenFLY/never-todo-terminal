@@ -19,3 +19,5 @@ parser/parser.go
 parser/y.output
 
 build/y.output
+
+static/data.json

@@ -5,18 +5,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/parser"
 	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
 func main() {
-	if err := model.Init("./static/data.json"); err != nil {
-		panic(err)
-	}
-	if err := model.Begin(); err != nil {
-		panic(err)
-	}
 
 	// Restore the args to origin command string
 	// varMap := make(map[string]string, 0)
@@ -32,10 +25,7 @@ func main() {
 
 	// Execute the AST
 	if err := result.Execute(cmd); err != nil {
-		model.RollBack()
-	} else {
-		if err := model.Commit(); err != nil {
-			panic(err)
-		}
+		fmt.Println(err.Error())
+		return
 	}
 }

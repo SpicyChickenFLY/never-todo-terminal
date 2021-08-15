@@ -112,7 +112,6 @@ func NewTagUpdateNode(id int, tuon *TagUpdateOptionNode) *TagUpdateNode {
 }
 
 func (tun *TagUpdateNode) execute() {
-	fmt.Println(tun.id)
 	tag, ok := controller.FindTagByID(tun.id)
 	if !ok {
 		ErrorList = append(ErrorList, errors.New("updated tag is not found"))

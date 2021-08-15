@@ -41,7 +41,8 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 		warnList = append(warnList, subWarnList...)
 		tagsStr := []string{}
 		for _, tag := range tags {
-			tagsStr = append(tagsStr, tag.Content)
+			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
+			tagsStr = append(tagsStr, content)
 		}
 		row := table.Row{task.ID, contentStr, strings.Join(tagsStr, ","), dueStr, task.Loop}
 		t.AppendRow(row)
@@ -56,7 +57,8 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 func Tags(tags []model.Tag) {
 	t.AppendHeader(table.Row{"#", "Content", "Color"})
 	for _, tag := range tags {
-		row := table.Row{tag.ID, tag.Content, tag.Color}
+		color := colorful.RenderStr(tag.Color, "default", "", tag.Color)
+		row := table.Row{tag.ID, tag.Content, color}
 		t.AppendRow(row)
 	}
 	t.AppendFooter(table.Row{"", fmt.Sprint("Found ", len(tags), " tasks")})
@@ -66,24 +68,24 @@ func Tags(tags []model.Tag) {
 
 func Result(command string, errorList []error, warnList []string) {
 	for _, err := range errorList {
-		fmt.Printf("%s %s",
+		fmt.Printf("%s %s\n",
 			colorful.RenderStr("[  INFO  ]: ", "default", "", "yellow"),
 			err.Error(),
 		)
 	}
 	if len(errorList) > 0 {
 		for _, err := range errorList {
-			fmt.Printf("%s %s",
+			fmt.Printf("%s %s\n",
 				colorful.RenderStr("[ ERROR  ]: ", "default", "", "red"),
 				err.Error(),
 			)
 		}
-		fmt.Printf("%s %s",
-			colorful.RenderStr("[ FAILED ]: ", "default", "", "green"),
+		fmt.Printf("%s %s\n",
+			colorful.RenderStr("[ FAILED ]: ", "default", "", "red"),
 			command,
 		)
 	} else {
-		fmt.Printf("%s never %s",
+		fmt.Printf("%s never %s\n",
 			colorful.RenderStr("[   OK   ]: ", "default", "", "green"),
 			command,
 		)

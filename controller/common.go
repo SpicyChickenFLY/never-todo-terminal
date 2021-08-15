@@ -12,6 +12,7 @@ func ShowHelp() error {
 }
 
 func StartUI() error {
+
 	return nil
 }
 

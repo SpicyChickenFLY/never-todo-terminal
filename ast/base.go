@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/render"
 )
 
@@ -50,13 +51,27 @@ func (rn *RootNode) Execute(cmd string) error {
 		}
 		return nil
 	case CMDStmt:
+		if err := model.Init("./static/data.json"); err != nil {
+			panic(err)
+		}
+		if err := model.Begin(); err != nil {
+			panic(err)
+		}
 		rn.stmtNode.execute()
 		render.Result(cmd, ErrorList, WarnList)
 
-		return nil
+		if len(ErrorList) > 0 {
+			model.RollBack()
+			return errors.New("error(s) occur while executing CMD")
+		} else {
+			if err := model.Commit(); err != nil {
+				return errors.New("error occur while writing DB")
+			}
+		}
 	default:
 		return errors.New("目前不支持的命令类型")
 	}
+	return nil
 }
 
 // Explain should explain from root

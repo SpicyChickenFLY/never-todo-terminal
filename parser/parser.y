@@ -27,6 +27,7 @@ import (
   tagListFilterNode *ast.TagListFilterNode
   tagAddNode *ast.TagAddNode
   tagUpdateNode *ast.TagUpdateNode
+  tagUpdateOptionNode *ast.TagUpdateOptionNode
   tagDeleteNode *ast.TagDeleteNode
   idGroupNode *ast.IDGroupNode
   contentGroupNode *ast.ContentGroupNode
@@ -61,6 +62,7 @@ import (
 %type <tagListFilterNode> tag_list_filter
 %type <tagAddNode> tag_add
 %type <tagUpdateNode> tag_update
+%type <tagUpdateOptionNode> tag_update_option
 %type <tagDeleteNode> tag_delete
 %type <num> id importance
 %type <idGroupNode> id_group
@@ -214,9 +216,7 @@ tag_delete:
     ;
 
 tag_update:
-      TAG id content { $$ = ast.NewTagUpdateNode($2, $3, "") }
-    | TAG id color { $$ = ast.NewTagUpdateNode($2, "", $3) }
-    | TAG id content color { $$ = ast.NewTagUpdateNode($2, $3, $4) }
+      TAG id tag_update_option { $$ = ast.NewTagUpdateNode($2, $3) }
     ;
 
 // ========== TAG FILTER =============
@@ -224,6 +224,16 @@ tag_list_filter:
       { $$ = ast.NewTagListFilterNode(nil, "") }
     | id_group { $$ = ast.NewTagListFilterNode($1, "") }
     | content { $$ = ast.NewTagListFilterNode(nil, $1) }
+    ;
+
+// ========== TASK UPDATE OPTION =============
+
+tag_update_option:
+      { $$ = ast.NewTagUpdateOptionNode() }
+    | content tag_update_option { $$ = $2.SetContent($1) }
+    | tag_update_option content { $$ = $1.SetContent($2) }
+    | color tag_update_option { $$ = $2.SetColor($1) }
+    | tag_update_option color { $$ = $1.SetColor($2) }
     ;
 
 // ========== UTILS =============
