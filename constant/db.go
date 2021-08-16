@@ -12,8 +12,8 @@ var DBInitData = `
 				{"id":-5,"content":"同样，双击已完成会撤销","deleted":false,"completed":true,"important":1,"due":"0001-01-01T00:00:00Z"}
 			],
 			"tags":[
-				{"id":-1,"content":"同左","deleted":false,"color":"#FF0000"},
-				{"id":-2,"content":"待办","deleted":false,"color":"#00FF80"}
+				{"id":-1,"content":"同左","deleted":false,"color":"red"},
+				{"id":-2,"content":"待办","deleted":false,"color":"green"}
 			],
 			"task_tags":[
 				{"task_id":-1,"tag_id":-1},

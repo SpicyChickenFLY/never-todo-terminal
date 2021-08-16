@@ -42,8 +42,8 @@ import (
 %left <str> NOT
 %left <str> AND OR 
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
-%token <str> UI EXPLAIN LOG UNDO 
-%token <str> TODO TAG ADD DELETE DONE
+%token <str> UI EXPLAIN LOG UNDO
+%token <str> TODO TAG ADD DELETE DONE REDO
 %token <str> AGE DUE LOOP IMPORTANCE COLOR
 %token <str> HELP
 

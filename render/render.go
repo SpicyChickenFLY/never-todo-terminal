@@ -20,6 +20,7 @@ func init() {
 func Init() {
 	t = table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleLight)
 }
 
 func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
@@ -64,6 +65,7 @@ func Tags(tags []model.Tag) {
 	t.AppendFooter(table.Row{"", fmt.Sprint("Found ", len(tags), " tasks")})
 	t.Style().Options.SeparateColumns = false
 	t.Render()
+	Init()
 }
 
 func Result(command string, errorList []error, warnList []string) {
@@ -90,4 +92,5 @@ func Result(command string, errorList []error, warnList []string) {
 			command,
 		)
 	}
+	Init()
 }

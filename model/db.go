@@ -24,7 +24,7 @@ var DB *Model
 func Init(filePath string) error {
 	dbFilePath = filePath
 	if dbFilePath == "" {
-		homePath, err := getHome()
+		homePath, err := getDatePath()
 		if err != nil {
 			return err
 		}
@@ -100,7 +100,7 @@ func RollBack() error {
 	return Begin()
 }
 
-func getHome() (string, error) {
+func getDatePath() (string, error) {
 	if runtime.GOOS == "windows" {
 		return homeDataWindows()
 	}

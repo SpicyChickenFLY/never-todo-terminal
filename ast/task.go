@@ -38,7 +38,7 @@ func (tln *TaskListNode) execute() {
 		todo, done, deleted := controller.ListAllTasks()
 		render.Tasks(tln.taskListFilterNode.filter(todo), "Todo")
 		render.Tasks(tln.taskListFilterNode.filter(done), "Done")
-		render.Tasks(tln.taskListFilterNode.filter(deleted), "Deleted")
+		render.Tasks(tln.taskListFilterNode.filter(deleted), "Bin")
 	case ListTodo:
 		todo := controller.ListTodoTasks()
 		render.Tasks(tln.taskListFilterNode.filter(todo), "Todo")
