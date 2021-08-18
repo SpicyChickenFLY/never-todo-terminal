@@ -57,7 +57,6 @@ func (y *yylexer) Lex(lval *yySymType) int {
 %yyc c
 %yyn c = y.getc()
 
-variable @{digit}
 setence     \"[^"]*\"|'[^']*'|`[^`]*`
 letter      [_a-zA-Z]
 identifier  {letter}({letter}|{digit})*
@@ -83,48 +82,37 @@ importance  ![0-9]
 ")" 
     lval.str = string(y.buf)
     return RBRACK
+"@"
+    lval.str = string(y.buf)
+    return PROJECT
 
 "AND" 
-    lval.str = string(y.buf)
     return AND
 "OR" 
-    lval.str = string(y.buf)
     return OR
 "NOT" 
-    lval.str = string(y.buf)
     return NOT
 
 "-h" 
-    lval.str = string(y.buf)
     return HELP
 "ui" 
-    lval.str = string(y.buf)
     return UI
 "explain" 
-    lval.str = string(y.buf)
     return EXPLAIN
 "log" 
-    lval.str = string(y.buf)
     return LOG
 "undo" 
-    lval.str = string(y.buf)
     return UNDO
-
 "todo"
-    lval.str = string(y.buf)
     return TODO
 "tag" 
-    lval.str = string(y.buf)
     return TAG
 
 "add"|"create" 
-    lval.str = string(y.buf)
     return ADD
 "del"|"delete"|"remove" 
-    lval.str = string(y.buf)
     return DELETE
 "done"|"complete" 
-    lval.str = string(y.buf)
     return DONE
 
 "age:" 
@@ -133,7 +121,6 @@ importance  ![0-9]
     return DUE
 "loop:" 
     return LOOP
-
 "color:"
     return COLOR
 
@@ -149,9 +136,6 @@ importance  ![0-9]
     lval.str = string(y.buf)
     return NUM
 
-{variable}
-    lval.str = string(y.buf)
-    return SETENCE
 
 {setence}
     lval.str = string(y.buf[1:len(y.buf)-1])

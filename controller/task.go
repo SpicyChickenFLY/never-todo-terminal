@@ -7,6 +7,11 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
+// ListTasks with filter provided by params
+func ListTasks() []model.Task {
+	return model.DB.Data.Tasks
+}
+
 // ListAllTasks with filter provided by params
 func ListAllTasks() (todo, done, deleted []model.Task) {
 	return ListTodoTasks(), ListDoneTasks(), ListDeletedTasks()

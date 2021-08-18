@@ -60,6 +60,6 @@ type Data struct {
 }
 
 type Model struct {
-	Data Data  `json:"data", mapstructure:"data"`
+	Data Data  `json:"data" mapstructure:"data"`
 	Log  []Log `json:"log" mapstructure:"log"`
 }

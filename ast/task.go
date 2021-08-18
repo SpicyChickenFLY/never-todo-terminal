@@ -13,43 +13,19 @@ import (
 // Task List
 // ============================
 
-// list type
-const (
-	ListAll = iota + 0
-	ListTodo
-	ListDone
-	ListDeleted
-)
-
 // TaskListNode include task list filter
 type TaskListNode struct {
 	taskListFilterNode *TaskListFilterNode
-	listType           int
 }
 
 // NewTaskListNode return TaskListNode
-func NewTaskListNode(tlfn *TaskListFilterNode, listType int) *TaskListNode {
-	return &TaskListNode{tlfn, listType}
+func NewTaskListNode(tlfn *TaskListFilterNode) *TaskListNode {
+	return &TaskListNode{tlfn}
 }
 
 func (tln *TaskListNode) execute() {
-	switch tln.listType {
-	case ListAll:
-		todo, done, deleted := controller.ListAllTasks()
-		render.Tasks(tln.taskListFilterNode.filter(todo), "Todo")
-		render.Tasks(tln.taskListFilterNode.filter(done), "Done")
-		render.Tasks(tln.taskListFilterNode.filter(deleted), "Bin")
-	case ListTodo:
-		todo := controller.ListTodoTasks()
-		render.Tasks(tln.taskListFilterNode.filter(todo), "Todo")
-	case ListDone:
-		done := controller.ListDoneTasks()
-		render.Tasks(tln.taskListFilterNode.filter(done), "Done")
-	case ListDeleted:
-		deleted := controller.ListDeletedTasks()
-		render.Tasks(tln.taskListFilterNode.filter(deleted), "Deleted")
-	}
-
+	tasks := controller.ListTasks()
+	render.Tasks(tln.taskListFilterNode.filter(tasks), "Tasks")
 }
 
 func (tln *TaskListNode) explain() string {
@@ -447,6 +423,33 @@ func (tdn *TaskDoneNode) explain() string {
 
 // Execute complete task logic
 func (tdn *TaskDoneNode) execute() {
+	controller.CompleteTask(tdn.idGroup.ids)
+}
+
+// ============================
+// Task Todo
+// ============================
+
+// TaskTodoNode is node for complete task
+type TaskTodoNode struct {
+	idGroup *IDGroupNode
+}
+
+// NewTaskTodoNode return TaskTodoNode
+func NewTaskTodoNode(ign *IDGroupNode) *TaskTodoNode {
+	return &TaskTodoNode{ign}
+}
+
+// Explain to statement
+func (tdn *TaskTodoNode) explain() string {
+	result := "task Todo "
+	fmt.Println("complete/uncomplete task ")
+	result += tdn.idGroup.explain()
+	return result
+}
+
+// Execute complete task logic
+func (tdn *TaskTodoNode) execute() {
 	controller.CompleteTask(tdn.idGroup.ids)
 }
 
