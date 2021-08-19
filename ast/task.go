@@ -79,6 +79,7 @@ func (tlfn *TaskListFilterNode) explain() string {
 
 // IndefiniteTaskListFilterNode include content assignGroup age due
 type IndefiniteTaskListFilterNode struct {
+	project      string
 	importance   int
 	contentGroup *ContentGroupNode
 	assignGroup  *AssignGroupNode
@@ -166,6 +167,16 @@ func (itlfn *IndefiniteTaskListFilterNode) SetDue(tfn *TimeFilterNode) *Indefini
 		WarnList = append(WarnList, "Only one due filter will be accepted")
 	} else {
 		itlfn.due = tfn
+	}
+	return itlfn
+}
+
+// SetProject func
+func (itlfn *IndefiniteTaskListFilterNode) SetProject(project string) *IndefiniteTaskListFilterNode {
+	if itlfn.project != "" {
+		WarnList = append(WarnList, "Only one project filter will be accepted")
+	} else {
+		itlfn.project = project
 	}
 	return itlfn
 }
