@@ -8,8 +8,11 @@ import (
 )
 
 // ListTasks with filter provided by params
-func ListTasks() []model.Task {
-	return model.DB.Data.Tasks
+func ListTasks() (tasks []model.Task) {
+	for _, task := range model.DB.Data.Tasks {
+		tasks = append(tasks, task)
+	}
+	return tasks
 }
 
 // ListAllTasks with filter provided by params
@@ -30,7 +33,7 @@ func ListTodoTasks() (tasks []model.Task) {
 // ListDoneTasks with filter provided by params
 func ListDoneTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
-		if !task.Deleted && task.Completed {
+		if task.ProjectID == model.ProjectDone {
 			tasks = append(tasks, task)
 		}
 	}
@@ -40,7 +43,7 @@ func ListDoneTasks() (tasks []model.Task) {
 // ListDeletedTasks with filter provided by params
 func ListDeletedTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
-		if task.Deleted {
+		if task.ProjectID == model.ProjectDeleted {
 			tasks = append(tasks, task)
 		}
 	}
@@ -71,26 +74,33 @@ func FindTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
 }
 
 // DeleteTask called by parser
-func DeleteTask(ids []int) {
-	// delete task
+func DeleteTask(ids []int) (warnList []string) {
 	for _, id := range ids {
-		for i := range model.DB.Data.Tasks {
-			if model.DB.Data.Tasks[i].ID == id {
-				model.DB.Data.Tasks[i].Deleted = true
-			}
+		if task, ok := model.DB.Data.Tasks[id]; ok {
+			task.ProjectID = model.ProjectDeleted
+			model.DB.Data.Tasks[id] = task
+		} else {
+			warnList = append(warnList,
+				fmt.Sprint("Task(id=%d) not found", id),
+			)
 		}
 	}
+	return
 }
 
 // CompleteTask called by parse
-func CompleteTask(ids []int) {
+func CompleteTask(ids []int) (warnList []string) {
 	for _, id := range ids {
-		for _, task := range model.DB.Data.Tasks {
-			if task.ID == id {
-				task.Completed = true
-			}
+		if task, ok := model.DB.Data.Tasks[id]; ok {
+			task.ProjectID = model.ProjectDone
+			model.DB.Data.Tasks[id] = task
+		} else {
+			warnList = append(warnList,
+				fmt.Sprint("Task(id=%d) not found", id),
+			)
 		}
 	}
+	return
 }
 
 // AddTask called by parser
@@ -99,7 +109,7 @@ func AddTask(content string) (taskID int) {
 		ID:      model.DB.Data.TaskInc,
 		Content: content,
 	}
-	model.DB.Data.Tasks = append(model.DB.Data.Tasks, newTask)
+	model.DB.Data.Tasks[newTask.ID] = newTask
 	model.DB.Data.TaskInc--
 	return newTask.ID
 }
