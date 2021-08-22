@@ -26,14 +26,15 @@ func ShowSummary() error {
 	fmt.Println(constant.ColorfulLogo)
 	fmt.Println(constant.Descirption)
 	fmt.Println(constant.Separator)
-	var todoTotal, doneTotal, tagTotal int
+	var todoTotal, doneTotal, deletedTotal, tagTotal int
 	for _, task := range model.DB.Data.Tasks {
-		if !task.Deleted {
-			if !task.Completed {
-				todoTotal++
-			} else {
-				doneTotal++
-			}
+		switch task.ProjectID {
+		case model.ProjectTodo:
+			todoTotal++
+		case model.ProjectDone:
+			doneTotal++
+		case model.ProjectDeleted:
+			deletedTotal++
 		}
 	}
 	for _, tag := range model.DB.Data.Tags {

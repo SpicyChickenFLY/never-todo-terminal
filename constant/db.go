@@ -24,7 +24,7 @@ var DBInitData = `
 				{"task_id":-4,"tag_id":-2},
 				{"task_id":-5,"tag_id":-2}
 			],
-			"taskAutoIncVal":-6,
-			"tagAutoIncVal":-3},
+			"taskInc":-6,
+			"tagInc":-3},
 		"log":[]
 	}`

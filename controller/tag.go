@@ -23,12 +23,12 @@ func AddTag(content string) (int, error) {
 		return id, errors.New("tag already exists")
 	}
 	newTag := model.Tag{
-		ID:      model.DB.Data.TagAutoIncVal,
+		ID:      model.DB.Data.TagInc,
 		Content: content,
 		Color:   "white",
 	}
 	model.DB.Data.Tags = append(model.DB.Data.Tags, newTag)
-	model.DB.Data.TagAutoIncVal--
+	model.DB.Data.TagInc--
 
 	return newTag.ID, nil
 }

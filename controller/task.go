@@ -20,7 +20,7 @@ func ListAllTasks() (todo, done, deleted []model.Task) {
 // ListTodoTasks with filter provided by params
 func ListTodoTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
-		if !task.Deleted && !task.Completed {
+		if task.ProjectID == model.ProjectTodo {
 			tasks = append(tasks, task)
 		}
 	}
@@ -96,11 +96,11 @@ func CompleteTask(ids []int) {
 // AddTask called by parser
 func AddTask(content string) (taskID int) {
 	newTask := model.Task{
-		ID:      model.DB.Data.TaskAutoIncVal,
+		ID:      model.DB.Data.TaskInc,
 		Content: content,
 	}
 	model.DB.Data.Tasks = append(model.DB.Data.Tasks, newTask)
-	model.DB.Data.TaskAutoIncVal--
+	model.DB.Data.TaskInc--
 	return newTask.ID
 }
 
