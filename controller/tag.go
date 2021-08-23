@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
@@ -16,6 +17,17 @@ func ListTags() (tags []model.Tag) {
 	return tags
 }
 
+// FindTagByID called by parser
+func FindTagByID(id int) (model.Tag, bool) {
+	tag, ok := model.DB.Data.Tags[id]
+	return tag, ok
+}
+
+// GetTagIDByName called by parser
+func GetTagIDByName(string) (int, bool) {
+	return 0, false
+}
+
 // AddTag called by parser
 func AddTag(content string) (int, error) {
 	id, ok := GetTagIDByName(content)
@@ -27,7 +39,7 @@ func AddTag(content string) (int, error) {
 		Content: content,
 		Color:   "white",
 	}
-	model.DB.Data.Tags = append(model.DB.Data.Tags, newTag)
+	model.DB.Data.Tags[model.DB.Data.TagInc] = newTag
 	model.DB.Data.TagInc--
 
 	return newTag.ID, nil
@@ -35,43 +47,25 @@ func AddTag(content string) (int, error) {
 
 // UpdateTag called by parser
 func UpdateTag(updateTag model.Tag) error {
-	for i := range model.DB.Data.Tags {
-		if model.DB.Data.Tags[i].ID == updateTag.ID {
-			model.DB.Data.Tags[i] = updateTag
-			return nil
-		}
+	if _, ok := model.DB.Data.Tags[updateTag.ID]; !ok {
+		return errors.New(fmt.Sprint("tag(id=%d) not found", updateTag.ID))
 	}
-	return errors.New("not found the tag to be updated")
+	model.DB.Data.Tags[updateTag.ID] = updateTag
+	return nil
 }
 
 // DeleteTags called by parser
-func DeleteTags(ids []int) {
+func DeleteTags(ids []int) (warnList []string) {
 	// delete tag
 	for _, id := range ids {
-		for i := range model.DB.Data.Tags {
-			if model.DB.Data.Tags[i].ID == id {
-				model.DB.Data.Tags[i].Deleted = true
-			}
+		if deleteTag, ok := model.DB.Data.Tags[id]; !ok {
+			warnList = append(warnList,
+				fmt.Sprint("Task(id=%d) not found", id),
+			)
+		} else {
+			deleteTag.Deleted = true
+			model.DB.Data.Tags[id] = deleteTag
 		}
 	}
-}
-
-// SetTag called by parser
-func SetTag(tag model.Tag) {
-
-}
-
-// FindTagByID called by parser
-func FindTagByID(id int) (model.Tag, bool) {
-	for _, tag := range model.DB.Data.Tags {
-		if tag.ID == id {
-			return tag, true
-		}
-	}
-	return model.Tag{}, false
-}
-
-// GetTagIDByName called by parser
-func GetTagIDByName(string) (int, bool) {
-	return 0, false
+	return
 }

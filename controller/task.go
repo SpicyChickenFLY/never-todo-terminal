@@ -52,12 +52,8 @@ func ListDeletedTasks() (tasks []model.Task) {
 
 // FindTaskByID called by parser
 func FindTaskByID(id int) (model.Task, bool) {
-	for _, task := range model.DB.Data.Tasks {
-		if task.ID == id {
-			return task, true
-		}
-	}
-	return model.Task{}, false
+	task, ok := model.DB.Data.Tasks[id]
+	return task, ok
 }
 
 // FindTasksByIDGroup called by parser
@@ -116,11 +112,9 @@ func AddTask(content string) (taskID int) {
 
 // UpdateTask called by parser
 func UpdateTask(updateTask model.Task) error {
-	for i := range model.DB.Data.Tasks {
-		if model.DB.Data.Tasks[i].ID == updateTask.ID {
-			model.DB.Data.Tasks[i] = updateTask
-			return nil
-		}
+	if _, ok := model.DB.Data.Tasks[updateTask.ID]; !ok {
+		return errors.New("not found the task to be updated")
 	}
-	return errors.New("not found the task to be updated")
+	model.DB.Data.Tasks[updateTask.ID] = updateTask
+	return nil
 }

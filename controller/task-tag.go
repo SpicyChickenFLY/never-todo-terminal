@@ -1,19 +1,15 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
-func FindTagsByTask(taskID int) (tags []model.Tag, warnList []string) {
-	for _, taskTag := range model.DB.Data.TaskTags {
-		if taskTag.TaskID == taskID {
-			tag, ok := FindTagByID(taskTag.TagID)
-			if !ok {
-				warnList = append(warnList, fmt.Sprintf("TaskTag(%d, %d) not Found", taskTag.TaskID, taskTag.TagID))
+func FindTagsByTask(taskID int) (tags []model.Tag) {
+	if tagsID, ok := model.DB.Data.TaskTags[taskID]; ok {
+		for _, tagID := range tagsID {
+			if tag, ok := FindTagByID(tagID); ok {
+				tags = append(tags, tag)
 			}
-			tags = append(tags, tag)
 		}
 	}
 	return
