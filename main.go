@@ -24,8 +24,5 @@ func main() {
 	result := parser.Parse(cmd)
 
 	// Execute the AST
-	if err := result.Execute(cmd); err != nil {
-		fmt.Println(err.Error())
-		return
-	}
+	result.Execute(cmd)
 }

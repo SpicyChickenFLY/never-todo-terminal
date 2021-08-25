@@ -220,8 +220,15 @@ type AssignGroupNode struct {
 }
 
 // NewAssignGroupNode return IDGroup
-func NewAssignGroupNode() *AssignGroupNode {
-	return &AssignGroupNode{}
+func NewAssignGroupNode(assignTag, unassignTag string) *AssignGroupNode {
+	result := &AssignGroupNode{}
+	if assignTag != "" {
+		result.AssignTag(assignTag)
+	}
+	if unassignTag != "" {
+		result.UnassignTag(unassignTag)
+	}
+	return result
 }
 
 // AssignTag for task
@@ -253,18 +260,18 @@ func (agn *AssignGroupNode) explain() string {
 
 func (agn *AssignGroupNode) filter(tasks []model.Task) (result []model.Task) {
 	result = tasks
-	realTagIDs := []int{}
+	filterTagIDs := []int{}
 	for _, tag := range agn.assignTags {
 		tagID, ok := controller.GetTagIDByName(tag)
 		if !ok {
 			ErrorList = append(ErrorList, errors.New("got inexist tag while finding tasks"))
 		} else {
-			realTagIDs = append(realTagIDs, tagID)
+			filterTagIDs = append(filterTagIDs, tagID)
 		}
 
 	}
 	for _, task := range tasks {
-		if controller.CheckTaskByTags(task.ID, realTagIDs) {
+		if controller.CheckTaskByTags(task.ID, filterTagIDs) {
 			result = append(result, task)
 		}
 	}

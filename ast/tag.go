@@ -85,7 +85,7 @@ func (tan *TagAddNode) execute() {
 	if !ok {
 		WarnList = append(WarnList, fmt.Sprintf("Task(%d) Not Found", tagID))
 	}
-	controller.SetTag(tag)
+	controller.UpdateTag(tag)
 	render.Tags([]model.Tag{tag})
 }
 func (tan *TagAddNode) explain() string {

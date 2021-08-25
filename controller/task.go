@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
@@ -77,7 +76,7 @@ func DeleteTask(ids []int) (warnList []string) {
 			model.DB.Data.Tasks[id] = task
 		} else {
 			warnList = append(warnList,
-				fmt.Sprint("Task(id=%d) not found", id),
+				fmt.Sprintf("Task(id=%d) not found", id),
 			)
 		}
 	}
@@ -92,7 +91,7 @@ func CompleteTask(ids []int) (warnList []string) {
 			model.DB.Data.Tasks[id] = task
 		} else {
 			warnList = append(warnList,
-				fmt.Sprint("Task(id=%d) not found", id),
+				fmt.Sprintf("Task(id=%d) not found", id),
 			)
 		}
 	}
@@ -113,7 +112,7 @@ func AddTask(content string) (taskID int) {
 // UpdateTask called by parser
 func UpdateTask(updateTask model.Task) error {
 	if _, ok := model.DB.Data.Tasks[updateTask.ID]; !ok {
-		return errors.New("not found the task to be updated")
+		return fmt.Errorf("task(id=%d) not found", updateTask.ID)
 	}
 	model.DB.Data.Tasks[updateTask.ID] = updateTask
 	return nil

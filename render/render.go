@@ -38,8 +38,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 		if task.Due.IsZero() {
 			dueStr = ""
 		}
-		tags, subWarnList := controller.FindTagsByTask(task.ID)
-		warnList = append(warnList, subWarnList...)
+		tags := controller.FindTagsByTask(task.ID)
 		tagsStr := []string{}
 		for _, tag := range tags {
 			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
@@ -69,10 +68,10 @@ func Tags(tags []model.Tag) {
 }
 
 func Result(command string, errorList []error, warnList []string) {
-	for _, err := range errorList {
+	for _, warn := range warnList {
 		fmt.Printf("%s %s\n",
 			colorful.RenderStr("[  INFO  ]: ", "default", "", "yellow"),
-			err.Error(),
+			warn,
 		)
 	}
 	if len(errorList) > 0 {

@@ -48,7 +48,7 @@ func AddTag(content string) (int, error) {
 // UpdateTag called by parser
 func UpdateTag(updateTag model.Tag) error {
 	if _, ok := model.DB.Data.Tags[updateTag.ID]; !ok {
-		return errors.New(fmt.Sprint("tag(id=%d) not found", updateTag.ID))
+		return fmt.Errorf("tag(id=%d) not found", updateTag.ID)
 	}
 	model.DB.Data.Tags[updateTag.ID] = updateTag
 	return nil
@@ -60,7 +60,7 @@ func DeleteTags(ids []int) (warnList []string) {
 	for _, id := range ids {
 		if deleteTag, ok := model.DB.Data.Tags[id]; !ok {
 			warnList = append(warnList,
-				fmt.Sprint("Task(id=%d) not found", id),
+				fmt.Sprintf("Task(id=%d) not found", id),
 			)
 		} else {
 			deleteTag.Deleted = true

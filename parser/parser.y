@@ -245,13 +245,14 @@ project:
       PROJECT content { $$ = $2}
 
 assign_group:
-      { $$ = ast.NewAssignGroupNode() }
+      assign_tag { $$ = ast.NewAssignGroupNode($1, "") }
+    | unassign_tag { $$ = ast.NewAssignGroupNode("", $1) }
     | assign_tag assign_group { $$ = $2.AssignTag($1) }
     | unassign_tag assign_group { $$ = $2.UnassignTag($1) }
     ;
 
 positive_assign_group:
-      { $$ = ast.NewAssignGroupNode() }
+      assign_tag { $$ = ast.NewAssignGroupNode($1, "") }
     | assign_tag positive_assign_group { $$ = $2.AssignTag($1) }
     ;
 

@@ -53,14 +53,15 @@ type Log struct {
 	Table string
 	ID    int
 	Type  int
-	Data  map[string]interface{}
+	Data  []interface{}
 }
 
 // Data is data struct
 type Data struct {
 	Tasks      map[int]Task
 	Tags       map[int]Tag
-	TaskTags   map[int][]int // key: task_id; value: []tag_id
+	TaskTags   map[int]map[int]bool
+	TagTasks   map[int]map[int]bool
 	Projects   map[int]Project
 	TaskInc    int
 	TagInc     int

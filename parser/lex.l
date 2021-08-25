@@ -43,6 +43,7 @@ func (y *yylexer) getc() byte {
 }
 
 func (y yylexer) Error(e string) {
+    fmt.Println(e)
     ast.ErrorList = append(ast.ErrorList, errors.New(e))
 }
 

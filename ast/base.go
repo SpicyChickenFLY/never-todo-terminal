@@ -38,47 +38,50 @@ func NewRootNode(cmdType int, sn StmtNode) *RootNode {
 }
 
 // Execute should start from root
-func (rn *RootNode) Execute(cmd string) error {
+func (rn *RootNode) Execute(cmd string) {
 	switch rn.cmdType {
 	case CMDHelp:
-		return controller.ShowHelp()
+		controller.ShowHelp()
 	case CMDUI:
-		return controller.StartUI()
+		controller.StartUI()
 	case CMDExplain:
 		if rn.stmtNode != nil {
-			fmt.Println("==== Execute Plan ====")
-			fmt.Println("==== rewrite ====\n", rn.explain())
+			rn.Explain()
+		} else {
+			// No stmt found
 		}
-		return nil
 	case CMDStmt:
 		if err := model.Init("./static/data.json"); err != nil {
-			panic(err)
+			ErrorList = append(ErrorList, err)
+			render.Result(cmd, ErrorList, WarnList)
+			return
 		}
 		if err := model.Begin(); err != nil {
-			panic(err)
+			ErrorList = append(ErrorList, err)
+			render.Result(cmd, ErrorList, WarnList)
+			return
 		}
 		rn.stmtNode.execute()
 		render.Result(cmd, ErrorList, WarnList)
-
 		if len(ErrorList) > 0 {
-			model.RollBack()
-			return errors.New("error(s) occur while executing CMD")
-		} else {
-			if err := model.Commit(); err != nil {
-				return errors.New("error occur while writing DB")
+			if err := model.RollBack(); err != nil {
+				ErrorList = append(ErrorList, err)
 			}
+			render.Result(cmd, ErrorList, WarnList)
+		} else if err := model.Commit(); err != nil {
+			ErrorList = append(ErrorList, err)
+			render.Result(cmd, ErrorList, WarnList)
 		}
 	default:
-		return errors.New("目前不支持的命令类型")
+		ErrorList = append(ErrorList, errors.New("目前不支持的命令类型"))
+		render.Result(cmd, ErrorList, WarnList)
 	}
-	return nil
 }
 
 // Explain should explain from root
 func (rn *RootNode) Explain() {
 	fmt.Println("==== Execute Plan ====")
 	fmt.Println("==== rewrite command ====\n", rn.explain())
-
 }
 
 func (rn *RootNode) explain() string {

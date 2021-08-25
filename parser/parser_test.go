@@ -17,6 +17,7 @@ func TestParser(t *testing.T) {
 	testcases := []string{
 		// help
 		"-h",
+		"add -h",
 		"todo add -h",
 		"todo add me -h",
 		"tag -h",
