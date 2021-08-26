@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+const (
+	timeTemp = "2006-01-02T15:04:05Z"
+)
+
 func unmarshalModel(m map[string]interface{}) error {
 	if _, ok := m["initRun"]; !ok { // initialize data
 		// 给model一个默认数据
@@ -106,10 +110,14 @@ func unmarshalTask(tasks interface{}) error {
 		if err != nil {
 			return err
 		}
-		dueTime, err := time.ParseInLocation("2006-01-02T15:04:05Z", taskDue, loc)
-		if err != nil {
-			return err
+		var dueTime time.Time
+		if taskDue != "" {
+			dueTime, err = time.ParseInLocation(timeTemp, taskDue, loc)
+			if err != nil {
+				return err
+			}
 		}
+
 		if taskLoop, ok = taskMap[5].(string); !ok {
 			return errors.New("field taskMap[5] cannot be convert to string")
 		}
@@ -185,7 +193,6 @@ func unmarshalTaskTag(taskTags interface{}) error {
 		if taskTagMap, ok = taskTag.([]interface{}); !ok {
 			return errors.New("field taskTagMap cannot be convert to []interface{}")
 		}
-
 		if len(taskTagMap) != 2 {
 			return errors.New("count of taskTagMap fields is not matched")
 		}
@@ -302,7 +309,10 @@ func marshalModel() (m map[string]interface{}, err error) {
 	var tasks []interface{}
 	for _, task := range DB.Data.Tasks {
 		var taskMap []interface{}
-		dueTime := task.Due.Format("2006-01-02T15:04:05Z")
+		var dueTime string
+		if !task.Due.IsZero() {
+			dueTime = task.Due.Format(timeTemp)
+		}
 		taskMap = append(taskMap,
 			task.ID,
 			task.Content,
@@ -328,13 +338,12 @@ func marshalModel() (m map[string]interface{}, err error) {
 	dm["tags"] = tags
 	var taskTags []interface{}
 	for taskID, tagIDsOfTask := range DB.Data.TaskTags {
-		var taskTagMap []interface{}
 		for tagID := range tagIDsOfTask {
-			taskTagMap = append(taskTagMap, []int{taskID, tagID})
-			taskTags = append(taskTags, taskTagMap)
+			taskTag := []interface{}{taskID, tagID}
+			taskTags = append(taskTags, taskTag)
 		}
 	}
-	dm["tas_tags"] = taskTags
+	dm["task_tags"] = taskTags
 	dm["task_inc"] = DB.Data.TaskInc
 	dm["tag_inc"] = DB.Data.TagInc
 	dm["project_inc"] = DB.Data.ProjectInc

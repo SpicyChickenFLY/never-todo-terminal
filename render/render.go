@@ -31,8 +31,9 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	t.AppendHeader(table.Row{"#", defaultContentTitle, "Tags", "Due", "Loop"})
 	for _, task := range tasks {
 		contentStr := task.Content
-		if task.Important > 0 {
-			contentStr = colorful.RenderStr(contentStr, "highlight", "", "")
+		for i := 0; i < task.Important; i++ {
+			// contentStr = colorful.RenderStr(contentStr, "line", "", "")
+			contentStr += "*" // ★
 		}
 		dueStr := task.Due.Format("2006/01/02 15:04:05")
 		if task.Due.IsZero() {

@@ -6,8 +6,8 @@ import "fmt"
 const MARK = 0x1B
 
 // Mode Map(Can be combined)
-// code meaning
-// --------------
+//  code meaning
+//  --------------
 //  0  终端默认设置
 //  1  高亮显示
 //  4  使用下划线
@@ -34,25 +34,25 @@ var modeMap = map[string]int{
 }
 
 // Color Map 8/16
-// f   b   meaning
-// --------------
-// 39  49  default
-// 30  40  black
-// 31  41  red
-// 32  42  green
-// 33  43  yellow
-// 34  44  blue
-// 35  45  magenta
-// 36  46  cyan
-// 37  47  light grey
-// 90  100 dark grey
-// 91  101 light red
-// 92  102 light green
-// 93  103 light yellow
-// 94  104 light blue
-// 95  105 light magenta
-// 96  106 light cyan
-// 97  107 white
+//  f   b   meaning
+//  --------------
+//  39  49  default
+//  30  40  black
+//  31  41  red
+//  32  42  green
+//  33  43  yellow
+//  34  44  blue
+//  35  45  magenta
+//  36  46  cyan
+//  37  47  light grey
+//  90  100 dark grey
+//  91  101 light red
+//  92  102 light green
+//  93  103 light yellow
+//  94  104 light blue
+//  95  105 light magenta
+//  96  106 light cyan
+//  97  107 white
 const (
 	frontBlack = iota + 30
 	frontRed
@@ -129,7 +129,7 @@ var backMap8_16 = map[string]int{
 }
 
 // Color Map 88/256
-// There are about 256 kind of colors so we just list color we used
+//  There are about 256 kind of colors so we just list color we used
 const (
 	Crimson = 88
 	Yellow  = 11
@@ -145,10 +145,10 @@ const (
 )
 
 // RenderStr is a func for render string with specified color and style
-// str:  		your output string
-// modeStr: 	your mode string(default/highlight/line/flash/rewrite/hidden)
-// bColorStr:	your back color string(black/red/yellow/green/blue/cyan/purple/white)
-// fColorStr: 	your front color string(same as back color)
+//  str:  		your output string
+//  modeStr: 	your mode string(default/highlight/line/flash/rewrite/hidden)
+//  bColorStr:	your back color string(black/red/yellow/green/blue/cyan/purple/white)
+//  fColorStr: 	your front color string(same as back color)
 func RenderStr(str, modeStr, bColorStr, fColorStr string) string {
 	startMark := GetStartMark(modeStr, bColorStr, fColorStr)
 	endMark := GetEndMark()
