@@ -14,7 +14,7 @@ goyacc -o ..\parser\parser.go ..\parser\parser.y
 md "%APPDATA%\.nevertodo\"
 copy ..\static\data.json %APPDATA%\.nevertodo
 
-go test -v ../parser
+@REM go test -v ../parser
 @REM go test -v ../controller
 @REM go test -v ../data
 

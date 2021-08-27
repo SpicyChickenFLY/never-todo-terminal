@@ -8,7 +8,7 @@ import (
 func FindTagsByTask(taskID int) (tags []model.Tag) {
 	if tagMap, ok := model.DB.Data.TaskTags[taskID]; ok {
 		for tagID := range tagMap {
-			if tag, ok := FindTagByID(tagID); ok {
+			if tag, ok := GetTagByID(tagID); ok {
 				tags = append(tags, tag)
 			}
 		}
@@ -20,7 +20,7 @@ func FindTagsByTask(taskID int) (tags []model.Tag) {
 func FindTasksByTag(tagID int) (tasks []model.Task) {
 	if taskMap, ok := model.DB.Data.TagTasks[tagID]; ok {
 		for taskID := range taskMap {
-			if task, ok := FindTaskByID(taskID); ok {
+			if task, ok := GetTaskByID(taskID); ok {
 				tasks = append(tasks, task)
 			}
 		}

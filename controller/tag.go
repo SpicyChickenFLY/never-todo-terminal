@@ -17,14 +17,19 @@ func ListTags() (tags []model.Tag) {
 	return tags
 }
 
-// FindTagByID called by parser
-func FindTagByID(id int) (model.Tag, bool) {
+// GetTagByID called by parser
+func GetTagByID(id int) (model.Tag, bool) {
 	tag, ok := model.DB.Data.Tags[id]
 	return tag, ok
 }
 
 // GetTagIDByName called by parser
-func GetTagIDByName(string) (int, bool) {
+func GetTagIDByName(name string) (int, bool) {
+	for _, tag := range model.DB.Data.Tags {
+		if tag.Content == name {
+			return tag.ID, true
+		}
+	}
 	return 0, false
 }
 

@@ -89,19 +89,46 @@ type IndefiniteTaskListFilterNode struct {
 
 // NewIndefiniteTaskListFilterNode return IndefiniteTaskListFilterNode
 func NewIndefiniteTaskListFilterNode() *IndefiniteTaskListFilterNode {
+
 	return &IndefiniteTaskListFilterNode{}
 }
 
 func (itlfn *IndefiniteTaskListFilterNode) filter(tasks []model.Task) []model.Task {
-	// tasks := controller.ListTodoTasks()
-	tasks, _ = itlfn.contentGroup.filter(tasks)
-	tasks = itlfn.assignGroup.filter(tasks)
-	tasks = itlfn.age.filter(tasks)
-	tasks = itlfn.due.filter(tasks)
+	if itlfn.contentGroup != nil {
+		tasks, _ = itlfn.contentGroup.filter(tasks)
+	}
+	if itlfn.assignGroup != nil {
+		tasks = itlfn.assignGroup.filter(tasks)
+	}
+	if itlfn.age != nil {
+		tasks = itlfn.age.filter(tasks)
+	}
+	if itlfn.due != nil {
+		tasks = itlfn.due.filter(tasks)
+	}
+	if itlfn.project != "" {
+		result := []model.Task{}
+		projectID, ok := controller.GetProjectIDByName(itlfn.project)
+		if ok {
+			for _, task := range tasks {
+				if task.ProjectID == projectID {
+					result = append(result, task)
+				}
+			}
+		} else {
+			WarnList = append(WarnList, fmt.Sprintf("project(%s) not found", itlfn.project))
+		}
+		tasks = result
+	}
 	return tasks
 }
 func (itlfn *IndefiniteTaskListFilterNode) explain() string {
 	result := ""
+	if itlfn.project != "" {
+		fmt.Print("\tby project ")
+		result += fmt.Sprintf("@%s ", itlfn.project)
+		fmt.Print("\n")
+	}
 	if itlfn.contentGroup != nil {
 		fmt.Print("\tby content ")
 		result += itlfn.contentGroup.explain() + " "
@@ -173,6 +200,7 @@ func (itlfn *IndefiniteTaskListFilterNode) SetDue(tfn *TimeFilterNode) *Indefini
 
 // SetProject func
 func (itlfn *IndefiniteTaskListFilterNode) SetProject(project string) *IndefiniteTaskListFilterNode {
+	fmt.Println("set project")
 	if itlfn.project != "" {
 		WarnList = append(WarnList, "Only one project filter will be accepted")
 	} else {
@@ -201,7 +229,7 @@ func NewTaskAddNode(c string, opt *TaskAddOptionNode) *TaskAddNode {
 
 func (tan *TaskAddNode) execute() {
 	taskID := controller.AddTask(tan.content)
-	task, ok := controller.FindTaskByID(taskID)
+	task, ok := controller.GetTaskByID(taskID)
 	if !ok {
 		ErrorList = append(ErrorList, errors.New("ddded task is not found"))
 		return
@@ -310,8 +338,7 @@ func (tun *TaskUpdateNode) explain() string {
 
 // Execute complete task logic
 func (tun *TaskUpdateNode) execute() {
-	fmt.Println(tun.id)
-	task, ok := controller.FindTaskByID(tun.id)
+	task, ok := controller.GetTaskByID(tun.id)
 	if !ok {
 		ErrorList = append(ErrorList, errors.New("updated task is not found"))
 		return

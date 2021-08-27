@@ -67,11 +67,12 @@ func unmarshalData(data interface{}) error {
 		}
 		DB.Data.TaskInc = int(projectIncVal)
 	}
-	if projects, ok := dm["project"]; ok {
+	if projects, ok := dm["projects"]; ok {
 		if err := unmarshalProject(projects); err != nil {
 			return err
 		}
 	}
+	initDefaultProject()
 	return nil
 }
 
@@ -233,12 +234,13 @@ func unmarshalProject(projects interface{}) error {
 			return errors.New("field projectMap cannot be convert to []interface{}")
 		}
 
-		if len(projectMap) != 2 {
+		if len(projectMap) != 4 {
 			return errors.New("count of projectMap fields is not matched")
 		}
 
 		var projectID float64
-		var projectContent string
+		var projectContent, projectColor string
+		var projectDeleted bool
 
 		projectID, ok := projectMap[0].(float64)
 		if !ok {
@@ -247,10 +249,18 @@ func unmarshalProject(projects interface{}) error {
 		if projectContent, ok = projectMap[1].(string); !ok {
 			return errors.New("field projectMap[1] cannot be convert to string")
 		}
+		if projectColor, ok = projectMap[2].(string); !ok {
+			return errors.New("field projectMap[2] cannot be convert to string")
+		}
+		if projectDeleted, ok = projectMap[3].(bool); !ok {
+			return errors.New("field projectMap[3] cannot be convert to bool")
+		}
 
 		project := Project{
 			ID:      int(projectID),
 			Content: projectContent,
+			Color:   projectColor,
+			Deleted: projectDeleted,
 		}
 
 		DB.Data.Projects[project.ID] = project
@@ -258,7 +268,17 @@ func unmarshalProject(projects interface{}) error {
 			DB.Data.ProjectInc = project.ID - 1
 		}
 	}
+	initDefaultProject()
 	return nil
+}
+
+func initDefaultProject() {
+	if DB.Data.Projects == nil {
+		DB.Data.Projects = make(map[int]Project)
+	}
+	DB.Data.Projects[ProjectTodo] = Project{ProjectTodo, "TODO", "", false}
+	DB.Data.Projects[ProjectDone] = Project{ProjectDone, "DONE", "", false}
+	DB.Data.Projects[ProjectDeleted] = Project{ProjectDeleted, "Deleted", "", false}
 }
 
 func unmarshalLog(logs interface{}) error {

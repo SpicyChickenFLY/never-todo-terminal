@@ -83,9 +83,9 @@ importance  ![0-9]
 ")" 
     lval.str = string(y.buf)
     return RBRACK
-"@"
+"*"
     lval.str = string(y.buf)
-    return PROJECT
+    return MULTI
 
 "AND" 
     return AND

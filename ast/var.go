@@ -106,6 +106,7 @@ type ContentGroupNode struct {
 // NewContentGroupNode return ContentGroupNode
 func NewContentGroupNode(
 	content string, operator int, operands []*ContentGroupNode) *ContentGroupNode {
+	fmt.Println("new content" + content)
 	return &ContentGroupNode{content, operator, operands}
 }
 
@@ -221,7 +222,10 @@ type AssignGroupNode struct {
 
 // NewAssignGroupNode return IDGroup
 func NewAssignGroupNode(assignTag, unassignTag string) *AssignGroupNode {
-	result := &AssignGroupNode{}
+	result := &AssignGroupNode{
+		assignTags:   []string{},
+		unassignTags: []string{},
+	}
 	if assignTag != "" {
 		result.AssignTag(assignTag)
 	}

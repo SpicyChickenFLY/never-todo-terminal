@@ -6,26 +6,26 @@ import (
 
 // Task is task struct
 type Task struct {
-	ID        int    `json:"id"`
-	Content   string `json:"content"`
-	Important int    `json:"important"`
+	ID        int
+	Content   string
+	Important int
 	ProjectID int
-	Due       time.Time `json:"due,omitempty"`
-	Loop      string    `json:"loop,omitempty"`
+	Due       time.Time
+	Loop      string
 }
 
 // Tag is tag struct
 type Tag struct {
-	ID      int    `json:"id"`
-	Content string `json:"content"`
-	Deleted bool   `json:"deleted"`
-	Color   string `json:"color"`
+	ID      int
+	Content string
+	Deleted bool
+	Color   string
 }
 
 // TaskTag is tasktag struct
 type TaskTag struct {
-	TaskID int `json:"task_id"`
-	TagID  int `json:"tag_id"`
+	TaskID int
+	TagID  int
 }
 
 // Project default ID
@@ -39,6 +39,8 @@ const (
 type Project struct {
 	ID      int
 	Content string
+	Color   string
+	Deleted bool
 }
 
 // LogType
@@ -70,8 +72,8 @@ type Data struct {
 
 //Model is model struct
 type Model struct {
-	Data Data  `json:"data"`
-	Logs []Log `json:"log"`
+	Data Data
+	Logs []Log
 }
 
 // TimeGroup is timegroup struct

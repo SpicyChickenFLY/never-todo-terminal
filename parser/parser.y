@@ -41,10 +41,10 @@ import (
 %left <str> NOT
 %left <str> AND OR 
 
-%token <str> LBRACK RBRACK PROJECT
+%token <str> LBRACK RBRACK MULTI
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
 %token <str> UI EXPLAIN LOG UNDO
-%token <str> TODO TAG ADD DELETE DONE REDO
+%token <str> TODO TAG ADD DELETE DONE PROJECT
 %token <str> AGE DUE LOOP IMPORTANCE COLOR
 %token <str> HELP
 
@@ -137,7 +137,7 @@ task_add:
 task_todo:
       id_group TODO { $$ = ast.NewTaskTodoNode($1) }
     | TODO id_group { $$ = ast.NewTaskTodoNode($2) }
-
+    ;
 
 task_done:
       DONE id_group { $$= ast.NewTaskDoneNode($2) }
@@ -162,7 +162,7 @@ task_list_filter:
 
 indefinite_task_list_filter:
       { $$ = ast.NewIndefiniteTaskListFilterNode() }
-    |  content_group indefinite_task_list_filter { $$ = $2.SetContentGroup($1) }
+    | content_group indefinite_task_list_filter { $$ = $2.SetContentGroup($1) }
     | indefinite_task_list_filter content_group { $$ = $1.SetContentGroup($2) }
     | importance indefinite_task_list_filter { $$ = $2.SetImportance($1) }
     | indefinite_task_list_filter importance { $$ = $1.SetImportance($2) }
@@ -242,7 +242,8 @@ tag_update_option:
 
 // ========== UTILS =============
 project:
-      PROJECT content { $$ = $2}
+      MULTI content { $$ = $2 }
+    ;
 
 assign_group:
       assign_tag { $$ = ast.NewAssignGroupNode($1, "") }
@@ -328,7 +329,16 @@ definite_content:
     ;
 
 indefinite_content:
-      { $$ = "" }
+      NUM  { $$ = fmt.Sprint($1)}
+    | IDENT {$$ = $1}
+    | TODO { $$ = $1 }
+    | TAG { $$ = $1 }
+    | ADD { $$ = $1 }
+    | DELETE { $$ = $1 }
+    | DONE { $$ = $1 }
+    | PROJECT { $$ = $1 }
+    | DATE { $$ = $1 }
+    | TIME { $$ = $1 }
     | indefinite_content NUM  { $$ = $1 + " " + fmt.Sprint($2) }
     | indefinite_content IDENT {$$ = $1 + " " + $2}
     | indefinite_content TODO { $$ = $1 + " " + $2 }
@@ -336,9 +346,8 @@ indefinite_content:
     | indefinite_content ADD { $$ = $1 + " " + $2 }
     | indefinite_content DELETE { $$ = $1 + " " + $2 }
     | indefinite_content DONE { $$ = $1 + " " + $2 }
+    | indefinite_content PROJECT { $$ = $1 + " " + $2 }
     | indefinite_content DATE { $$ = $1 + " " + $2 }
     | indefinite_content TIME { $$ = $1 + " " + $2 }
     ;
-
-
 %%

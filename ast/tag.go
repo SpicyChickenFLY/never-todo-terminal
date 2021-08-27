@@ -81,9 +81,9 @@ func (tan *TagAddNode) execute() {
 	if err != nil {
 		ErrorList = append(ErrorList, err)
 	}
-	tag, ok := controller.FindTagByID(tagID)
+	tag, ok := controller.GetTagByID(tagID)
 	if !ok {
-		WarnList = append(WarnList, fmt.Sprintf("Task(%d) Not Found", tagID))
+		WarnList = append(WarnList, fmt.Sprintf("task(%d) not found", tagID))
 	}
 	controller.UpdateTag(tag)
 	render.Tags([]model.Tag{tag})
@@ -112,7 +112,7 @@ func NewTagUpdateNode(id int, tuon *TagUpdateOptionNode) *TagUpdateNode {
 }
 
 func (tun *TagUpdateNode) execute() {
-	tag, ok := controller.FindTagByID(tun.id)
+	tag, ok := controller.GetTagByID(tun.id)
 	if !ok {
 		ErrorList = append(ErrorList, errors.New("updated tag is not found"))
 		return

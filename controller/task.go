@@ -49,16 +49,16 @@ func ListDeletedTasks() (tasks []model.Task) {
 	return tasks
 }
 
-// FindTaskByID called by parser
-func FindTaskByID(id int) (model.Task, bool) {
+// GetTaskByID called by parser
+func GetTaskByID(id int) (model.Task, bool) {
 	task, ok := model.DB.Data.Tasks[id]
 	return task, ok
 }
 
-// FindTasksByIDGroup called by parser
-func FindTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
+// GetTasksByIDGroup called by parser
+func GetTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
 	for _, id := range ids {
-		task, ok := FindTaskByID(id)
+		task, ok := GetTaskByID(id)
 		if ok {
 			tasks = append(tasks, task)
 		} else {
