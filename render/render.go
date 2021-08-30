@@ -28,7 +28,8 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	if contenTitle != "" {
 		defaultContentTitle = contenTitle
 	}
-	t.AppendHeader(table.Row{"#", defaultContentTitle, "Tags", "Due", "Loop"})
+	t.AppendHeader(table.Row{"#", defaultContentTitle, "Project", "Tags", "Due", "Loop"})
+
 	for _, task := range tasks {
 		contentStr := task.Content
 		for i := 0; i < task.Important; i++ {
@@ -45,7 +46,11 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
 			tagsStr = append(tagsStr, content)
 		}
-		row := table.Row{task.ID, contentStr, strings.Join(tagsStr, ","), dueStr, task.Loop}
+		project, ok := controller.GetProjectByID(task.ProjectID)
+		if !ok {
+			project = model.Project{}
+		}
+		row := table.Row{task.ID, contentStr, project.Content, strings.Join(tagsStr, ","), dueStr, task.Loop}
 		t.AppendRow(row)
 	}
 	t.AppendFooter(table.Row{"", fmt.Sprint("Found ", len(tasks), " tasks")})

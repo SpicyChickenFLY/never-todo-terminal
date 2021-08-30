@@ -25,8 +25,6 @@ func GetProjectByID(id int) (model.Project, bool) {
 
 // GetProjectIDByName called by parser
 func GetProjectIDByName(name string) (int, bool) {
-	fmt.Println(model.DB.Data.Projects)
-	fmt.Println(name)
 	for _, project := range model.DB.Data.Projects {
 		if project.Content == name {
 			return project.ID, true

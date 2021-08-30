@@ -72,7 +72,6 @@ func unmarshalData(data interface{}) error {
 			return err
 		}
 	}
-	initDefaultProject()
 	return nil
 }
 
@@ -85,11 +84,11 @@ func unmarshalTask(tasks interface{}) error {
 		if !ok {
 			return errors.New("field taskMap cannot be convert to []interface{}")
 		}
-		if len(taskMap) != 6 {
+		if len(taskMap) != 7 {
 			return errors.New("count of taskMap fields is not matched")
 		}
 
-		var taskID, taskImportant, taskProjectID float64
+		var taskID, taskStatus, taskImportant, taskProjectID float64
 		var taskContent, taskDue, taskLoop string
 
 		if taskID, ok = taskMap[0].(float64); !ok {
@@ -98,14 +97,17 @@ func unmarshalTask(tasks interface{}) error {
 		if taskContent, ok = taskMap[1].(string); !ok {
 			return errors.New("field taskMap[1] cannot be convert to string")
 		}
-		if taskImportant, ok = taskMap[2].(float64); !ok {
+		if taskStatus, ok = taskMap[2].(float64); !ok {
 			return errors.New("field taskMap[2] cannot be convert to float64")
 		}
-		if taskProjectID, ok = taskMap[3].(float64); !ok {
+		if taskImportant, ok = taskMap[3].(float64); !ok {
 			return errors.New("field taskMap[3] cannot be convert to float64")
 		}
-		if taskDue, ok = taskMap[4].(string); !ok {
-			return errors.New("field taskMap[4] cannot be convert to time.Time")
+		if taskProjectID, ok = taskMap[4].(float64); !ok {
+			return errors.New("field taskMap[4] cannot be convert to float64")
+		}
+		if taskDue, ok = taskMap[5].(string); !ok {
+			return errors.New("field taskMap[5] cannot be convert to time.Time")
 		}
 		loc, err := time.LoadLocation("Asia/Shanghai")
 		if err != nil {
@@ -126,6 +128,7 @@ func unmarshalTask(tasks interface{}) error {
 		task := Task{
 			ID:        int(taskID),
 			Content:   taskContent,
+			Status:    int(taskStatus),
 			Important: int(taskImportant),
 			ProjectID: int(taskProjectID),
 			Due:       dueTime,
@@ -268,17 +271,7 @@ func unmarshalProject(projects interface{}) error {
 			DB.Data.ProjectInc = project.ID - 1
 		}
 	}
-	initDefaultProject()
 	return nil
-}
-
-func initDefaultProject() {
-	if DB.Data.Projects == nil {
-		DB.Data.Projects = make(map[int]Project)
-	}
-	DB.Data.Projects[ProjectTodo] = Project{ProjectTodo, "TODO", "", false}
-	DB.Data.Projects[ProjectDone] = Project{ProjectDone, "DONE", "", false}
-	DB.Data.Projects[ProjectDeleted] = Project{ProjectDeleted, "Deleted", "", false}
 }
 
 func unmarshalLog(logs interface{}) error {
@@ -336,6 +329,7 @@ func marshalModel() (m map[string]interface{}, err error) {
 		taskMap = append(taskMap,
 			task.ID,
 			task.Content,
+			task.Status,
 			task.Important,
 			task.ProjectID,
 			dueTime,

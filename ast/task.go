@@ -200,7 +200,6 @@ func (itlfn *IndefiniteTaskListFilterNode) SetDue(tfn *TimeFilterNode) *Indefini
 
 // SetProject func
 func (itlfn *IndefiniteTaskListFilterNode) SetProject(project string) *IndefiniteTaskListFilterNode {
-	fmt.Println("set project")
 	if itlfn.project != "" {
 		WarnList = append(WarnList, "Only one project filter will be accepted")
 	} else {
