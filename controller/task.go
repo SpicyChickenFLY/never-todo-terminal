@@ -2,8 +2,10 @@ package controller
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
+	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
 // ListTasks with filter provided by params
@@ -116,4 +118,27 @@ func UpdateTask(updateTask model.Task) error {
 	}
 	model.DB.Data.Tasks[updateTask.ID] = updateTask
 	return nil
+}
+
+// TaskSortDue sorted by task id
+type TaskSortDue []model.Task
+
+func (tsd TaskSortDue) Len() int           { return len(tsd) }
+func (tsd TaskSortDue) Less(i, j int) bool { return utils.LessInAbs(tsd[i].ID, tsd[j].ID) }
+func (tsd TaskSortDue) Swap(i, j int)      { tsd[i], tsd[j] = tsd[j], tsd[i] }
+
+// SortTask with specified metric
+func SortTask(tasks []model.Task, metric int, asc bool) []model.Task {
+	switch metric {
+	case model.TaskSortMetricName:
+	case model.TaskSortMetricDue:
+		sort.SliceStable(tasks, func(a, b int) bool {
+			return utils.LessInTime(tasks[a].Due, tasks[b].Due)
+		})
+	default:
+		sort.SliceStable(tasks, func(a, b int) bool {
+			return utils.LessInID(tasks[a].ID, tasks[b].ID)
+		})
+	}
+	return tasks
 }

@@ -45,7 +45,7 @@ import (
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
 %token <str> UI EXPLAIN LOG UNDO
 %token <str> TODO TAG ADD DELETE DONE PROJECT
-%token <str> AGE DUE LOOP IMPORTANCE COLOR
+%token <str> AGE DUE LOOP IMPORTANCE COLOR SORT
 %token <str> HELP
 
 %type <root> root
@@ -68,7 +68,7 @@ import (
 %type <tagDeleteNode> tag_delete
 %type <num> id importance
 %type <idGroupNode> id_group
-%type <str> content definite_content indefinite_content color project
+%type <str> content definite_content indefinite_content color project sort
 %type <contentGroupNode> content_group content_logic_p3 content_logic_p2 content_logic_p1
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
@@ -127,7 +127,7 @@ undo_log:
 
 // ========== TASK COMMAND ==============
 task_list:
-      task_list_filter { $$ = ast.NewTaskListNode($1) } 
+      task_list_filter task_list_option { $$ = ast.NewTaskListNode($1) } 
     ;
 
 task_add:
@@ -176,6 +176,15 @@ indefinite_task_list_filter:
     | indefinite_task_list_filter project { $$=$1.SetProject($2) }
     ;
 
+// ========== TASK LIST OPTION =============
+
+task_list_option:
+      { $$ = ast.NewTaskListOptionNode() }
+    | sort task_list_option { $$ = $2.SetSortMetric($1) }
+    | task_list_option sort { $$ = $1.SetSortMetric($2) } 
+    /* | LOOP loop_time {} */
+    ;
+
 // ========== TASK ADD OPTION =============
 
 task_add_option:
@@ -188,7 +197,6 @@ task_add_option:
     | DUE time_filter task_add_option { $$ = $3.SetDue($2) }    
     /* | LOOP loop_time {} */
     ;
-
 
 // ========== TASK UPDATE OPTION =============
 
@@ -241,6 +249,10 @@ tag_update_option:
     ;
 
 // ========== UTILS =============
+sort:
+      SORT content { $$ = $2 }
+    ;
+
 project:
       MULTI content { $$ = $2 }
     ;

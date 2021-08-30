@@ -124,6 +124,8 @@ importance  ![0-9]
     return LOOP
 "color:"
     return COLOR
+"sort:"
+    return SORT
 
 {date}
     lval.str = string(y.buf)

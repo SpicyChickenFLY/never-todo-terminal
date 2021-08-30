@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"math"
 	"regexp"
 	"strings"
+	"time"
 	"unicode"
 )
 
@@ -46,6 +48,31 @@ func min(x int, y int, z int) int {
 		x = z
 	}
 	return x
+}
+
+func Abs(a int) int {
+	return int(math.Abs(float64(a)))
+}
+
+func LessInAbs(a, b int) bool {
+	return Abs(a) < Abs(b)
+}
+
+func LessInID(a, b int) bool {
+	if a > 0 {
+		if b > 0 {
+			return a < b
+		}
+		return true
+	}
+	if b < 0 {
+		return a > b
+	}
+	return false
+}
+
+func LessInTime(a, b time.Time) bool {
+	return a.Before(b)
 }
 
 func ContainChinese(str string) bool {

@@ -4,10 +4,25 @@ import (
 	"time"
 )
 
+// task status value
+const (
+	TaskTodo = iota
+	TaskDone
+	TaskDeleted
+)
+
+// task sort metric value
+const (
+	TaskSortMetricID = iota
+	TaskSortMetricName
+	TaskSortMetricDue
+)
+
 // Task is task struct
 type Task struct {
 	ID        int
 	Content   string
+	Status    int
 	Important int
 	ProjectID int
 	Due       time.Time
