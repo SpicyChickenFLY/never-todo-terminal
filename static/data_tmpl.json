@@ -1,0 +1,104 @@
+{
+    "data": {
+        "tag_inc": -3,
+        "tags": [
+            [
+                -1,
+                "同左",
+                "#FF0000",
+                false,
+                true,
+                false
+            ],
+            [
+                -2,
+                "待办",
+                "#00FF80",
+                false,
+                false,
+                false
+            ]
+        ],
+        "task_inc": -6,
+        "task_tags": [
+            [
+                -1,
+                -1
+            ],
+            [
+                -2,
+                -1
+            ],
+            [
+                -3,
+                -1
+            ],
+            [
+                -1,
+                -2
+            ],
+            [
+                -2,
+                -2
+            ],
+            [
+                -4,
+                -2
+            ],
+            [
+                -5,
+                -2
+            ]
+        ],
+        "tasks": [
+            [
+                -1,
+                "单击查看任务详情",
+                false,
+                false,
+                false,
+                false
+            ],
+            [
+                -2,
+                "双击快捷完成任务",
+                false,
+                false,
+                false,
+                false
+            ],
+            [
+                -3,
+                "点击加号新增对应项目",
+                false,
+                false,
+                false,
+                false
+            ],
+            [
+                -4,
+                "可以随意调整待办对应标签",
+                false,
+                false,
+                false,
+                false
+            ],
+            [
+                -5,
+                "同样，双击已完成会撤销",
+                true,
+                false,
+                true,
+                false
+            ]
+        ]
+    },
+    "log": [
+        [
+            "task",
+            "-1",
+            "1",
+            []
+        ]
+    ]
+}
