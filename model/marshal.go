@@ -60,18 +60,18 @@ func unmarshalData(data interface{}) error {
 			return err
 		}
 	}
-	if projectInc, ok := dm["project_inc"]; ok {
-		projectIncVal, ok := projectInc.(float64)
-		if !ok {
-			return errors.New("field project_inc cannot be convert to float64")
-		}
-		DB.Data.TaskInc = int(projectIncVal)
-	}
-	if projects, ok := dm["projects"]; ok {
-		if err := unmarshalProject(projects); err != nil {
-			return err
-		}
-	}
+	// if projectInc, ok := dm["project_inc"]; ok {
+	// 	projectIncVal, ok := projectInc.(float64)
+	// 	if !ok {
+	// 		return errors.New("field project_inc cannot be convert to float64")
+	// 	}
+	// 	DB.Data.TaskInc = int(projectIncVal)
+	// }
+	// if projects, ok := dm["projects"]; ok {
+	// 	if err := unmarshalProject(projects); err != nil {
+	// 		return err
+	// 	}
+	// }
 	return nil
 }
 
@@ -228,51 +228,51 @@ func unmarshalTaskTag(taskTags interface{}) error {
 	return nil
 }
 
-func unmarshalProject(projects interface{}) error {
-	var ok bool
-	DB.Data.Projects = make(map[int]Project)
-	for _, project := range projects.([]interface{}) {
-		var projectMap []interface{}
-		if projectMap, ok = project.([]interface{}); !ok {
-			return errors.New("field projectMap cannot be convert to []interface{}")
-		}
+// func unmarshalProject(projects interface{}) error {
+// 	var ok bool
+// 	DB.Data.Projects = make(map[int]Project)
+// 	for _, project := range projects.([]interface{}) {
+// 		var projectMap []interface{}
+// 		if projectMap, ok = project.([]interface{}); !ok {
+// 			return errors.New("field projectMap cannot be convert to []interface{}")
+// 		}
 
-		if len(projectMap) != 4 {
-			return errors.New("count of projectMap fields is not matched")
-		}
+// 		if len(projectMap) != 4 {
+// 			return errors.New("count of projectMap fields is not matched")
+// 		}
 
-		var projectID float64
-		var projectContent, projectColor string
-		var projectDeleted bool
+// 		var projectID float64
+// 		var projectContent, projectColor string
+// 		var projectDeleted bool
 
-		projectID, ok := projectMap[0].(float64)
-		if !ok {
-			return errors.New("field projectMap[0] cannot be convert to float64")
-		}
-		if projectContent, ok = projectMap[1].(string); !ok {
-			return errors.New("field projectMap[1] cannot be convert to string")
-		}
-		if projectColor, ok = projectMap[2].(string); !ok {
-			return errors.New("field projectMap[2] cannot be convert to string")
-		}
-		if projectDeleted, ok = projectMap[3].(bool); !ok {
-			return errors.New("field projectMap[3] cannot be convert to bool")
-		}
+// 		projectID, ok := projectMap[0].(float64)
+// 		if !ok {
+// 			return errors.New("field projectMap[0] cannot be convert to float64")
+// 		}
+// 		if projectContent, ok = projectMap[1].(string); !ok {
+// 			return errors.New("field projectMap[1] cannot be convert to string")
+// 		}
+// 		if projectColor, ok = projectMap[2].(string); !ok {
+// 			return errors.New("field projectMap[2] cannot be convert to string")
+// 		}
+// 		if projectDeleted, ok = projectMap[3].(bool); !ok {
+// 			return errors.New("field projectMap[3] cannot be convert to bool")
+// 		}
 
-		project := Project{
-			ID:      int(projectID),
-			Content: projectContent,
-			Color:   projectColor,
-			Deleted: projectDeleted,
-		}
+// 		project := Project{
+// 			ID:      int(projectID),
+// 			Content: projectContent,
+// 			Color:   projectColor,
+// 			Deleted: projectDeleted,
+// 		}
 
-		DB.Data.Projects[project.ID] = project
-		if project.ID <= DB.Data.ProjectInc {
-			DB.Data.ProjectInc = project.ID - 1
-		}
-	}
-	return nil
-}
+// 		DB.Data.Projects[project.ID] = project
+// 		if project.ID <= DB.Data.ProjectInc {
+// 			DB.Data.ProjectInc = project.ID - 1
+// 		}
+// 	}
+// 	return nil
+// }
 
 func unmarshalLog(logs interface{}) error {
 	var ok bool
