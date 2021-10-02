@@ -3,6 +3,7 @@ package ast
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
@@ -206,6 +207,32 @@ func (itlfn *IndefiniteTaskListFilterNode) SetProject(project string) *Indefinit
 		itlfn.project = project
 	}
 	return itlfn
+}
+
+// TasklistNode include task list option
+type TaskListOptionNode struct {
+	sortMetrics []string
+}
+
+func NewTaskListOptionNode() *TaskListOptionNode {
+	return &TaskListOptionNode{}
+}
+
+func (tlon *TaskListOptionNode) filter(tasks []model.Task) (result []model.Task) {
+	for _, sortMetric := range tlon.sortMetrics {
+		controller.SortTask(tasks, sortMetric)
+	}
+	return tasks
+}
+
+func (tlon *TaskListOptionNode) explain() string {
+	result := ""
+	fmt.Println("sorted by ")
+	return result
+}
+func (tlon *TaskListOptionNode) SetSortMetric(sortMetrics string) *TaskListOptionNode {
+	tlon.sortMetrics = strings.Split(sortMetrics, ",")
+	return tlon
 }
 
 // ============================

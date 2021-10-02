@@ -127,11 +127,23 @@ func (tsd TaskSortDue) Len() int           { return len(tsd) }
 func (tsd TaskSortDue) Less(i, j int) bool { return utils.LessInAbs(tsd[i].ID, tsd[j].ID) }
 func (tsd TaskSortDue) Swap(i, j int)      { tsd[i], tsd[j] = tsd[j], tsd[i] }
 
+
 // SortTask with specified metric
-func SortTask(tasks []model.Task, metric int, asc bool) []model.Task {
-	switch metric {
-	case model.TaskSortMetricName:
-	case model.TaskSortMetricDue:
+func SortTask(tasks []model.Task, metricName string) []model.Task {
+	switch metricName {
+	case "NAME":
+		sort.SliceStable(tasks, func(a, b int) bool {
+			return true
+		})
+	case "name":
+		sort.SliceStable(tasks, func(a, b int) bool {
+			return true
+		})
+	case "DUE":
+		sort.SliceStable(tasks, func(a, b int) bool {
+			return utils.LessInTime(tasks[a].Due, tasks[b].Due)
+		})
+	case "due":
 		sort.SliceStable(tasks, func(a, b int) bool {
 			return utils.LessInTime(tasks[a].Due, tasks[b].Due)
 		})

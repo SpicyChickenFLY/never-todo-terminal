@@ -17,6 +17,7 @@ import (
   taskListNode *ast.TaskListNode
   taskListFilterNode *ast.TaskListFilterNode
   indefiniteTaskListFilterNode *ast.IndefiniteTaskListFilterNode
+  taskListOptionNode *ast.TaskListOptionNode
   taskAddNode *ast.TaskAddNode  
   taskAddOptionNode *ast.TaskAddOptionNode
   taskTodoNode *ast.TaskTodoNode
@@ -50,9 +51,11 @@ import (
 
 %type <root> root
 %type <stmt> stmt
+
 %type <taskListNode> task_list
 %type <taskListFilterNode> task_list_filter
 %type <indefiniteTaskListFilterNode> indefinite_task_list_filter 
+%type <taskListOptionNode> task_list_option
 %type <taskAddNode> task_add
 %type <taskAddOptionNode> task_add_option
 %type <taskDeleteNode> task_delete 
@@ -60,6 +63,7 @@ import (
 %type <taskDoneNode> task_done
 %type <taskUpdateNode> task_update
 %type <taskUpdateOptionNode> task_update_option
+
 %type <tagListNode> tag_list
 %type <tagListFilterNode> tag_list_filter
 %type <tagAddNode> tag_add
@@ -67,6 +71,7 @@ import (
 %type <tagUpdateOptionNode> tag_update_option
 %type <tagDeleteNode> tag_delete
 %type <num> id importance
+
 %type <idGroupNode> id_group
 %type <str> content definite_content indefinite_content color project sort
 %type <contentGroupNode> content_group content_logic_p3 content_logic_p2 content_logic_p1

@@ -11,13 +11,6 @@ const (
 	TaskDeleted
 )
 
-// task sort metric value
-const (
-	TaskSortMetricID = iota
-	TaskSortMetricName
-	TaskSortMetricDue
-)
-
 // Task is task struct
 type Task struct {
 	ID        int
