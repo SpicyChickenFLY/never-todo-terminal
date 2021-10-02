@@ -51,7 +51,7 @@ func (rn *RootNode) Execute(cmd string) {
 			// No stmt found
 		}
 	case CMDStmt:
-		if err := model.Init("./static/data.json"); err != nil {
+		if err := model.Init(""); err != nil {
 			ErrorList = append(ErrorList, err)
 			render.Result(cmd, ErrorList, WarnList)
 			return
