@@ -17,7 +17,6 @@ type Task struct {
 	Content   string
 	Status    int
 	Important int
-	ProjectID int
 	Due       time.Time
 	Loop      string
 }

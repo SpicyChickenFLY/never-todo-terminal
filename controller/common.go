@@ -7,16 +7,14 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
+// ShowHelp for user
 func ShowHelp() error {
 	return nil
 }
 
+// StartUI interface
 func StartUI() error {
 
-	return nil
-}
-
-func StartGUI() error {
 	return nil
 }
 
@@ -28,7 +26,7 @@ func ShowSummary() error {
 	fmt.Println(constant.Separator)
 	var todoTotal, doneTotal, deletedTotal, tagTotal int
 	for _, task := range model.DB.Data.Tasks {
-		switch task.ProjectID {
+		switch task.Status {
 		case model.ProjectTodo:
 			todoTotal++
 		case model.ProjectDone:

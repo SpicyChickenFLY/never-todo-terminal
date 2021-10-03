@@ -24,9 +24,10 @@ func ListAllTasks() (todo, done, deleted []model.Task) {
 // ListTodoTasks with filter provided by params
 func ListTodoTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
-		if task.ProjectID == model.ProjectTodo {
+		if task.Status == model.ProjectTodo {
 			tasks = append(tasks, task)
 		}
+		tasks = append(tasks, task)
 	}
 	return tasks
 }
@@ -34,7 +35,7 @@ func ListTodoTasks() (tasks []model.Task) {
 // ListDoneTasks with filter provided by params
 func ListDoneTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
-		if task.ProjectID == model.ProjectDone {
+		if task.Status == model.ProjectDone {
 			tasks = append(tasks, task)
 		}
 	}
@@ -44,7 +45,7 @@ func ListDoneTasks() (tasks []model.Task) {
 // ListDeletedTasks with filter provided by params
 func ListDeletedTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
-		if task.ProjectID == model.ProjectDeleted {
+		if task.Status == model.ProjectDeleted {
 			tasks = append(tasks, task)
 		}
 	}
@@ -74,7 +75,7 @@ func GetTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
 func DeleteTask(ids []int) (warnList []string) {
 	for _, id := range ids {
 		if task, ok := model.DB.Data.Tasks[id]; ok {
-			task.ProjectID = model.ProjectDeleted
+			task.Status = model.ProjectDeleted
 			model.DB.Data.Tasks[id] = task
 		} else {
 			warnList = append(warnList,
@@ -89,7 +90,7 @@ func DeleteTask(ids []int) (warnList []string) {
 func CompleteTask(ids []int) (warnList []string) {
 	for _, id := range ids {
 		if task, ok := model.DB.Data.Tasks[id]; ok {
-			task.ProjectID = model.ProjectDone
+			task.Status = model.ProjectDone
 			model.DB.Data.Tasks[id] = task
 		} else {
 			warnList = append(warnList,
@@ -126,7 +127,6 @@ type TaskSortDue []model.Task
 func (tsd TaskSortDue) Len() int           { return len(tsd) }
 func (tsd TaskSortDue) Less(i, j int) bool { return utils.LessInAbs(tsd[i].ID, tsd[j].ID) }
 func (tsd TaskSortDue) Swap(i, j int)      { tsd[i], tsd[j] = tsd[j], tsd[i] }
-
 
 // SortTask with specified metric
 func SortTask(tasks []model.Task, metricName string) []model.Task {

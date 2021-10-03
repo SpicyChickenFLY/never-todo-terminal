@@ -6,17 +6,17 @@
                 -1,
                 "同左",
                 "#FF0000",
-                false,
-                true,
-                false
+                0,
+                0,
+                ""
             ],
             [
                 -2,
                 "待办",
                 "#00FF80",
-                false,
-                false,
-                false
+                0,
+                0,
+                ""
             ]
         ],
         "task_inc": -6,
@@ -54,42 +54,37 @@
             [
                 -1,
                 "单击查看任务详情",
-                false,
-                false,
-                false,
-                false
+		0,
+		0,
+		""
             ],
             [
                 -2,
                 "双击快捷完成任务",
-                false,
-                false,
-                false,
-                false
+		0,
+		0,
+		""
             ],
             [
                 -3,
                 "点击加号新增对应项目",
-                false,
-                false,
-                false,
-                false
+		0,
+		0,
+		""
             ],
             [
                 -4,
                 "可以随意调整待办对应标签",
-                false,
-                false,
-                false,
-                false
+		0,
+		0,
+		""
             ],
             [
                 -5,
                 "同样，双击已完成会撤销",
-                true,
-                false,
-                true,
-                false
+		0,
+		0,
+		""
             ]
         ]
     },

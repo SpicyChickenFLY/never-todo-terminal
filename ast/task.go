@@ -107,29 +107,29 @@ func (itlfn *IndefiniteTaskListFilterNode) filter(tasks []model.Task) []model.Ta
 	if itlfn.due != nil {
 		tasks = itlfn.due.filter(tasks)
 	}
-	if itlfn.project != "" {
-		result := []model.Task{}
-		projectID, ok := controller.GetProjectIDByName(itlfn.project)
-		if ok {
-			for _, task := range tasks {
-				if task.ProjectID == projectID {
-					result = append(result, task)
-				}
-			}
-		} else {
-			WarnList = append(WarnList, fmt.Sprintf("project(%s) not found", itlfn.project))
-		}
-		tasks = result
-	}
+	// if itlfn.project != "" {
+	// 	result := []model.Task{}
+	// 	projectID, ok := controller.GetProjectIDByName(itlfn.project)
+	// 	if ok {
+	// 		for _, task := range tasks {
+	// 			if task.ProjectID == projectID {
+	// 				result = append(result, task)
+	// 			}
+	// 		}
+	// 	} else {
+	// 		WarnList = append(WarnList, fmt.Sprintf("project(%s) not found", itlfn.project))
+	// 	}
+	// 	tasks = result
+	// }
 	return tasks
 }
 func (itlfn *IndefiniteTaskListFilterNode) explain() string {
 	result := ""
-	if itlfn.project != "" {
-		fmt.Print("\tby project ")
-		result += fmt.Sprintf("@%s ", itlfn.project)
-		fmt.Print("\n")
-	}
+	// if itlfn.project != "" {
+	// 	fmt.Print("\tby project ")
+	// 	result += fmt.Sprintf("@%s ", itlfn.project)
+	// 	fmt.Print("\n")
+	// }
 	if itlfn.contentGroup != nil {
 		fmt.Print("\tby content ")
 		result += itlfn.contentGroup.explain() + " "
@@ -209,11 +209,12 @@ func (itlfn *IndefiniteTaskListFilterNode) SetProject(project string) *Indefinit
 	return itlfn
 }
 
-// TasklistNode include task list option
+// TaskListOptionNode include task list option
 type TaskListOptionNode struct {
 	sortMetrics []string
 }
 
+// NewTaskListOptionNode return *TaskListOptionNode
 func NewTaskListOptionNode() *TaskListOptionNode {
 	return &TaskListOptionNode{}
 }
@@ -230,6 +231,8 @@ func (tlon *TaskListOptionNode) explain() string {
 	fmt.Println("sorted by ")
 	return result
 }
+
+// SetSortMetric set sort metrics for tasks
 func (tlon *TaskListOptionNode) SetSortMetric(sortMetrics string) *TaskListOptionNode {
 	tlon.sortMetrics = strings.Split(sortMetrics, ",")
 	return tlon

@@ -17,18 +17,20 @@ func init() {
 	Init()
 }
 
+// Init the render
 func Init() {
 	t = table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 	t.SetStyle(table.StyleLight)
 }
 
+// Tasks in table
 func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	defaultContentTitle := "Content"
 	if contenTitle != "" {
 		defaultContentTitle = contenTitle
 	}
-	t.AppendHeader(table.Row{"#", defaultContentTitle, "Project", "Tags", "Due", "Loop"})
+	t.AppendHeader(table.Row{"#", defaultContentTitle, "Tags", "Due", "Loop"})
 
 	for _, task := range tasks {
 		contentStr := task.Content
@@ -46,11 +48,11 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
 			tagsStr = append(tagsStr, content)
 		}
-		project, ok := controller.GetProjectByID(task.ProjectID)
-		if !ok {
-			project = model.Project{}
-		}
-		row := table.Row{task.ID, contentStr, project.Content, strings.Join(tagsStr, ","), dueStr, task.Loop}
+		// project, ok := controller.GetProjectByID(task.ProjectID)
+		// if !ok {
+		// 	project = model.Project{}
+		// }
+		row := table.Row{task.ID, contentStr, strings.Join(tagsStr, ","), dueStr, task.Loop}
 		t.AppendRow(row)
 	}
 	t.AppendFooter(table.Row{"", fmt.Sprint("Found ", len(tasks), " tasks")})
@@ -60,6 +62,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	return
 }
 
+// Tags in table
 func Tags(tags []model.Tag) {
 	t.AppendHeader(table.Row{"#", "Content", "Color"})
 	for _, tag := range tags {
@@ -73,6 +76,7 @@ func Tags(tags []model.Tag) {
 	Init()
 }
 
+// Result of execution
 func Result(command string, errorList []error, warnList []string) {
 	for _, warn := range warnList {
 		fmt.Printf("%s %s\n",

@@ -19,5 +19,7 @@ parser/parser.go
 parser/y.output
 
 build/y.output
+build/nt
+build/nt.exe
 
 static/data.json
