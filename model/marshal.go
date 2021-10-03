@@ -48,7 +48,7 @@ func unmarshalData(data interface{}) error {
 		if !ok {
 			return errors.New("field tag_inc cannot be convert to float64")
 		}
-		DB.Data.TaskInc = int(tagIncVal)
+		DB.Data.TagInc = int(tagIncVal)
 	}
 	if tags, ok := dm["tags"]; ok {
 		if err := unmarshalTag(tags); err != nil {

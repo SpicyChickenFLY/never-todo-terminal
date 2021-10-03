@@ -108,6 +108,7 @@ func AddTask(content string) (taskID int) {
 		Content: content,
 	}
 	model.DB.Data.Tasks[newTask.ID] = newTask
+	model.DB.Data.TaskTags[newTask.ID] = make(map[int]bool, 0)
 	model.DB.Data.TaskInc--
 	return newTask.ID
 }

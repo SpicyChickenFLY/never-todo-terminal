@@ -44,7 +44,8 @@ func AddTag(content string) (int, error) {
 		Content: content,
 		Color:   "white",
 	}
-	model.DB.Data.Tags[model.DB.Data.TagInc] = newTag
+	model.DB.Data.Tags[newTag.ID] = newTag
+	model.DB.Data.TagTasks[newTag.ID] = make(map[int]bool, 0)
 	model.DB.Data.TagInc--
 
 	return newTag.ID, nil
