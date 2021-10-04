@@ -40,7 +40,13 @@ func AddTaskTags(taskID int, assignTags []string) (err error) {
 			}
 		}
 		if !checkTaskTagExist(taskID, tagID) {
+			if _, ok := model.DB.Data.TaskTags[taskID]; !ok {
+				model.DB.Data.TaskTags[taskID] = make(map[int]bool)
+			}
 			model.DB.Data.TaskTags[taskID][tagID] = true
+			if _, ok := model.DB.Data.TagTasks[tagID]; !ok {
+				model.DB.Data.TagTasks[tagID] = make(map[int]bool)
+			}
 			model.DB.Data.TagTasks[tagID][taskID] = true
 		}
 	}
@@ -51,8 +57,12 @@ func AddTaskTags(taskID int, assignTags []string) (err error) {
 func DeleteTaskTags(taskID int, unassignTags []string) error {
 	for _, unassignTag := range unassignTags {
 		tagID, _ := GetTagIDByName(unassignTag)
-		delete(model.DB.Data.TaskTags[taskID], tagID)
-		delete(model.DB.Data.TagTasks[tagID], taskID)
+		if _, ok := model.DB.Data.TaskTags[taskID]; ok {
+			delete(model.DB.Data.TaskTags[taskID], tagID)
+		}
+		if _, ok := model.DB.Data.TagTasks[tagID]; ok {
+			delete(model.DB.Data.TagTasks[tagID], taskID)
+		}
 	}
 	return nil
 }
