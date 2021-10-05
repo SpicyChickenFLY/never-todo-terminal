@@ -20,5 +20,5 @@ copy ..\static\data.json %APPDATA%\.nevertodo
 
 cd ..
 
-go build -o build/nt.exe
-copy .\nt.exe %USERPROFILE%\AppData\Local\Microsoft\WindowsApps
+go build -o build\nt.exe
+copy build\nt.exe %USERPROFILE%\AppData\Local\Microsoft\WindowsApps

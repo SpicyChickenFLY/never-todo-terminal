@@ -13,4 +13,4 @@ cp ../static/data.json ~/.nevertodo
 cd ..
 
 go build -o build/nt
-cp nt /usr/bin
+cp build/nt /usr/bin
