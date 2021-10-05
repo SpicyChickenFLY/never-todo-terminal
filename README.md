@@ -30,47 +30,49 @@ never
 # 查看帮助
 never help
 
-## 通过UI交互界面进行操作
+# 通过UI交互界面进行操作
 never ui
 
-## 通过指令交互进行操作
-# 查看历史操作
+# 查看历史操作(未完成)
 never log [<num>]
 
-# 撤销
+# 撤销(未完成)
 never undo [<log_id>]
 
 # 解释指令的解析结果和执行计划
 never explain [<log_id>]
 
 # 查看、搜索待办任务
-never todo [<FILTER_TODO_LIST>]
+never [todo] [<FILTER_TODO_LIST>]
     # FILTER_TODO_LIST
-    <id>[-<id>] [<id>]                  # 通过ID直接定位
+    <id>[-<id>] [<id>]             # 通过ID直接定位
     <content> [and|or <content>]   # 通过内容模糊搜索
-    +<tag>|-<tag> [+<tag>|-<tag>]       # 通过标签筛选
-    age:<age>|[<age>]-[<age>]                   # 通过创建时间筛选
-    due:<due>|[<due>]-[<due>]                   # 通过截止时间筛选
+    +<tag>|-<tag> [+<tag>|-<tag>]  # 通过标签筛选
+    age:<age>|[<age>]-[<age>]      # 通过创建时间筛选(未完成)
+    due:<due>|[<due>]-[<due>]      # 通过截止时间筛选(未完成)
 
 # 新增待办任务
-never [todo] add <content> [<FILTER_TODO_ADD>]
+never add <content> [<FILTER_TODO_ADD>]
     # FILTER_TODO_ADD
     +<tag> [+<tag>]         # 分配标签
-    due:<due>               # 设置截止时间
-    loop: y|m|w[-SMTWTFS]|d # 设置重复提醒(每周日，一，四：w-SM...T..)
+    due:<due>               # 设置截止时间(未完成)
+    loop: y|m|w[-SMTWTFS]|d # 设置重复提醒(每周日，一，四：w-SM...T..)(未完成)
+
+# 查看已完成、已删除任务
+never done
 
 # 完成、删除任务
-never [todo] done|del <id>[-<id>] [<id>]
+never done|del <id>[-<id>] [<id>]
 
 # 修改任务
-never [todo] [set] <id> [<content>] [<FILTER_TODO_UPDATE>]
+never [set] <id> [<content>] [<FILTER_TODO_UPDATE>]
     # FILTER_TODO_UPDATE
     +<tag>|-<tag> [+<tag>|-<tag>]   # 分配标签
-    due:<due>                       # 设置截止时间
-    loop: y|m|w[-SMTWTFS]|d         # 设置重复提醒(每周日，一，四：w-SM...T..)
+    due:<due>                       # 设置截止时间  (未完成)
+    loop: y|m|w[-SMTWTFS]|d         # 设置重复提醒(每周日，一，四：w-SM...T..)(未完成)
 
-# 查看某一时段内的统计
-never stat year|month|week|day # 默认为day
+# 查看某一时段内的统计(未开发)
+# never stat year|month|week|day # 默认为day
 
 # 查看所有标签、修改标签
 never tag [<FILTER_TAG_LIST>]
