@@ -28,8 +28,8 @@ use 'never -h' to get help about how to use this`
 )
 
 var (
-	startMarkGreen = colorful.GetStartMark("default", "black", "green")
-	startMarkRed   = colorful.GetStartMark("default", "black", "red")
+	startMarkGreen = colorful.GetStartMark("default", "default", "green")
+	startMarkRed   = colorful.GetStartMark("default", "default", "red")
 	endMark        = colorful.GetEndMark()
 
 	ColorfulLogo = fmt.Sprintf(`                      %s____%s
