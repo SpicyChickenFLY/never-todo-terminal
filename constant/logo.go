@@ -6,26 +6,8 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/utils/colorful"
 )
 
-const (
-	Logo = `                     ____
-                    /   /    
-                   /   /   _____     ____  __  __   ____  _____
-           ____   /   /   /' __ \   / ,. \/\ \/\ \ / ,. \/\  __\
-          /\   \ /   /    /\ \/\ \ /\  __/\ \ \/ |/\  __/\ \ \_/
-          \ \   v   /     \ \_\ \_\\ \____\\ \___/\ \____\\ \_\
-           \ \_____/       \/_/\/_/ \/____/ \/__/  \/____/ \/_/
-          / \/____/          __                   __
-         /   ^ \  \         /\ \___     ____    __\ \     ____
-        /   / \ \__\        \ \  __\   / __ \  / __\ \   / __ \
-       /   /   \/__/         \ \ \/__ /\ \_\ \/\ \__\ \ /\ \_\ \
-      /___/                   \ \____\\ \____/\ \___/\_\\ \____/
-     /___/                     \/____/ \/___/  \/__/\/_/ \/___/`
-
-	Descirption = `
-Never todo (CMD): https://github.com/SpicyChickenFLY/never-todo-cmd
-use 'never -h' to get help about how to use this`
-	Separator = `=======================================================`
-)
+// Logos
+const ()
 
 var (
 	startMarkGreen = colorful.GetStartMark("default", "default", "green")
@@ -60,4 +42,8 @@ var (
 		startMarkRed, endMark, startMarkGreen, endMark,
 		startMarkRed, endMark, startMarkGreen, endMark,
 	)
+
+	Descirption = `Never todo (CMD): https://github.com/SpicyChickenFLY/never-todo-cmd
+use 'never -h' to get help about how to use this`
+	Separator = `=======================================================`
 )

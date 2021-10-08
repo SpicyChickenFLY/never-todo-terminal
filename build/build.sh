@@ -8,7 +8,7 @@ golex -o ../parser/lex.go ../parser/lex.l
 goyacc -o ../parser/parser.go ../parser/parser.y
 
 mkdir ~/.nevertodo
-cp ../static/data.json ~/.nevertodo
+cp ../static/data_tmpl.json ~/.nevertodo/data.json
 
 cd ..
 

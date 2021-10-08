@@ -110,13 +110,14 @@ func unmarshalTask(tasks interface{}) error {
 		if taskDue, ok = taskMap[4].(string); !ok {
 			return errors.New("field taskMap[5] cannot be convert to time.Time")
 		}
-		loc, err := time.LoadLocation("Asia/Shanghai")
+		_, err := time.LoadLocation("Asia/Shanghai")
 		if err != nil {
 			return err
 		}
 		var dueTime time.Time
 		if taskDue != "" {
-			dueTime, err = time.ParseInLocation(timeTemp, taskDue, loc)
+			// dueTime, err = time.ParseInLocation(timeTemp, taskDue, loc)
+			dueTime, err = time.Parse(timeTemp, taskDue)
 			if err != nil {
 				return err
 			}
