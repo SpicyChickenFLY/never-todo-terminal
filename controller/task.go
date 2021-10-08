@@ -148,6 +148,10 @@ func SortTask(tasks []model.Task, metricName string) []model.Task {
 		sort.SliceStable(tasks, func(a, b int) bool {
 			return utils.LessInTime(tasks[a].Due, tasks[b].Due)
 		})
+	case "ID":
+		sort.SliceStable(tasks, func(a, b int) bool {
+			return !utils.LessInID(tasks[a].ID, tasks[b].ID)
+		})
 	default:
 		sort.SliceStable(tasks, func(a, b int) bool {
 			return utils.LessInID(tasks[a].ID, tasks[b].ID)

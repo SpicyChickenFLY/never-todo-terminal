@@ -59,16 +59,7 @@ func LessInAbs(a, b int) bool {
 }
 
 func LessInID(a, b int) bool {
-	if a > 0 {
-		if b > 0 {
-			return a < b
-		}
-		return true
-	}
-	if b < 0 {
-		return a > b
-	}
-	return false
+	return LessInAbs(a, b)
 }
 
 func LessInTime(a, b time.Time) bool {

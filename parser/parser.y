@@ -132,7 +132,7 @@ undo_log:
 
 // ========== TASK COMMAND ==============
 task_list:
-      task_list_filter task_list_option { $$ = ast.NewTaskListNode($1) } 
+      task_list_filter task_list_option { $$ = ast.NewTaskListNode($1, $2) } 
     ;
 
 task_add:

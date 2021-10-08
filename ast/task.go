@@ -17,16 +17,19 @@ import (
 // TaskListNode include task list filter
 type TaskListNode struct {
 	taskListFilterNode *TaskListFilterNode
+	taskListOptionNode *TaskListOptionNode
 }
 
 // NewTaskListNode return TaskListNode
-func NewTaskListNode(tlfn *TaskListFilterNode) *TaskListNode {
-	return &TaskListNode{tlfn}
+func NewTaskListNode(tlfn *TaskListFilterNode, tlon *TaskListOptionNode) *TaskListNode {
+	return &TaskListNode{tlfn, tlon}
 }
 
 func (tln *TaskListNode) execute() {
 	tasks := controller.ListTasks()
-	render.Tasks(tln.taskListFilterNode.filter(tasks), "Tasks")
+	tasks = tln.taskListFilterNode.filter(tasks)
+	tasks = tln.taskListOptionNode.filter(tasks)
+	render.Tasks(tasks, "Tasks")
 }
 
 func (tln *TaskListNode) explain() string {
@@ -216,10 +219,11 @@ type TaskListOptionNode struct {
 
 // NewTaskListOptionNode return *TaskListOptionNode
 func NewTaskListOptionNode() *TaskListOptionNode {
-	return &TaskListOptionNode{}
+	return &TaskListOptionNode{[]string{"ID"}}
 }
 
 func (tlon *TaskListOptionNode) filter(tasks []model.Task) (result []model.Task) {
+	// fmt.Println("Task List Option:", tlon.sortMetrics)
 	for _, sortMetric := range tlon.sortMetrics {
 		controller.SortTask(tasks, sortMetric)
 	}
