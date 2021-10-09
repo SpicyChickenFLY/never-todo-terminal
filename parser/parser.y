@@ -68,7 +68,7 @@ import (
 %type <tagListFilterNode> tag_list_filter
 %type <tagAddNode> tag_add
 %type <tagUpdateNode> tag_update
-%type <tagUpdateOptionNode> tag_update_option
+%type <tagUpdateOptionNode> tag_update_option tag_update_option_first
 %type <tagDeleteNode> tag_delete
 %type <num> id importance
 
@@ -253,11 +253,16 @@ tag_list_filter:
 // ========== TASK UPDATE OPTION =============
 
 tag_update_option:
-      { $$ = ast.NewTagUpdateOptionNode() }
+      tag_update_option_first { $$ = $1 }
     | content tag_update_option { $$ = $2.SetContent($1) }
     | tag_update_option content { $$ = $1.SetContent($2) }
     | color tag_update_option { $$ = $2.SetColor($1) }
     | tag_update_option color { $$ = $1.SetColor($2) }
+    ;
+
+tag_update_option_first:
+      content { $$ = ast.NewTagUpdateOptionNode().SetContent($1) }
+    | color { $$ = ast.NewTagUpdateOptionNode().SetColor($1) }
     ;
 
 // ========== UTILS =============
