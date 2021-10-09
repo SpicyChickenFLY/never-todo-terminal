@@ -45,6 +45,7 @@ func (y *yylexer) getc() byte {
 func (y yylexer) Error(e string) {
     // fmt.Println(e) 
     ast.ErrorList = append(ast.ErrorList, errors.New("Command not supported: " + e))
+    ast.Result = ast.NewRootNode(ast.CMDNotSupport, nil)
 }
 
 func (y *yylexer) Lex(lval *yySymType) int {

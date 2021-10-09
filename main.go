@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/SpicyChickenFLY/never-todo-cmd/ast"
 	"github.com/SpicyChickenFLY/never-todo-cmd/parser"
 	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
@@ -23,9 +22,6 @@ func main() {
 
 	// Parse command string to an AST
 	result := parser.Parse(cmd)
-	if result == nil {
-		result = ast.NewRootNode(ast.CMDNotSupport, nil)
-	}
 
 	// Execute the AST
 	result.Execute(cmd)
