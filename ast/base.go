@@ -16,6 +16,7 @@ const (
 	CMDExplain
 	CMDStmt
 	CMDHelp
+	CMDNotSupport
 )
 
 // export for parser
@@ -40,6 +41,9 @@ func NewRootNode(cmdType int, sn StmtNode) *RootNode {
 // Execute should start from root
 func (rn *RootNode) Execute(cmd string) {
 	switch rn.cmdType {
+	case CMDNotSupport:
+		// ErrorList = append(ErrorList, errors.New("Command not support"))
+		render.Result(cmd, ErrorList, WarnList)
 	case CMDHelp:
 		controller.ShowHelp()
 	case CMDUI:
