@@ -62,7 +62,7 @@ import (
 %type <taskTodoNode> task_todo
 %type <taskDoneNode> task_done
 %type <taskUpdateNode> task_update
-%type <taskUpdateOptionNode> task_update_option
+%type <taskUpdateOptionNode> task_update_option task_update_option_first
 
 %type <tagListNode> tag_list
 %type <tagListFilterNode> tag_list_filter
@@ -206,7 +206,7 @@ task_add_option:
 // ========== TASK UPDATE OPTION =============
 
 task_update_option:
-      { $$ = ast.NewTaskUpdateOptionNode() }
+      task_update_option_first { $$ = $1 }
     | content task_update_option { $$ = $2.SetContent($1) }
     | task_update_option content { $$ = $1.SetContent($2) }
     | assign_group task_update_option { $$ = $2.SetAssignGroup($1) }
@@ -215,6 +215,13 @@ task_update_option:
     | importance task_update_option { $$ = $2.SetImportance($1) }
     | task_update_option DUE time { $$ = $1.SetDue($3) }
     | DUE time task_update_option { $$ = $3.SetDue($2) }
+    ;
+
+task_update_option_first:
+      content { $$ = ast.NewTaskUpdateOptionNode().SetContent($1) }
+    | assign_group { $$ = ast.NewTaskUpdateOptionNode().SetAssignGroup($1) }
+    | importance { $$ = ast.NewTaskUpdateOptionNode().SetImportance($1) }
+    | DUE time { $$ = ast.NewTaskUpdateOptionNode().SetDue($2) }
     ;
 
 // ========== TAG COMMAND =============

@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
@@ -66,18 +65,13 @@ func (rn *RootNode) Execute(cmd string) {
 			return
 		}
 		rn.stmtNode.execute()
-		render.Result(cmd, ErrorList, WarnList)
 		if len(ErrorList) > 0 {
 			if err := model.RollBack(); err != nil {
 				ErrorList = append(ErrorList, err)
 			}
-			render.Result(cmd, ErrorList, WarnList)
 		} else if err := model.Commit(); err != nil {
 			ErrorList = append(ErrorList, err)
-			render.Result(cmd, ErrorList, WarnList)
 		}
-	default:
-		ErrorList = append(ErrorList, errors.New("目前不支持的命令类型"))
 		render.Result(cmd, ErrorList, WarnList)
 	}
 }
