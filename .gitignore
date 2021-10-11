@@ -16,8 +16,10 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-parser/lex.go
-parser/parser.go
+.vscode/*
+
+#parser/lex.go
+#parser/parser.go
 parser/y.output
 
 build/y.output
@@ -25,3 +27,5 @@ build/nt
 build/nt.exe
 
 static/data.json
+
+__debug_bin
