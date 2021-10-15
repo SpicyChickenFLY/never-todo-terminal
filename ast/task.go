@@ -98,6 +98,7 @@ func NewIndefiniteTaskListFilterNode() *IndefiniteTaskListFilterNode {
 }
 
 func (itlfn *IndefiniteTaskListFilterNode) filter(tasks []model.Task) []model.Task {
+	// fmt.Println("itlfn:", itlfn)
 	if itlfn.contentGroup != nil {
 		tasks, _ = itlfn.contentGroup.filter(tasks)
 	}
@@ -126,6 +127,7 @@ func (itlfn *IndefiniteTaskListFilterNode) filter(tasks []model.Task) []model.Ta
 	// }
 	return tasks
 }
+
 func (itlfn *IndefiniteTaskListFilterNode) explain() string {
 	result := ""
 	// if itlfn.project != "" {

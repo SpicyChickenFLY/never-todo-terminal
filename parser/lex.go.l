@@ -60,7 +60,7 @@ func (y *yylexer) Lex(lval *yySymType) int {
 %yyn c = y.getc()
 
 setence     \"[^"]*\"|'[^']*'|`[^`]*`
-letter      [_a-zA-Z]
+letter      [_a-zA-Z\\]
 identifier  {letter}({letter}|{digit})*
 white       [ \t\n\r]+
 date        {digit}\/{digit}\/{digit}|{digit}\/{digit}

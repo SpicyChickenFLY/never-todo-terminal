@@ -91,7 +91,7 @@ func Result(command string, errorList []error, warnList []string) {
 				err.Error(),
 			)
 		}
-		fmt.Printf("%s %s\n",
+		fmt.Printf("%s never %s\n",
 			colorful.RenderStr("[ FAILED ]: ", "default", "", "red"),
 			command,
 		)

@@ -263,8 +263,9 @@ func (agn *AssignGroupNode) explain() string {
 }
 
 func (agn *AssignGroupNode) filter(tasks []model.Task) (result []model.Task) {
-	result = tasks
+	result = []model.Task{}
 	filterTagIDs := []int{}
+	// fmt.Println("tags: ", agn.assignTags)
 	for _, tag := range agn.assignTags {
 		tagID, ok := controller.GetTagIDByName(tag)
 		if !ok {

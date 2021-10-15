@@ -5,7 +5,9 @@ import (
   "fmt"
   "strconv"
   "strings"
+  "errors"
   "github.com/SpicyChickenFLY/never-todo-cmd/ast"
+  "github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 %}
 
@@ -343,14 +345,28 @@ content_logic_p2:
     ;
 
 content_logic_p1:
-      content {  $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) }
+      content { $$ = ast.NewContentGroupNode($1, ast.OPNone, []*ast.ContentGroupNode{}) }
     | LBRACK content_logic_p3 RBRACK { $$ = $2 }
     | NOT content_logic_p1 { $$ = ast.NewContentGroupNode("", ast.OPNOT, []*ast.ContentGroupNode{$2}) }
     ;
 
 content:
-      definite_content { $$ = $1 }
-    | indefinite_content { $$ = strings.Trim($1, " ")}
+      definite_content 
+	  { 
+		var err error
+	  	$$, err = utils.DecodeCmd($1)
+		if err != nil {
+			ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
+		}	
+	  }
+    | indefinite_content 
+	  { 
+		var err error
+		$$, err = utils.DecodeCmd(strings.Trim($1, " "))
+		if err != nil {
+			ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
+		}	
+	  }
     ;
 
 definite_content:

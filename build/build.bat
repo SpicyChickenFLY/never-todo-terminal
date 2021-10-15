@@ -8,8 +8,8 @@ cd %~dp0
 @REM go get modernc.org/goyacc
 @REM go get modernc.org/golex
 
-golex -o ..\parser\lex.go ..\parser\lex.l
-goyacc -o ..\parser\parser.go ..\parser\parser.y 
+golex -o ..\parser\lex.go ..\parser\lex.go.l
+goyacc -o ..\parser\parser.go ..\parser\parser.go.y 
 
 md "%APPDATA%\.nevertodo\"
 copy ..\static\data.json %APPDATA%\.nevertodo

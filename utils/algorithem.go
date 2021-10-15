@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"fmt"
 	"math"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -75,4 +77,118 @@ func ContainChinese(str string) bool {
 		}
 	}
 	return false
+}
+
+func getPrefixTable(search string) []int {
+	ptLength := len(search)
+	pt := make([]int, ptLength)
+	pt[0] = 0
+	len := 0
+	i := 1
+	for i < ptLength {
+		if search[i] == search[len] {
+			len++
+			pt[i] = len
+			i++
+		} else {
+			if len > 1 {
+				len = pt[len-1]
+			} else {
+				pt[i] = len
+				i++
+			}
+		}
+	}
+	return pt
+}
+func shiftPT(pt []int) {
+	len := len(pt)
+	for i := len - 1; i > 0; i-- {
+		pt[i] = pt[i-1]
+	}
+	pt[0] = -1
+}
+
+func searchWithPT(text string, pattern string) (idxRec []int) {
+	idxRec = []int{}
+	pt := getPrefixTable(pattern)
+	shiftPT(pt)
+	// fmt.Printf("pt=%v", pt)
+	M := len(text)
+	N := len(pattern)
+	if N > M {
+		return
+	}
+	// i 追踪text的位置 ， j 追踪pattern的位置
+	txtIdx, patIdx := 0, 0
+	found := 0
+	for txtIdx < M {
+		if patIdx == N-1 && text[txtIdx] == pattern[patIdx] {
+			// fmt.Printf("found pattern \"%s\" at index %d\n", pattern, txtIdx-patIdx)
+			idxRec = append(idxRec, txtIdx-patIdx)
+			found++
+			patIdx = pt[patIdx]
+		}
+		if text[txtIdx] == pattern[patIdx] {
+			txtIdx++
+			patIdx++
+		} else {
+			patIdx = pt[patIdx]
+			if patIdx == -1 {
+				txtIdx++
+				patIdx++
+			}
+		}
+	}
+	// fmt.Printf("find %d pattern in the text \n", found)
+	// return found > 0
+	return
+}
+
+func chinese2Unicode(str string) string {
+
+	if len(str) > 0 {
+		str = strconv.QuoteToASCII(str)
+		str = str[1 : len(str)-1]
+	}
+	return str
+}
+
+func unicode2Chinese(str string) (string, error) {
+	// fmt.Println("str:", str)
+	ascii, err := strconv.ParseInt(str, 16, 32)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("%c", ascii), nil
+}
+
+func EncodeCmd(cmd string) string {
+	return chinese2Unicode(cmd)
+}
+
+func DecodeCmd(cmd string) (result string, err error) {
+	result = ""
+	idxRec := searchWithPT(cmd, "\\u")
+	if len(idxRec) == 0 {
+		return cmd, nil
+	}
+	// fmt.Println("idxRec:", idxRec)
+	if idxRec[0] != 0 {
+		result += cmd[0:idxRec[0]]
+	}
+	for i := range idxRec {
+		if i != 0 && idxRec[i]-idxRec[i-1] > 6 {
+			result += cmd[idxRec[i-1]+6 : idxRec[i]-1]
+		}
+		word, err := unicode2Chinese(cmd[idxRec[i]+2 : idxRec[i]+6])
+		if err != nil {
+			return "", err
+		}
+		result += word
+	}
+	if len(idxRec) > 0 && idxRec[len(idxRec)-1]+6 != len(cmd) {
+		result += cmd[idxRec[len(idxRec)-1]+6 : len(cmd)]
+	}
+	return result, nil
 }
