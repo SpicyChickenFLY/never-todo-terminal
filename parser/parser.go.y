@@ -8,6 +8,7 @@ import (
   "errors"
   "github.com/SpicyChickenFLY/never-todo-cmd/ast"
   "github.com/SpicyChickenFLY/never-todo-cmd/utils"
+  "github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 %}
 
@@ -134,7 +135,10 @@ undo_log:
 
 // ========== TASK COMMAND ==============
 task_list:
-      task_list_filter task_list_option { $$ = ast.NewTaskListNode($1, $2) } 
+      task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskAll, $1, $2) } 
+	| TODO task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskTodo, $2, $3) }
+	| DONE task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDone, $2, $3) }
+	| DELETE task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDeleted, $2, $3) }
     ;
 
 task_add:

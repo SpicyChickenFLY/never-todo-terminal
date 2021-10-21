@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -28,7 +27,7 @@ func Init(filePath string) error {
 			return err
 		}
 		dbFilePath = path.Join(homePath, ".nevertodo/data.json")
-		fmt.Println(dbFilePath)
+		// fmt.Println(dbFilePath)
 	}
 	if _, err := os.Stat(dbFilePath); err != nil {
 		// 创建文件

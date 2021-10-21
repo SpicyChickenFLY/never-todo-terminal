@@ -16,17 +16,28 @@ import (
 
 // TaskListNode include task list filter
 type TaskListNode struct {
+	taskType           int
 	taskListFilterNode *TaskListFilterNode
 	taskListOptionNode *TaskListOptionNode
 }
 
 // NewTaskListNode return TaskListNode
-func NewTaskListNode(tlfn *TaskListFilterNode, tlon *TaskListOptionNode) *TaskListNode {
-	return &TaskListNode{tlfn, tlon}
+func NewTaskListNode(taskType int, tlfn *TaskListFilterNode, tlon *TaskListOptionNode) *TaskListNode {
+	return &TaskListNode{taskType, tlfn, tlon}
 }
 
 func (tln *TaskListNode) execute() {
-	tasks := controller.ListTasks()
+	var tasks []model.Task
+	switch tln.taskType {
+	case model.TaskAll:
+		tasks = controller.ListTasks()
+	case model.TaskTodo:
+		tasks = controller.ListTodoTasks()
+	case model.TaskDone:
+		tasks = controller.ListDoneTasks()
+	case model.TaskDeleted:
+		tasks = controller.ListDeletedTasks()
+	}
 	tasks = tln.taskListFilterNode.filter(tasks)
 	tasks = tln.taskListOptionNode.filter(tasks)
 	render.Tasks(tasks, "Tasks")

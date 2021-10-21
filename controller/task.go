@@ -27,7 +27,6 @@ func ListTodoTasks() (tasks []model.Task) {
 		if task.Status == model.ProjectTodo {
 			tasks = append(tasks, task)
 		}
-		tasks = append(tasks, task)
 	}
 	return tasks
 }

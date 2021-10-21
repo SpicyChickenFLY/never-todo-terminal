@@ -6,7 +6,8 @@ import (
 
 // task status value
 const (
-	TaskTodo = iota
+	TaskAll = iota
+	TaskTodo
 	TaskDone
 	TaskDeleted
 )
