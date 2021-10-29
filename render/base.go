@@ -2,13 +2,17 @@ package render
 
 import "fmt"
 
-type Table struct {
+type table struct {
 	pageLen       int
 	fieldNames    []string
 	fieldLenLimit []int
 	fieldMaxLen   []int
 
-	rows []Row
+	rows []row
+}
+
+func newTable() *table {
+	return &table{}
 }
 
 const (
@@ -16,62 +20,72 @@ const (
 	rowTypeLine
 )
 
-type Row struct {
+type row struct {
 	rowType     int
 	fieldValues []string
 }
 
-type Record []interface{}
+type record []interface{}
 
-func (t *Table) calcRowMaxLen() (sum int) {
+func (t *table) calcrowMaxLen() (sum int) {
 	for _, maxLen := range t.fieldMaxLen {
 		sum += maxLen
 	}
 	return
 }
 
-func (t *Table) SetFieldNames(fieldNames []string) {
-	if len(fieldNames) != len(t.fieldNames) {
-		// TODO: fullfill or throw exception //
-		return
-	}
+func (t *table) SetFieldNames(fieldNames []string) {
+	t.fieldNames = make([]string, len(fieldNames))
+	t.fieldMaxLen = make([]int, len(fieldNames))
 	for i, fieldName := range fieldNames {
 		t.fieldNames[i] = fieldName
-		if len(fieldName) > t.fieldMaxLen[i] {
-			t.fieldMaxLen[i] = len(fieldName)
-		}
+		t.fieldMaxLen[i] = len(fieldName)
 	}
 }
-func (t *Table) SetFieldLenLimit(idx, length int) {}
+func (t *table) SetFieldLenLimit(idx, length int) {}
 
-func (t *Table) AppendRecord(record Record) {
+// TODO: 中文汉字的length是有问题的
+:q
 	if len(record) != len(t.fieldNames) {
 		// TODO: fullfill or throw exception //
 		return
 	}
-	fieldValues := make([]interface{}, 0)
+	fieldValues := make([]string, len(record))
 	for i, field := range record {
 		fieldContent := fmt.Sprint(field)
-		fieldValues = append(fieldValues, fieldContent)
+		fieldValues[i] = fieldContent
 		if len(fieldContent) >= t.fieldMaxLen[i] {
 			t.fieldMaxLen[i] = len(fieldContent)
 		}
 	}
-	row := Row{rowTypeRecord, fieldValues}
+	row := row{rowTypeRecord, fieldValues}
+	t.rows = append(t.rows, row)
 }
 
-func (t *Table) AppendDoubleLine() {}
-func (t *Table) AppendSolidLine()  {}
-func (t *Table) AppendEmptyLine()  {}
+func (t *table) AppendDoubleLine() {}
+func (t *table) AppendSolidLine()  {}
+func (t *table) AppendEmptyLine()  {}
 
-func (t *Table) Render() {
-	if t.pageLen < t.calcRowMaxLen() {
+func (t *table) Render() {
+	if t.pageLen < t.calcrowMaxLen() {
 		// TODO:  do something  //
+		fmt.Println("small page")
 	}
 	for _, row := range t.rows {
 		switch row.rowType {
 		case rowTypeRecord:
-			// TODO:  <22-10-21, yourname> //
+			// TODO:  list all fields value of this row //
+			for fieldIdx, field := range row.fieldValues {
+				fmt.Print(field)
+				for i := 0; i <= t.fieldMaxLen[fieldIdx]-len(field); i++ {
+					fmt.Print(" ")
+				}
+				fmt.Print(t.fieldMaxLen[fieldIdx], len(field))
+			}
+			fmt.Println()
 		}
 	}
+}
+
+func (t *table) Reset() {
 }

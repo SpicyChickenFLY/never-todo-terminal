@@ -2,26 +2,19 @@ package render
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/utils/colorful"
-	"github.com/jedib0t/go-pretty/v6/table"
 )
 
-var t table.Writer
+var t *table
 
 func init() {
-	Init()
-}
-
-// Init the render
-func Init() {
-	t = table.NewWriter()
-	t.SetOutputMirror(os.Stdout)
-	t.SetStyle(table.StyleLight)
+	t = newTable()
+	t.pageLen = 200
+	t.Reset()
 }
 
 // Tasks in table
@@ -30,7 +23,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	if contenTitle != "" {
 		defaultContentTitle = contenTitle
 	}
-	t.AppendHeader(table.Row{"#", defaultContentTitle, "Tags", "Due", "Loop"})
+	t.SetFieldNames([]string{"#", defaultContentTitle, "Tags", "Due", "Loop"})
 
 	for _, task := range tasks {
 		contentStr := task.Content
@@ -52,28 +45,24 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 		// if !ok {
 		// 	project = model.Project{}
 		// }
-		row := table.Row{task.ID, contentStr, strings.Join(tagsStr, ","), dueStr, task.Loop}
-		t.AppendRow(row)
+		record := record{task.ID, contentStr, strings.Join(tagsStr, ","), dueStr, task.Loop}
+		t.Appendrecord(record)
 	}
-	t.AppendFooter(table.Row{"", fmt.Sprint("Found ", len(tasks), " tasks")})
-	t.Style().Options.SeparateColumns = false
 	t.Render()
-	Init()
+	t.Reset()
 	return
 }
 
 // Tags in table
 func Tags(tags []model.Tag) {
-	t.AppendHeader(table.Row{"#", "Content", "Color"})
+	t.SetFieldNames([]string{"#", "Content", "Color"})
 	for _, tag := range tags {
 		color := colorful.RenderStr(tag.Color, "default", "", tag.Color)
-		row := table.Row{tag.ID, tag.Content, color}
-		t.AppendRow(row)
+		record := record{tag.ID, tag.Content, color}
+		t.Appendrecord(record)
 	}
-	t.AppendFooter(table.Row{"", fmt.Sprint("Found ", len(tags), " tasks")})
-	t.Style().Options.SeparateColumns = false
 	t.Render()
-	Init()
+	t.Reset()
 }
 
 // Result of execution
@@ -101,5 +90,5 @@ func Result(command string, errorList []error, warnList []string) {
 			command,
 		)
 	}
-	Init()
+	t.Reset()
 }
