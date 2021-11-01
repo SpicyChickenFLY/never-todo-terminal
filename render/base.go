@@ -1,6 +1,10 @@
 package render
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
+)
 
 type table struct {
 	pageLen       int
@@ -44,8 +48,8 @@ func (t *table) SetFieldNames(fieldNames []string) {
 }
 func (t *table) SetFieldLenLimit(idx, length int) {}
 
-// TODO: 中文汉字的length是有问题的
-:q
+func (t *table) AppendRecord(record record) {
+	// TODO: 中文汉字的length是有问题的
 	if len(record) != len(t.fieldNames) {
 		// TODO: fullfill or throw exception //
 		return
@@ -55,7 +59,7 @@ func (t *table) SetFieldLenLimit(idx, length int) {}
 		fieldContent := fmt.Sprint(field)
 		fieldValues[i] = fieldContent
 		if len(fieldContent) >= t.fieldMaxLen[i] {
-			t.fieldMaxLen[i] = len(fieldContent)
+			t.fieldMaxLen[i] = utils.LenOnScreen(fieldContent)
 		}
 	}
 	row := row{rowTypeRecord, fieldValues}

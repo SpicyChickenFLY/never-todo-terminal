@@ -188,7 +188,20 @@ func DecodeCmd(cmd string) (result string, err error) {
 		result += word
 	}
 	if len(idxRec) > 0 && idxRec[len(idxRec)-1]+6 != len(cmd) {
-		result += cmd[idxRec[len(idxRec)-1]+6 : len(cmd)]
+		result += cmd[idxRec[len(idxRec)-1]+6:]
 	}
 	return result, nil
+}
+
+func LenOnScreen(str string) int {
+	length := 0
+	runeStr := []rune(str)
+	for _, r := range runeStr {
+		rVal := int(r)
+		length++
+		if rVal >= 128 {
+			length++
+		}
+	}
+	return length
 }
