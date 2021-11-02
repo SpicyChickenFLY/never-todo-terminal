@@ -46,7 +46,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 		// 	project = model.Project{}
 		// }
 		record := record{task.ID, contentStr, strings.Join(tagsStr, ","), dueStr, task.Loop}
-		t.Appendrecord(record)
+		t.AppendRecord(record)
 	}
 	t.Render()
 	t.Reset()
@@ -59,7 +59,7 @@ func Tags(tags []model.Tag) {
 	for _, tag := range tags {
 		color := colorful.RenderStr(tag.Color, "default", "", tag.Color)
 		record := record{tag.ID, tag.Content, color}
-		t.Appendrecord(record)
+		t.AppendRecord(record)
 	}
 	t.Render()
 	t.Reset()

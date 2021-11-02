@@ -43,7 +43,7 @@ func (t *table) SetFieldNames(fieldNames []string) {
 	t.fieldMaxLen = make([]int, len(fieldNames))
 	for i, fieldName := range fieldNames {
 		t.fieldNames[i] = fieldName
-		t.fieldMaxLen[i] = len(fieldName)
+		t.fieldMaxLen[i] = utils.LenOnScreen(fieldName)
 	}
 }
 func (t *table) SetFieldLenLimit(idx, length int) {}
@@ -58,7 +58,7 @@ func (t *table) AppendRecord(record record) {
 	for i, field := range record {
 		fieldContent := fmt.Sprint(field)
 		fieldValues[i] = fieldContent
-		if len(fieldContent) >= t.fieldMaxLen[i] {
+		if utils.LenOnScreen(fieldContent) >= t.fieldMaxLen[i] {
 			t.fieldMaxLen[i] = utils.LenOnScreen(fieldContent)
 		}
 	}
@@ -81,10 +81,9 @@ func (t *table) Render() {
 			// TODO:  list all fields value of this row //
 			for fieldIdx, field := range row.fieldValues {
 				fmt.Print(field)
-				for i := 0; i <= t.fieldMaxLen[fieldIdx]-len(field); i++ {
+				for i := 0; i <= t.fieldMaxLen[fieldIdx]-utils.LenOnScreen(field); i++ {
 					fmt.Print(" ")
 				}
-				fmt.Print(t.fieldMaxLen[fieldIdx], len(field))
 			}
 			fmt.Println()
 		}
