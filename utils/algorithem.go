@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"math"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 	"unicode"
+	"unsafe"
 )
 
 func ContainStr(sentence, word string) bool {
@@ -204,4 +207,32 @@ func LenOnScreen(str string) int {
 		}
 	}
 	return length
+}
+
+const (
+	TIOCGWINSZ     = syscall.TIOCGWINSZ
+	TIOCGWINSZ_OSX = 1074295912
+)
+
+func LenOfTerminal() (int, error) {
+	type window struct {
+		Row    uint16
+		Col    uint16
+		Xpixel uint16
+		Ypixel uint16
+	}
+	w := new(window)
+	tio := TIOCGWINSZ
+	if runtime.GOOS == "darwin" {
+		tio = TIOCGWINSZ_OSX
+	}
+	res, _, err := syscall.Syscall(syscall.SYS_IOCTL,
+		uintptr(syscall.Stdin),
+		uintptr(tio),
+		uintptr(unsafe.Pointer(w)),
+	)
+	if int(res) == -1 {
+		return 0, err
+	}
+	return int(w.Col), nil
 }
