@@ -61,20 +61,19 @@ func NewTaskListFilterNode(
 }
 
 func (tlfn *TaskListFilterNode) filter(tasks []model.Task) (result []model.Task) {
-	if tlfn.idGroup != nil {
-		for _, id := range tlfn.idGroup.ids {
-			for _, task := range tasks {
-				if id == task.ID {
-					result = append(result, task)
-				}
-			}
-		}
-		return result
+	if tlfn.idGroup == nil && tlfn.indefiniteTaskListFilter == nil {
+		return tasks
 	} else if tlfn.indefiniteTaskListFilter != nil {
 		return tlfn.indefiniteTaskListFilter.filter(tasks)
-	} else {
-		return tasks
 	}
+	for _, id := range tlfn.idGroup.ids {
+		for _, task := range tasks {
+			if id == task.ID {
+				result = append(result, task)
+			}
+		}
+	}
+	return result
 }
 
 func (tlfn *TaskListFilterNode) explain() string {
@@ -122,20 +121,6 @@ func (itlfn *IndefiniteTaskListFilterNode) filter(tasks []model.Task) []model.Ta
 	if itlfn.due != nil {
 		tasks = itlfn.due.filter(tasks)
 	}
-	// if itlfn.project != "" {
-	// 	result := []model.Task{}
-	// 	projectID, ok := controller.GetProjectIDByName(itlfn.project)
-	// 	if ok {
-	// 		for _, task := range tasks {
-	// 			if task.ProjectID == projectID {
-	// 				result = append(result, task)
-	// 			}
-	// 		}
-	// 	} else {
-	// 		WarnList = append(WarnList, fmt.Sprintf("project(%s) not found", itlfn.project))
-	// 	}
-	// 	tasks = result
-	// }
 	return tasks
 }
 
