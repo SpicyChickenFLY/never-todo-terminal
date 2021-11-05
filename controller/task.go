@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 
@@ -52,33 +53,38 @@ func ListDeletedTasks() (tasks []model.Task) {
 }
 
 // GetTaskByID called by parser
-func GetTaskByID(id int) (model.Task, bool) {
+func GetTaskByID(id int) (model.Task, error) {
 	task, ok := model.DB.Data.Tasks[id]
-	return task, ok
+	if !ok {
+		return model.Task{}, errors.New("Retrieve: Task(id:%d) not found")
+	}
+	return task, nil
 }
 
 // GetTasksByIDGroup called by parser
 func GetTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
 	for _, id := range ids {
-		task, ok := GetTaskByID(id)
-		if ok {
+		task, err := GetTaskByID(id)
+		if err == nil {
 			tasks = append(tasks, task)
 		} else {
-			warnList = append(warnList, fmt.Sprintf("Task(id:%d) not found", id))
+			warnList = append(warnList,
+				err.Error(),
+			)
 		}
 	}
 	return tasks, warnList
 }
 
-// DeleteTask called by parser
-func DeleteTask(ids []int) (warnList []string) {
+// DeleteTasks called by parser
+func DeleteTasks(ids []int) (warnList []string) {
 	for _, id := range ids {
 		if task, ok := model.DB.Data.Tasks[id]; ok {
 			task.Status = model.ProjectDeleted
 			model.DB.Data.Tasks[id] = task
 		} else {
 			warnList = append(warnList,
-				fmt.Sprintf("Task(id=%d) not found", id),
+				fmt.Sprintf("Delete: Task(id=%d) not found", id),
 			)
 		}
 	}
@@ -93,7 +99,7 @@ func CompleteTask(ids []int) (warnList []string) {
 			model.DB.Data.Tasks[id] = task
 		} else {
 			warnList = append(warnList,
-				fmt.Sprintf("Task(id=%d) not found", id),
+				fmt.Sprintf("Complete: Task(id=%d) not found", id),
 			)
 		}
 	}
@@ -115,7 +121,7 @@ func AddTask(content string) (taskID int) {
 // UpdateTask called by parser
 func UpdateTask(updateTask model.Task) error {
 	if _, ok := model.DB.Data.Tasks[updateTask.ID]; !ok {
-		return fmt.Errorf("task(id=%d) not found", updateTask.ID)
+		return fmt.Errorf("Update: Task(id=%d) not found", updateTask.ID)
 	}
 	model.DB.Data.Tasks[updateTask.ID] = updateTask
 	return nil

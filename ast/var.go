@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"errors"
 	"fmt"
 	"sort"
 	"strings"
@@ -267,9 +266,9 @@ func (agn *AssignGroupNode) filter(tasks []model.Task) (result []model.Task) {
 	filterTagIDs := []int{}
 	// fmt.Println("tags: ", agn.assignTags)
 	for _, tag := range agn.assignTags {
-		tagID, ok := controller.GetTagIDByName(tag)
-		if !ok {
-			ErrorList = append(ErrorList, errors.New("got inexist tag while finding tasks"))
+		tagID, err := controller.GetTagIDByName(tag)
+		if err != nil {
+			ErrorList = append(ErrorList, err)
 		} else {
 			filterTagIDs = append(filterTagIDs, tagID)
 		}

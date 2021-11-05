@@ -18,26 +18,29 @@ func ListTags() (tags []model.Tag) {
 }
 
 // GetTagByID called by parser
-func GetTagByID(id int) (model.Tag, bool) {
+func GetTagByID(id int) (model.Tag, error) {
 	tag, ok := model.DB.Data.Tags[id]
-	return tag, ok
+	if !ok {
+		return model.Tag{}, errors.New("Retrieve: Tag(id=%d) not found")
+	}
+	return tag, nil
 }
 
 // GetTagIDByName called by parser
-func GetTagIDByName(name string) (int, bool) {
+func GetTagIDByName(name string) (int, error) {
 	for _, tag := range model.DB.Data.Tags {
 		if tag.Content == name {
-			return tag.ID, true
+			return tag.ID, nil
 		}
 	}
-	return 0, false
+	return 0, errors.New("")
 }
 
 // AddTag called by parser
 func AddTag(content string) (int, error) {
-	id, ok := GetTagIDByName(content)
-	if ok {
-		return id, errors.New("tag already exists")
+	id, err := GetTagIDByName(content)
+	if err == nil {
+		return id, errors.New("Create: Tag(id=%d, content=%s) already exists")
 	}
 	newTag := model.Tag{
 		ID:      model.DB.Data.TagInc,
@@ -54,7 +57,7 @@ func AddTag(content string) (int, error) {
 // UpdateTag called by parser
 func UpdateTag(updateTag model.Tag) error {
 	if _, ok := model.DB.Data.Tags[updateTag.ID]; !ok {
-		return fmt.Errorf("tag(id=%d) not found", updateTag.ID)
+		return fmt.Errorf("Update: Tag(id=%d) not found", updateTag.ID)
 	}
 	model.DB.Data.Tags[updateTag.ID] = updateTag
 	return nil
@@ -66,7 +69,7 @@ func DeleteTags(ids []int) (warnList []string) {
 	for _, id := range ids {
 		if deleteTag, ok := model.DB.Data.Tags[id]; !ok {
 			warnList = append(warnList,
-				fmt.Sprintf("Task(id=%d) not found", id),
+				fmt.Sprintf("Delete: Tag(id=%d) not found", id),
 			)
 		} else {
 			deleteTag.Deleted = true

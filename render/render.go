@@ -26,26 +26,43 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	t.SetFieldNames([]string{"#", defaultContentTitle, "Tags", "Due", "Loop"})
 
 	for _, task := range tasks {
-		contentStr := task.Content
-		for i := 0; i < task.Important; i++ {
-			// contentStr = colorful.RenderStr(contentStr, "line", "", "")
-			contentStr += "*" // ★
+		record := record{task.ID}
+
+		if task.Content != "" {
+			contentStr := task.Content
+			for i := 0; i < task.Important; i++ {
+				// contentStr = colorful.RenderStr(contentStr, "line", "", "")
+				contentStr += "*" // ★
+			}
+			record = append(record, contentStr)
+		} else {
+			record = append(record, nil)
 		}
-		dueStr := task.Due.Format("2006/01/02 15:04:05")
-		if task.Due.IsZero() {
-			dueStr = ""
-		}
-		tags := controller.FindTagsByTask(task.ID)
+
+		tags, _ := controller.FindTagsByTask(task.ID)
 		tagsStr := []string{}
 		for _, tag := range tags {
 			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
 			tagsStr = append(tagsStr, content)
 		}
-		// project, ok := controller.GetProjectByID(task.ProjectID)
-		// if !ok {
-		// 	project = model.Project{}
-		// }
-		record := record{task.ID, contentStr, strings.Join(tagsStr, ","), dueStr, task.Loop}
+		tagStr := strings.Join(tagsStr, ",")
+		if tagStr == "" {
+			record = append(record, nil)
+		} else {
+			record = append(record, tagStr)
+		}
+
+		dueStr := task.Due.Format("2006/01/02 15:04:05")
+		if task.Due.IsZero() {
+			record = append(record, nil)
+		} else {
+			record = append(record, dueStr)
+		}
+		if task.Loop == "" {
+			record = append(record, nil)
+		} else {
+			record = append(record, task.Loop)
+		}
 		t.AppendRecord(record)
 	}
 	t.Render()

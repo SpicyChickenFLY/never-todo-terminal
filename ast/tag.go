@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
@@ -81,9 +80,9 @@ func (tan *TagAddNode) execute() {
 	if err != nil {
 		ErrorList = append(ErrorList, err)
 	}
-	tag, ok := controller.GetTagByID(tagID)
-	if !ok {
-		WarnList = append(WarnList, fmt.Sprintf("task(%d) not found", tagID))
+	tag, err := controller.GetTagByID(tagID)
+	if err != nil {
+		WarnList = append(WarnList, err.Error())
 	}
 	controller.UpdateTag(tag)
 	render.Tags([]model.Tag{tag})
@@ -112,9 +111,9 @@ func NewTagUpdateNode(id int, tuon *TagUpdateOptionNode) *TagUpdateNode {
 }
 
 func (tun *TagUpdateNode) execute() {
-	tag, ok := controller.GetTagByID(tun.id)
-	if !ok {
-		ErrorList = append(ErrorList, errors.New("updated tag is not found"))
+	tag, err := controller.GetTagByID(tun.id)
+	if err != nil {
+		ErrorList = append(ErrorList, err)
 		return
 	}
 	tun.option.apply(tag)

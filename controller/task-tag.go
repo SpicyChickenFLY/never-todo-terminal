@@ -5,11 +5,13 @@ import (
 )
 
 // FindTagsByTask return tags by task id
-func FindTagsByTask(taskID int) (tags []model.Tag) {
+func FindTagsByTask(taskID int) (tags []model.Tag, warnList []string) {
 	if tagMap, ok := model.DB.Data.TaskTags[taskID]; ok {
 		for tagID := range tagMap {
-			if tag, ok := GetTagByID(tagID); ok {
+			if tag, err := GetTagByID(tagID); err == nil {
 				tags = append(tags, tag)
+			} else {
+				warnList = append(warnList, err.Error())
 			}
 		}
 	}
@@ -17,11 +19,13 @@ func FindTagsByTask(taskID int) (tags []model.Tag) {
 }
 
 // FindTasksByTag return tasks by tag id
-func FindTasksByTag(tagID int) (tasks []model.Task) {
+func FindTasksByTag(tagID int) (tasks []model.Task, warnList []string) {
 	if taskMap, ok := model.DB.Data.TagTasks[tagID]; ok {
 		for taskID := range taskMap {
-			if task, ok := GetTaskByID(taskID); ok {
+			if task, err := GetTaskByID(taskID); err == nil {
 				tasks = append(tasks, task)
+			} else {
+				warnList = append(warnList, err.Error())
 			}
 		}
 	}
@@ -32,8 +36,8 @@ func FindTasksByTag(tagID int) (tasks []model.Task) {
 func AddTaskTags(taskID int, assignTags []string) (err error) {
 	for _, assignTag := range assignTags {
 		var tagID int
-		tagID, ok := GetTagIDByName(assignTag)
-		if !ok {
+		tagID, err := GetTagIDByName(assignTag)
+		if err != nil {
 			tagID, err = AddTag(assignTag)
 			if err != nil {
 				return err
@@ -56,7 +60,10 @@ func AddTaskTags(taskID int, assignTags []string) (err error) {
 // DeleteTaskTags called by parse
 func DeleteTaskTags(taskID int, unassignTags []string) error {
 	for _, unassignTag := range unassignTags {
-		tagID, _ := GetTagIDByName(unassignTag)
+		tagID, err := GetTagIDByName(unassignTag)
+		if err != nil {
+			return err
+		}
 		if _, ok := model.DB.Data.TaskTags[taskID]; ok {
 			delete(model.DB.Data.TaskTags[taskID], tagID)
 		}

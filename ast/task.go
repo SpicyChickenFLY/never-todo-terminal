@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -122,20 +121,6 @@ func (itlfn *IndefiniteTaskListFilterNode) filter(tasks []model.Task) []model.Ta
 	if itlfn.due != nil {
 		tasks = itlfn.due.filter(tasks)
 	}
-	// if itlfn.project != "" {
-	// 	result := []model.Task{}
-	// 	projectID, ok := controller.GetProjectIDByName(itlfn.project)
-	// 	if ok {
-	// 		for _, task := range tasks {
-	// 			if task.ProjectID == projectID {
-	// 				result = append(result, task)
-	// 			}
-	// 		}
-	// 	} else {
-	// 		WarnList = append(WarnList, fmt.Sprintf("project(%s) not found", itlfn.project))
-	// 	}
-	// 	tasks = result
-	// }
 	return tasks
 }
 
@@ -256,7 +241,7 @@ func (tlon *TaskListOptionNode) SetSortMetric(sortMetrics string) *TaskListOptio
 }
 
 // ============================
-// Task Add·
+// Task Add
 // ============================
 
 // TaskAddNode include task content and add option
@@ -275,9 +260,9 @@ func NewTaskAddNode(c string, opt *TaskAddOptionNode) *TaskAddNode {
 
 func (tan *TaskAddNode) execute() {
 	taskID := controller.AddTask(tan.content)
-	task, ok := controller.GetTaskByID(taskID)
-	if !ok {
-		ErrorList = append(ErrorList, errors.New("ddded task is not found"))
+	task, err := controller.GetTaskByID(taskID)
+	if err != nil {
+		ErrorList = append(ErrorList, err)
 		return
 	}
 	tan.option.apply(task)
@@ -384,9 +369,9 @@ func (tun *TaskUpdateNode) explain() string {
 
 // Execute complete task logic
 func (tun *TaskUpdateNode) execute() {
-	task, ok := controller.GetTaskByID(tun.id)
-	if !ok {
-		ErrorList = append(ErrorList, errors.New("updated task is not found"))
+	task, err := controller.GetTaskByID(tun.id)
+	if err != nil {
+		ErrorList = append(ErrorList, err)
 		return
 	}
 	tun.option.apply(task)
@@ -559,5 +544,5 @@ func (tdn *TaskDeleteNode) explain() string {
 }
 
 func (tdn *TaskDeleteNode) execute() {
-	controller.DeleteTask(tdn.idGroup.ids)
+	controller.DeleteTasks(tdn.idGroup.ids)
 }
