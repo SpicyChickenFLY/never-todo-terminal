@@ -3,6 +3,7 @@ package render
 import (
 	"fmt"
 
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
@@ -32,7 +33,7 @@ type row struct {
 
 type record []interface{}
 
-func (t *table) calcrowMaxLen() (sum int) {
+func (t *table) calcFieldMaxLen() (sum int) {
 	for _, maxLen := range t.fieldMaxLen {
 		sum += maxLen
 	}
@@ -77,8 +78,10 @@ func (t *table) AppendSolidLine()  {}
 func (t *table) AppendEmptyLine()  {}
 
 func (t *table) Render() {
-	if t.pageLen < t.calcrowMaxLen() {
+	if t.pageLen < t.calcFieldMaxLen() {
 		// TODO:  do something  //
+		if model.DB.Settings.WrapContent {
+		}
 		fmt.Println("small page")
 	}
 	// render header

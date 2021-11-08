@@ -359,6 +359,7 @@ func marshalModel() (m map[string]interface{}, err error) {
 		tags = append(tags, tagMap)
 	}
 	dm["tags"] = tags
+
 	var taskTags []interface{}
 	for taskID, tagIDsOfTask := range DB.Data.TaskTags {
 		for tagID := range tagIDsOfTask {
@@ -370,6 +371,16 @@ func marshalModel() (m map[string]interface{}, err error) {
 	dm["task_inc"] = DB.Data.TaskInc
 	dm["tag_inc"] = DB.Data.TagInc
 	dm["project_inc"] = DB.Data.ProjectInc
+
+	settings := make(map[string]interface{})
+	settings["tagStyle"] = DB.Settings.TagStyle
+	settings["conciseTag"] = DB.Settings.ConciseTag
+	settings["colorfulStr"] = DB.Settings.ColorfulStr
+	settings["showResult"] = DB.Settings.ShowResult
+	settings["compressTask"] = DB.Settings.CompressTask
+	settings["wrapContent"] = DB.Settings.WrapContent
+	dm["settings"] = settings
+
 	m["data"] = dm
 	var logs = make([]interface{}, 0)
 	for _, log := range DB.Logs {
