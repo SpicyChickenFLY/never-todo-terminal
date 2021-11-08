@@ -84,5 +84,13 @@
         "taskInc": -6,
         "tagInc": -3
     },
+    "settings": {
+        "tagStyle": "never-todo",
+        "conciseTag": false,
+        "colorfulStr": false,
+        "showResult": false,
+        "compressTask": false,
+        "wrapContent": false
+    },
     "log": []
 }

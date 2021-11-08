@@ -80,8 +80,9 @@ type Data struct {
 
 //Model is model struct
 type Model struct {
-	Data Data
-	Logs []Log
+	Data     Data
+	Settings Settings
+	Logs     []Log
 }
 
 // TimeGroup is timegroup struct
@@ -98,4 +99,14 @@ type Loop struct {
 	Week   int
 	Hour   int
 	Minute int
+}
+
+// Settings is the user configs struct
+type Settings struct {
+	TagStyle     string // TaskWarrior Mode/ NeverTodo Mode
+	ConciseTag   bool
+	ColorfulStr  bool
+	ShowResult   bool
+	CompressTask bool
+	WrapContent  bool
 }

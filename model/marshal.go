@@ -18,6 +18,11 @@ func unmarshalModel(m map[string]interface{}) error {
 			return err
 		}
 	}
+	if settings, ok := m["settings"]; ok {
+		if err := unmarshalSettings(settings); err != nil {
+			return err
+		}
+	}
 	if logs, ok := m["logs"]; ok { // read log
 		if err := unmarshalLog(logs); err != nil {
 			return err
@@ -60,18 +65,6 @@ func unmarshalData(data interface{}) error {
 			return err
 		}
 	}
-	// if projectInc, ok := dm["project_inc"]; ok {
-	// 	projectIncVal, ok := projectInc.(float64)
-	// 	if !ok {
-	// 		return errors.New("field project_inc cannot be convert to float64")
-	// 	}
-	// 	DB.Data.TaskInc = int(projectIncVal)
-	// }
-	// if projects, ok := dm["projects"]; ok {
-	// 	if err := unmarshalProject(projects); err != nil {
-	// 		return err
-	// 	}
-	// }
 	return nil
 }
 
@@ -272,6 +265,20 @@ func unmarshalProject(projects interface{}) error {
 		if project.ID <= DB.Data.ProjectInc {
 			DB.Data.ProjectInc = project.ID - 1
 		}
+	}
+	return nil
+}
+
+func unmarshalSettings(settings interface{}) error {
+	settingsMap := settings.(map[string]interface{})
+	// fmt.Println(settingsMap)
+	DB.Settings = Settings{
+		TagStyle:     settingsMap["tagStyle"].(string),
+		ConciseTag:   settingsMap["conciseTag"].(bool),
+		ColorfulStr:  settingsMap["colorfulStr"].(bool),
+		ShowResult:   settingsMap["showResult"].(bool),
+		CompressTask: settingsMap["compressTask"].(bool),
+		WrapContent:  settingsMap["wrapContent"].(bool),
 	}
 	return nil
 }
