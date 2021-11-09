@@ -60,20 +60,19 @@ func NewTaskListFilterNode(
 }
 
 func (tlfn *TaskListFilterNode) filter(tasks []model.Task) (result []model.Task) {
-	if tlfn.idGroup != nil {
-		for _, id := range tlfn.idGroup.ids {
-			for _, task := range tasks {
-				if id == task.ID {
-					result = append(result, task)
-				}
-			}
-		}
-		return result
+	if tlfn.idGroup == nil && tlfn.indefiniteTaskListFilter == nil {
+		return tasks
 	} else if tlfn.indefiniteTaskListFilter != nil {
 		return tlfn.indefiniteTaskListFilter.filter(tasks)
-	} else {
-		return tasks
 	}
+	for _, id := range tlfn.idGroup.ids {
+		for _, task := range tasks {
+			if id == task.ID {
+				result = append(result, task)
+			}
+		}
+	}
+	return result
 }
 
 func (tlfn *TaskListFilterNode) explain() string {
