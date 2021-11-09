@@ -101,6 +101,7 @@ func (t *table) Render() {
 			// TODO:  list all fields value of this row //
 			for fieldIdx, field := range row.fieldValues {
 				// 中文为代表的宽字符换行后会多占一个空格
+				// 首先得判断是否需要换行，是否可以省略
 				fmt.Print(field)
 				for i := 0; i <= t.fieldMaxLen[fieldIdx]-utils.LenOnScreen(field); i++ {
 					fmt.Print(" ")
