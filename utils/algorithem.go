@@ -198,8 +198,7 @@ func DecodeCmd(cmd string) (result string, err error) {
 
 func LenOnScreen(str string) int {
 	length := 0
-	runeStr := []rune(str)
-	for _, r := range runeStr {
+	for _, r := range []rune(str) {
 		rVal := int(r)
 		length++
 		if rVal >= 128 {
@@ -207,6 +206,28 @@ func LenOnScreen(str string) int {
 		}
 	}
 	return length
+}
+
+func SplitStrOnScreen(str string, l int) []string {
+	result := []string{}
+	tempStr := ""
+	tempLen := 0
+	for _, r := range []rune(str) {
+		rVal := int(r)
+		rLen := 1
+		if rVal >= 128 {
+			rLen = 2
+		}
+		if tempLen+rLen >= l {
+			result = append(result, tempStr)
+			tempStr = string(r)
+			tempLen = rLen
+		} else {
+			tempStr += string(r)
+			tempLen += rLen
+		}
+	}
+	return result
 }
 
 const (

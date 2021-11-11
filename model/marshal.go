@@ -272,13 +272,27 @@ func unmarshalProject(projects interface{}) error {
 func unmarshalSettings(settings interface{}) error {
 	settingsMap := settings.(map[string]interface{})
 	// fmt.Println(settingsMap)
-	DB.Settings = Settings{
-		TagStyle:     settingsMap["tagStyle"].(string),
-		ConciseTag:   settingsMap["conciseTag"].(bool),
-		ColorfulStr:  settingsMap["colorfulStr"].(bool),
-		ShowResult:   settingsMap["showResult"].(bool),
-		CompressTask: settingsMap["compressTask"].(bool),
-		WrapContent:  settingsMap["wrapContent"].(bool),
+	DB.Settings = Settings{}
+	if v, ok := settingsMap["tagStyle"]; ok {
+		DB.Settings.TagStyle = v.(string)
+	}
+	if v, ok := settingsMap["separator"]; ok {
+		DB.Settings.Separator = v.(string)
+	}
+	if v, ok := settingsMap["conciseTag"]; ok {
+		DB.Settings.ConciseTag = v.(bool)
+	}
+	if v, ok := settingsMap["colorfulStr"]; ok {
+		DB.Settings.ColorfulStr = v.(bool)
+	}
+	if v, ok := settingsMap["showResult"]; ok {
+		DB.Settings.ShowResult = v.(bool)
+	}
+	if v, ok := settingsMap["compressTask"]; ok {
+		DB.Settings.CompressTask = v.(bool)
+	}
+	if v, ok := settingsMap["wrapContent"]; ok {
+		DB.Settings.WrapContent = v.(bool)
 	}
 	return nil
 }
@@ -328,6 +342,7 @@ func unmarshalLog(logs interface{}) error {
 func marshalModel() (m map[string]interface{}, err error) {
 	m = make(map[string]interface{})
 	dm := make(map[string]interface{})
+
 	var tasks []interface{}
 	for _, task := range DB.Data.Tasks {
 		var taskMap []interface{}
@@ -347,6 +362,7 @@ func marshalModel() (m map[string]interface{}, err error) {
 		tasks = append(tasks, taskMap)
 	}
 	dm["tasks"] = tasks
+
 	var tags []interface{}
 	for _, tag := range DB.Data.Tags {
 		var tagMap []interface{}
@@ -367,19 +383,11 @@ func marshalModel() (m map[string]interface{}, err error) {
 			taskTags = append(taskTags, taskTag)
 		}
 	}
+
 	dm["task_tags"] = taskTags
 	dm["task_inc"] = DB.Data.TaskInc
 	dm["tag_inc"] = DB.Data.TagInc
 	dm["project_inc"] = DB.Data.ProjectInc
-
-	settings := make(map[string]interface{})
-	settings["tagStyle"] = DB.Settings.TagStyle
-	settings["conciseTag"] = DB.Settings.ConciseTag
-	settings["colorfulStr"] = DB.Settings.ColorfulStr
-	settings["showResult"] = DB.Settings.ShowResult
-	settings["compressTask"] = DB.Settings.CompressTask
-	settings["wrapContent"] = DB.Settings.WrapContent
-	dm["settings"] = settings
 
 	m["data"] = dm
 	var logs = make([]interface{}, 0)
@@ -393,6 +401,18 @@ func marshalModel() (m map[string]interface{}, err error) {
 		)
 		logs = append(logs, logMap)
 	}
+
+	settings := make(map[string]interface{})
+	settings["tagStyle"] = DB.Settings.TagStyle
+	settings["separator"] = DB.Settings.Separator
+	settings["conciseTag"] = DB.Settings.ConciseTag
+	settings["colorfulStr"] = DB.Settings.ColorfulStr
+	settings["showResult"] = DB.Settings.ShowResult
+	settings["compressTask"] = DB.Settings.CompressTask
+	settings["wrapContent"] = DB.Settings.WrapContent
+	m["settings"] = settings
+
 	m["logs"] = logs
+
 	return m, nil
 }

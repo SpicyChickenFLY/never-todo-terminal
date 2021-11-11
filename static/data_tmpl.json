@@ -86,6 +86,7 @@
     },
     "settings": {
         "tagStyle": "never-todo",
+        "separator": "|",
         "conciseTag": false,
         "colorfulStr": false,
         "showResult": false,
