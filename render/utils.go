@@ -23,7 +23,8 @@ func lenOfTerminal() (int, error) {
 	if runtime.GOOS == "darwin" {
 		tio = tioCGWinSZOSX
 	}
-	res, _, err := syscall.Syscall(syscall.SYS_IOCTL,
+	res, _, err := syscall.Syscall(
+		syscall.SYS_IOCTL,
 		uintptr(syscall.Stdin),
 		uintptr(tio),
 		uintptr(unsafe.Pointer(w)),
