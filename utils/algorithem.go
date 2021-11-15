@@ -4,13 +4,10 @@ import (
 	"fmt"
 	"math"
 	"regexp"
-	"runtime"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 	"unicode"
-	"unsafe"
 )
 
 func ContainStr(sentence, word string) bool {
@@ -194,66 +191,4 @@ func DecodeCmd(cmd string) (result string, err error) {
 		result += cmd[idxRec[len(idxRec)-1]+6:]
 	}
 	return result, nil
-}
-
-func LenOnScreen(str string) int {
-	length := 0
-	for _, r := range []rune(str) {
-		rVal := int(r)
-		length++
-		if rVal >= 128 {
-			length++
-		}
-	}
-	return length
-}
-
-func SplitStrOnScreen(str string, l int) []string {
-	result := []string{}
-	tempStr := ""
-	tempLen := 0
-	for _, r := range []rune(str) {
-		rVal := int(r)
-		rLen := 1
-		if rVal >= 128 {
-			rLen = 2
-		}
-		if tempLen+rLen >= l {
-			result = append(result, tempStr)
-			tempStr = string(r)
-			tempLen = rLen
-		} else {
-			tempStr += string(r)
-			tempLen += rLen
-		}
-	}
-	return result
-}
-
-const (
-	TIOCGWINSZ     = syscall.TIOCGWINSZ
-	TIOCGWINSZ_OSX = 1074295912
-)
-
-func LenOfTerminal() (int, error) {
-	type window struct {
-		Row    uint16
-		Col    uint16
-		Xpixel uint16
-		Ypixel uint16
-	}
-	w := new(window)
-	tio := TIOCGWINSZ
-	if runtime.GOOS == "darwin" {
-		tio = TIOCGWINSZ_OSX
-	}
-	res, _, err := syscall.Syscall(syscall.SYS_IOCTL,
-		uintptr(syscall.Stdin),
-		uintptr(tio),
-		uintptr(unsafe.Pointer(w)),
-	)
-	if int(res) == -1 {
-		return 0, err
-	}
-	return int(w.Col), nil
 }
