@@ -2,7 +2,6 @@ package render
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
@@ -19,6 +18,7 @@ func init() {
 
 // Tasks in table
 func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
+	tf := taskFormatter{}
 	defaultContentTitle := "Content"
 	if contenTitle != "" {
 		defaultContentTitle = contenTitle
@@ -26,44 +26,28 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	t.SetFieldNames([]string{"#", defaultContentTitle, "Tags", "Due", "Loop"})
 
 	for _, task := range tasks {
-		record := record{task.ID}
+		record := taskRecord{id: fmt.Sprint(task.ID)}
 
 		if task.Content != "" {
 			contentStr := task.Content
 			for i := 0; i < task.Important; i++ {
-				// contentStr = colorful.RenderStr(contentStr, "line", "", "")
-				contentStr += "*" // ★
+				contentStr += "!"
 			}
-			record = append(record, contentStr)
-		} else {
-			record = append(record, nil)
+			record.content = contentStr
 		}
 
 		tags, _ := controller.FindTagsByTask(task.ID)
-		tagsStr := []string{}
 		for _, tag := range tags {
-			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
-			tagsStr = append(tagsStr, content)
-		}
-		tagStr := strings.Join(tagsStr, ",")
-		if tagStr == "" {
-			record = append(record, nil)
-		} else {
-			record = append(record, tagStr)
+			record.tagsContent = append(record.tagsContent, tag.Content)
+			record.tagsColor = append(record.tagsColor, tag.Color)
 		}
 
 		dueStr := task.Due.Format("2006/01/02 15:04:05")
-		if task.Due.IsZero() {
-			record = append(record, nil)
-		} else {
-			record = append(record, dueStr)
+		if !task.Due.IsZero() {
+			record.dueStr = dueStr
 		}
-		if task.Loop == "" {
-			record = append(record, nil)
-		} else {
-			record = append(record, task.Loop)
-		}
-		t.AppendRecord(record)
+		record.loopStr = task.Loop
+		tf.records = append(tf.records, record)
 	}
 	t.Render()
 	t.Reset()

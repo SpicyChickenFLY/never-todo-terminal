@@ -9,7 +9,7 @@ type formatter interface {
 	Reset()
 }
 
-type taskRecords struct {
+type taskRecord struct {
 	id          string
 	content     string
 	tagsContent []string
@@ -19,6 +19,7 @@ type taskRecords struct {
 }
 
 type taskFormatter struct {
+	records            []taskRecord
 	contentFieldLen    int
 	contentFieldMaxLen int
 	tagFieldLen        int
@@ -30,19 +31,19 @@ func newTaskFormatter() *taskFormatter {
 }
 
 func (tf *taskFormatter) Render() {
-	table := newTable()
+	// table := newTable()
 
 	pageLen, err := lenOfTerminal()
 	if err != nil {
-		return err
+		// return err
 	}
 	if tf.contentFieldMaxLen+tf.tagFieldMaxLen > pageLen {
 
 	}
 
-	if model.DB.Settings.CompressTask {
+	if model.DB.Settings.WrapContent {
 
-	} else if model.DB.Settings.WrapContent {
+	} else if model.DB.Settings.CompressTask {
 
 	}
 
