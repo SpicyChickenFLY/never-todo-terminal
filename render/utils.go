@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+<<<<<<< HEAD
 const (
 	tioWinSZ      = 0x5413
 	tioCGWinSZOSX = 1074295912
@@ -49,6 +50,8 @@ func lenOfTerminal() (int, error) {
 	return width, nil
 }
 
+=======
+>>>>>>> rollback
 func lenOnScreen(str string) int {
 	length := 0
 	for _, r := range []rune(str) {
@@ -83,5 +86,19 @@ func splitStrOnScreen(str string, l int) []string {
 	return result
 }
 
+<<<<<<< HEAD
 func fillSpace(l int) {
+=======
+func lenOfTerminal() (int, error) {
+	cmd := exec.Command("stty", "size")
+	cmd.Stdin = os.Stdin
+	out, err := cmd.Output()
+	if err != nil {
+		return 0, err
+	}
+	sizeStr := strings.ReplaceAll(string(out), "\n", "")
+	sizes := strings.Split(sizeStr, " ")
+	width, err := strconv.Atoi(sizes[1])
+	return width, nil
+>>>>>>> rollback
 }
