@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
 type table struct {
@@ -46,7 +45,7 @@ func (t *table) SetFieldNames(fieldNames []string) {
 	t.fieldEmptyFLags = make([]bool, len(fieldNames))
 	for i, fieldName := range fieldNames {
 		t.fieldNames[i] = fieldName
-		t.fieldMaxLen[i] = utils.LenOnScreen(fieldName)
+		t.fieldMaxLen[i] = lenOnScreen(fieldName)
 		t.fieldEmptyFLags[i] = true
 	}
 }
@@ -64,8 +63,8 @@ func (t *table) AppendRecord(record record) {
 			fieldContent = fmt.Sprint(field)
 			fieldValues[i] = fieldContent
 			t.fieldEmptyFLags[i] = false
-			if utils.LenOnScreen(fieldContent) >= t.fieldMaxLen[i] {
-				t.fieldMaxLen[i] = utils.LenOnScreen(fieldContent)
+			if lenOnScreen(fieldContent) >= t.fieldMaxLen[i] {
+				t.fieldMaxLen[i] = lenOnScreen(fieldContent)
 			}
 		}
 	}
@@ -90,7 +89,7 @@ func (t *table) Render() {
 			continue
 		}
 		fmt.Print(fieldName)
-		for i := 0; i <= t.fieldMaxLen[fieldIdx]-utils.LenOnScreen(fieldName); i++ {
+		for i := 0; i <= t.fieldMaxLen[fieldIdx]-lenOnScreen(fieldName); i++ {
 			fmt.Print(" ")
 		}
 	}
@@ -103,7 +102,7 @@ func (t *table) Render() {
 				// 中文为代表的宽字符换行后会多占一个空格
 				// 首先得判断是否需要换行，是否可以省略
 				fmt.Print(field)
-				for i := 0; i <= t.fieldMaxLen[fieldIdx]-utils.LenOnScreen(field); i++ {
+				for i := 0; i <= t.fieldMaxLen[fieldIdx]-lenOnScreen(field); i++ {
 					fmt.Print(" ")
 				}
 			}
