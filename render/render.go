@@ -23,7 +23,8 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 		if task.Content != "" {
 			contentStr := task.Content
 			for i := 0; i < task.Important; i++ {
-				contentStr += "!"
+				// contentStr = colorful.RenderStr(contentStr, "line", "", "")
+				contentStr += "*"
 			}
 			record.content = contentStr
 		}
