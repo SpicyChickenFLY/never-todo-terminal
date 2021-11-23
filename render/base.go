@@ -2,11 +2,6 @@ package render
 
 import (
 	"fmt"
-<<<<<<< HEAD
-=======
-
-	"github.com/SpicyChickenFLY/never-todo-cmd/model"
->>>>>>> rollback
 )
 
 type table struct {

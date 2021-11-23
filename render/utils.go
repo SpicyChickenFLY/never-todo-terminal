@@ -7,51 +7,6 @@ import (
 	"strings"
 )
 
-<<<<<<< HEAD
-const (
-	tioWinSZ      = 0x5413
-	tioCGWinSZOSX = 1074295912
-)
-
-// func lenOfTerminal() (int, error) {
-// 	type window struct {
-// 		Row    uint16
-// 		Col    uint16
-// 		Xpixel uint16
-// 		Ypixel uint16
-// 	}
-// 	w := new(window)
-// 	tio := tioWinSZ
-// 	if runtime.GOOS == "darwin" {
-// 		tio = tioCGWinSZOSX
-// 	}
-// 	res, _, err := syscall.Syscall(
-// 		syscall.SYS_IOCTL,
-// 		uintptr(syscall.Stdin),
-// 		uintptr(tio),
-// 		uintptr(unsafe.Pointer(w)),
-// 	)
-// 	if int(res) == -1 {
-// 		return 0, err
-// 	}
-// 	return int(w.Col), nil
-// }
-
-func lenOfTerminal() (int, error) {
-	cmd := exec.Command("stty", "size")
-	cmd.Stdin = os.Stdin
-	out, err := cmd.Output()
-	if err != nil {
-		return 0, err
-	}
-	sizeStr := strings.ReplaceAll(string(out), "\n", "")
-	sizes := strings.Split(sizeStr, " ")
-	width, err := strconv.Atoi(sizes[1])
-	return width, nil
-}
-
-=======
->>>>>>> rollback
 func lenOnScreen(str string) int {
 	length := 0
 	for _, r := range []rune(str) {
@@ -86,9 +41,6 @@ func splitStrOnScreen(str string, l int) []string {
 	return result
 }
 
-<<<<<<< HEAD
-func fillSpace(l int) {
-=======
 func lenOfTerminal() (int, error) {
 	cmd := exec.Command("stty", "size")
 	cmd.Stdin = os.Stdin
@@ -100,5 +52,4 @@ func lenOfTerminal() (int, error) {
 	sizes := strings.Split(sizeStr, " ")
 	width, err := strconv.Atoi(sizes[1])
 	return width, nil
->>>>>>> rollback
 }
