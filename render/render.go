@@ -2,15 +2,23 @@ package render
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/utils/colorful"
 )
 
+var t *table
+
+func init() {
+	t = newTable()
+	t.pageLen = 200
+	t.Reset()
+}
+
 // Tasks in table
 func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
-	t := newTable()
 	defaultContentTitle := "Content"
 	if contenTitle != "" {
 		defaultContentTitle = contenTitle
@@ -18,37 +26,52 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	t.SetFieldNames([]string{"#", defaultContentTitle, "Tags", "Due", "Loop"})
 
 	for _, task := range tasks {
-		record := taskRecord{id: fmt.Sprint(task.ID)}
+		record := record{task.ID}
 
 		if task.Content != "" {
 			contentStr := task.Content
 			for i := 0; i < task.Important; i++ {
 				// contentStr = colorful.RenderStr(contentStr, "line", "", "")
-				contentStr += "*"
+				contentStr += "*" // ★
 			}
-			record.content = contentStr
+			record = append(record, contentStr)
+		} else {
+			record = append(record, nil)
 		}
 
 		tags, _ := controller.FindTagsByTask(task.ID)
+		tagsStr := []string{}
 		for _, tag := range tags {
-			record.tagsContent = append(record.tagsContent, tag.Content)
-			record.tagsColor = append(record.tagsColor, tag.Color)
+			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
+			tagsStr = append(tagsStr, content)
+		}
+		tagStr := strings.Join(tagsStr, ",")
+		if tagStr == "" {
+			record = append(record, nil)
+		} else {
+			record = append(record, tagStr)
 		}
 
 		dueStr := task.Due.Format("2006/01/02 15:04:05")
-		if !task.Due.IsZero() {
-			record.dueStr = dueStr
+		if task.Due.IsZero() {
+			record = append(record, nil)
+		} else {
+			record = append(record, dueStr)
 		}
-		record.loopStr = task.Loop
-		tf.records = append(tf.records, record)
+		if task.Loop == "" {
+			record = append(record, nil)
+		} else {
+			record = append(record, task.Loop)
+		}
+		t.AppendRecord(record)
 	}
 	t.Render()
+	t.Reset()
 	return
 }
 
 // Tags in table
 func Tags(tags []model.Tag) {
-	t := newTable()
 	t.SetFieldNames([]string{"#", "Content", "Color"})
 	for _, tag := range tags {
 		color := colorful.RenderStr(tag.Color, "default", "", tag.Color)
@@ -56,6 +79,7 @@ func Tags(tags []model.Tag) {
 		t.AppendRecord(record)
 	}
 	t.Render()
+	t.Reset()
 }
 
 // Result of execution
@@ -83,4 +107,5 @@ func Result(command string, errorList []error, warnList []string) {
 			command,
 		)
 	}
+	t.Reset()
 }
