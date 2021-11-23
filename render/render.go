@@ -32,7 +32,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 			contentStr := task.Content
 			for i := 0; i < task.Important; i++ {
 				// contentStr = colorful.RenderStr(contentStr, "line", "", "")
-				contentStr += "*" // ★
+				contentStr += "*"
 			}
 			record = append(record, contentStr)
 		} else {
