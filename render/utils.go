@@ -1,38 +1,52 @@
 package render
 
 import (
-	"runtime"
-	"syscall"
-	"unsafe"
+	"os"
+	"os/exec"
+	"strconv"
+	"strings"
 )
 
 const (
-	tioWinSZ      = syscall.TIOCGWINSZ
+	tioWinSZ      = 0x5413
 	tioCGWinSZOSX = 1074295912
 )
 
+// func lenOfTerminal() (int, error) {
+// 	type window struct {
+// 		Row    uint16
+// 		Col    uint16
+// 		Xpixel uint16
+// 		Ypixel uint16
+// 	}
+// 	w := new(window)
+// 	tio := tioWinSZ
+// 	if runtime.GOOS == "darwin" {
+// 		tio = tioCGWinSZOSX
+// 	}
+// 	res, _, err := syscall.Syscall(
+// 		syscall.SYS_IOCTL,
+// 		uintptr(syscall.Stdin),
+// 		uintptr(tio),
+// 		uintptr(unsafe.Pointer(w)),
+// 	)
+// 	if int(res) == -1 {
+// 		return 0, err
+// 	}
+// 	return int(w.Col), nil
+// }
+
 func lenOfTerminal() (int, error) {
-	type window struct {
-		Row    uint16
-		Col    uint16
-		Xpixel uint16
-		Ypixel uint16
-	}
-	w := new(window)
-	tio := tioWinSZ
-	if runtime.GOOS == "darwin" {
-		tio = tioCGWinSZOSX
-	}
-	res, _, err := syscall.Syscall(
-		syscall.SYS_IOCTL,
-		uintptr(syscall.Stdin),
-		uintptr(tio),
-		uintptr(unsafe.Pointer(w)),
-	)
-	if int(res) == -1 {
+	cmd := exec.Command("stty", "size")
+	cmd.Stdin = os.Stdin
+	out, err := cmd.Output()
+	if err != nil {
 		return 0, err
 	}
-	return int(w.Col), nil
+	sizeStr := strings.ReplaceAll(string(out), "\n", "")
+	sizes := strings.Split(sizeStr, " ")
+	width, err := strconv.Atoi(sizes[1])
+	return width, nil
 }
 
 func lenOnScreen(str string) int {
