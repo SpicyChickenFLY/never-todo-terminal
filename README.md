@@ -1,4 +1,4 @@
-<div align=center><img src="./static/logo.png" width = "200" height = "200" /><h1>never-todo-cmd</h1></div>
+<div align=center><img src="./static/logo.png" width = "200" height = "200" /><img src="./static/icon-cmd.png" width = "200" height = "200" /><h1>never-todo-cmd</h1></div>
 
 
 > NeverToDo待办列表——命令行端
@@ -22,28 +22,32 @@
 * [ ] 实现日程相关功能
 * [ ] 实现命令行端和桌面端或者后端服务器的同步机制
 
+## 目前已知的Bug
+* [ ] 在通过nt tag add命令创建标签的时候设置标签颜色不生效
+* [ ] 已经有log日志的情况下没必要进行软删除
+
 #### 项目搭建
 
 ```bash
 # 查看总览
 never
-# 查看帮助
-never help
+# 查看帮助(当前版本未实现)
+#never -h
 
-# 通过UI交互界面进行操作
-never ui
+# 通过UI交互界面进行操作(当前版本未实现）
+#never ui
 
-# 查看历史操作(未完成)
-never log [<num>]
+# 查看历史操作
+#never log [<num>]
 
-# 撤销(未完成)
-never undo [<log_id>]
+# 撤销(当前版本未实现）
+#never undo [<log_id>]
 
 # 解释指令的解析结果和执行计划
 never explain [<log_id>]
 
 # 查看、搜索待办任务
-never [todo] [<FILTER_TODO_LIST>]
+never [list] [todo]|done|all [<FILTER_TODO_LIST>]
     # FILTER_TODO_LIST
     <id>[-<id>] [<id>]             # 通过ID直接定位
     <content> [and|or <content>]   # 通过内容模糊搜索
@@ -71,7 +75,7 @@ never [set] <id> [<content>] [<FILTER_TODO_UPDATE>]
     due:<due>                       # 设置截止时间  (未完成)
     loop: y|m|w[-SMTWTFS]|d         # 设置重复提醒(每周日，一，四：w-SM...T..)(未完成)
 
-# 查看某一时段内的统计(未开发)
+# 查看某一时段内的统计(当前版本未实现）
 # never stat year|month|week|day # 默认为day
 
 # 查看所有标签、修改标签
