@@ -105,17 +105,22 @@ importance  ![0-9]
     return LOG
 "undo" 
     return UNDO
-"todo"
-    return TODO
-"tag" 
-    return TAG
 
+"list"
+    return LIST
 "add"|"create" 
     return ADD
 "del"|"delete"|"remove" 
     return DELETE
-"done"|"complete" 
+"todo"
+    return TODO
+"done" 
     return DONE
+"all"
+    return ALL
+
+"tag" 
+    return TAG
 
 "age:" 
     return AGE

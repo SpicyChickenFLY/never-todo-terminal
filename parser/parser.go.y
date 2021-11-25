@@ -48,7 +48,7 @@ import (
 %token <str> LBRACK RBRACK MULTI
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
 %token <str> UI EXPLAIN LOG UNDO
-%token <str> TODO TAG ADD DELETE DONE PROJECT
+%token <str> LIST TODO TAG ADD DELETE DONE  ALL
 %token <str> AGE DUE LOOP IMPORTANCE COLOR SORT
 %token <str> HELP
 
@@ -135,10 +135,11 @@ undo_log:
 
 // ========== TASK COMMAND ==============
 task_list:
-      task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskAll, $1, $2) } 
-	| TODO task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskTodo, $2, $3) }
-	| DONE task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDone, $2, $3) }
-	| DELETE task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDeleted, $2, $3) }
+      task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskAll, $1, $2) }
+    | LIST task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskAll, $2, $3) } 
+    | LIST TODO task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskTodo, $2, $3) }
+    | LIST DONE task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDone, $2, $3) }
+    | LIST ALL task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDeleted, $2, $3) }
     ;
 
 task_add:
@@ -385,7 +386,6 @@ indefinite_content:
     | ADD { $$ = $1 }
     | DELETE { $$ = $1 }
     | DONE { $$ = $1 }
-    | PROJECT { $$ = $1 }
     | DATE { $$ = $1 }
     | TIME { $$ = $1 }
     | indefinite_content NUM  { $$ = $1 + " " + fmt.Sprint($2) }
@@ -395,7 +395,6 @@ indefinite_content:
     | indefinite_content ADD { $$ = $1 + " " + $2 }
     | indefinite_content DELETE { $$ = $1 + " " + $2 }
     | indefinite_content DONE { $$ = $1 + " " + $2 }
-    | indefinite_content PROJECT { $$ = $1 + " " + $2 }
     | indefinite_content DATE { $$ = $1 + " " + $2 }
     | indefinite_content TIME { $$ = $1 + " " + $2 }
     ;
