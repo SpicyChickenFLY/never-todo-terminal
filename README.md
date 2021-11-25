@@ -39,11 +39,50 @@
 ```bash
 # 查看总览
 never
+
 # 查看帮助(当前版本未实现)
 #never -h
 
 # 通过UI交互界面进行操作(当前版本未实现）
 #never ui
+
+# 解释指令的解析结果和执行计划
+never explain [<log_id>]
+
+# 查看所有任务、筛选任务
+never list {[todo]|done|all} 
+    [ <content> [and|or <content>] ]   # 通过内容模糊搜索筛选
+    [ +<tag>|-<tag> [+<tag>|-<tag>] ]  # 通过标签筛选
+    [ age:<age>|[<age>]-[<age>] ]      # 通过创建时间筛选(当前版本未实现)
+    [ due:<due>|[<due>]-[<due>] ]      # 通过截止时间筛选(当前版本未实现)
+
+# 列出指定任务
+never list {[todo]|done|all} <id>[-<id>] [<id>]             # 通过ID直接定位
+
+# 新增待办任务
+never add <content>
+    [ +<tag> [+<tag>] ]         # 分配标签
+    [ due:<due> ]               # 设置截止时间(当前版本未实现)
+    [ loop: y|m|w[-SMTWTFS]|d ] # 设置重复提醒(每周日，一，四：w-SM...T..)(当前版本未实现)
+
+# 修改任务
+never [set] <id> [<content>] 
+    [ +<tag>|-<tag> [+<tag>|-<tag>] ]   # 分配标签
+    [ due:<due> ]                       # 设置截止时间  (当前版本未实现)
+    [ loop: y|m|w[-SMTWTFS]|d ]         # 设置重复提醒(每周日，一，四：w-SM...T..)(当前版本未实现)
+
+# 完成、删除任务
+never todo|done|del <id>[-<id>] [<id>]
+
+
+# 查看所有标签、筛选标签
+never tag
+    [ like <content> [and|or <content>] ]  # 通过内容模糊搜索
+
+# 列出指定标签
+never tag <id>[~<id>] [<id>]               # 通过ID直接定位
+
+never tag [set] <id> <content>
 
 # 查看历史操作
 #never log [<num>]
@@ -51,46 +90,6 @@ never
 # 撤销(当前版本未实现）
 #never undo [<log_id>]
 
-# 解释指令的解析结果和执行计划
-never explain [<log_id>]
-
-# 查看、搜索待办任务
-never [list] [todo]|done|all [<FILTER_TODO_LIST>]
-    # FILTER_TODO_LIST
-    <id>[-<id>] [<id>]             # 通过ID直接定位
-    <content> [and|or <content>]   # 通过内容模糊搜索
-    +<tag>|-<tag> [+<tag>|-<tag>]  # 通过标签筛选
-    age:<age>|[<age>]-[<age>]      # 通过创建时间筛选(未完成)
-    due:<due>|[<due>]-[<due>]      # 通过截止时间筛选(未完成)
-
-# 新增待办任务
-never add <content> [<FILTER_TODO_ADD>]
-    # FILTER_TODO_ADD
-    +<tag> [+<tag>]         # 分配标签
-    due:<due>               # 设置截止时间(未完成)
-    loop: y|m|w[-SMTWTFS]|d # 设置重复提醒(每周日，一，四：w-SM...T..)(未完成)
-
-# 查看已完成、已删除任务
-never done
-
-# 完成、删除任务
-never done|del <id>[-<id>] [<id>]
-
-# 修改任务
-never [set] <id> [<content>] [<FILTER_TODO_UPDATE>]
-    # FILTER_TODO_UPDATE
-    +<tag>|-<tag> [+<tag>|-<tag>]   # 分配标签
-    due:<due>                       # 设置截止时间  (未完成)
-    loop: y|m|w[-SMTWTFS]|d         # 设置重复提醒(每周日，一，四：w-SM...T..)(未完成)
-
 # 查看某一时段内的统计(当前版本未实现）
 # never stat year|month|week|day # 默认为day
-
-# 查看所有标签、修改标签
-never tag [<FILTER_TAG_LIST>]
-    # FILTER_TAG_LIST
-    <id>[~<id>] [<id>]                  # 通过ID直接定位
-    like <content> [and|or <content>]   # 通过内容模糊搜索
-never tag [set] <id> <content>
-
 ```
