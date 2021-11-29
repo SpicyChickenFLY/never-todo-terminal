@@ -18,8 +18,8 @@
 
 .vscode/*
 
-#parser/lex.go
-#parser/parser.go
+parser/lex.go
+parser/parser.go
 parser/y.output
 
 build/y.output
