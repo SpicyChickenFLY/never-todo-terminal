@@ -17,6 +17,7 @@ import (
   num int
   root *ast.RootNode
   stmt ast.StmtNode
+  helpNode *ast.HelpNode
   taskListNode *ast.TaskListNode
   taskListFilterNode *ast.TaskListFilterNode
   indefiniteTaskListFilterNode *ast.IndefiniteTaskListFilterNode
@@ -48,12 +49,14 @@ import (
 %token <str> LBRACK RBRACK MULTI
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
 %token <str> UI EXPLAIN LOG UNDO
-%token <str> LIST TODO TAG ADD DELETE DONE  ALL
+%token <str> LIST TODO TAG ADD DELETE UPDATE DONE ALL
 %token <str> AGE DUE LOOP IMPORTANCE COLOR SORT
 %token <str> HELP
 
 %type <root> root
 %type <stmt> stmt
+
+%type <helpNode> help
 
 %type <taskListNode> task_list
 %type <taskListFilterNode> task_list_filter
@@ -88,10 +91,11 @@ import (
 %%
 
 root:
-      UI { ast.Result = ast.NewRootNode(ast.CMDUI, nil) }
+      { ast.Result = ast.NewRootNode(ast.CMDSummary, nil) }
+    | UI { ast.Result = ast.NewRootNode(ast.CMDUI, nil) }
     | EXPLAIN stmt { ast.Result = ast.NewRootNode(ast.CMDExplain, $2) }
     | stmt { ast.Result = ast.NewRootNode(ast.CMDStmt, $1) }
-    | help { ast.Result = ast.NewRootNode(ast.CMDHelp, nil) }
+    | help { ast.Result = ast.NewRootNode(ast.CMDHelp, $1) }
     ;
 
 stmt:
@@ -111,15 +115,28 @@ stmt:
 
 // ========== HELP =============
 help:
-      HELP {}
-    | task_list HELP {}
-    | task_add HELP {}
-    | task_delete HELP {}
-    | task_update HELP {}
-    | tag_list HELP {}
-    | tag_add HELP {}
-    | tag_delete HELP {}
-    | tag_update HELP  {}
+      HELP { $$ = ast.NewHelpNode(ast.HelpRoot) }
+    | task_list HELP { $$ = ast.NewHelpNode(ast.HelpTaskList) }
+    | task_add HELP { $$ = ast.NewHelpNode(ast.HelpTaskList) }
+    | ADD HELP { $$ = ast.NewHelpNode(ast.HelpTaskAdd) }
+    | ADD { $$ = ast.NewHelpNode(ast.HelpTaskAdd) }
+    | task_delete HELP { $$ = ast.NewHelpNode(ast.HelpTaskDelete) }
+    | DELETE HELP { $$ = ast.NewHelpNode(ast.HelpTaskDelete) }
+    | DELETE { $$ = ast.NewHelpNode(ast.HelpTaskDelete) }
+    | task_update HELP { $$ = ast.NewHelpNode(ast.HelpTaskUpdate) }
+    | UPDATE HELP { $$ = ast.NewHelpNode(ast.HelpTaskUpdate) }
+    | UPDATE { $$ = ast.NewHelpNode(ast.HelpTaskUpdate) }
+    | tag_list HELP { $$ = ast.NewHelpNode(ast.HelpTagList) }
+    | TAG LIST HELP { $$ = ast.NewHelpNode(ast.HelpTagList) }
+    | tag_add HELP { $$ = ast.NewHelpNode(ast.HelpTagAdd) }
+    | TAG ADD HELP { $$ = ast.NewHelpNode(ast.HelpTagAdd) }
+    | TAG ADD { $$ = ast.NewHelpNode(ast.HelpTagAdd) }
+    | tag_delete HELP { $$ = ast.NewHelpNode(ast.HelpTagDelete) }
+    | TAG DELETE HELP { $$ = ast.NewHelpNode(ast.HelpTagDelete) }
+    | TAG DELETE { $$ = ast.NewHelpNode(ast.HelpTagDelete) }
+    | tag_update HELP { $$ = ast.NewHelpNode(ast.HelpTagUpdate) }
+    | TAG UPDATE HELP { $$ = ast.NewHelpNode(ast.HelpTagUpdate) }
+    | TAG UPDATE { $$ = ast.NewHelpNode(ast.HelpTagUpdate) }
     ;
 
 // ========== LOG =============
@@ -135,11 +152,10 @@ undo_log:
 
 // ========== TASK COMMAND ==============
 task_list:
-      task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskAll, $1, $2) }
-    | LIST task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskAll, $2, $3) } 
-    | LIST TODO task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskTodo, $2, $3) }
-    | LIST DONE task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDone, $2, $3) }
-    | LIST ALL task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDeleted, $2, $3) }
+      LIST task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskTodo, $2, $3) } 
+    | LIST TODO task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskTodo, $3, $4) }
+    | LIST DONE task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskDone, $3, $4) }
+    | LIST ALL task_list_filter task_list_option { $$ = ast.NewTaskListNode(model.TaskAll, $3, $4) }
     ;
 
 task_add:
@@ -163,6 +179,7 @@ task_delete:
 
 task_update:
       id task_update_option {$$ = ast.NewTaskUpdateNode($1, $2)}
+    | UPDATE id task_update_option {$$ = ast.NewTaskUpdateNode($2, $3)} 
     ;
 
 // ========== TASK LIST FILTER =============

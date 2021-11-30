@@ -105,7 +105,6 @@ type ContentGroupNode struct {
 // NewContentGroupNode return ContentGroupNode
 func NewContentGroupNode(
 	content string, operator int, operands []*ContentGroupNode) *ContentGroupNode {
-	fmt.Println("new content" + content)
 	return &ContentGroupNode{content, operator, operands}
 }
 
@@ -372,7 +371,7 @@ func NewTimeNode(str string, dtType int) *TimeNode {
 	return &TimeNode{&time}
 }
 
-func (tn *TimeNode) execute() {}
+func (tn *TimeNode) filter() {}
 
 func (tn *TimeNode) explain() string {
 	fmt.Print(tn.time.Format("2006/01/02 15:04:05"))

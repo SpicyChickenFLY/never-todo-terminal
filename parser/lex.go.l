@@ -112,6 +112,8 @@ importance  ![0-9]
     return ADD
 "del"|"delete"|"remove" 
     return DELETE
+"set"
+    return UPDATE
 "todo"
     return TODO
 "done" 

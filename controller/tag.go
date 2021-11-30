@@ -21,7 +21,7 @@ func ListTags() (tags []model.Tag) {
 func GetTagByID(id int) (model.Tag, error) {
 	tag, ok := model.DB.Data.Tags[id]
 	if !ok {
-		return model.Tag{}, errors.New("Retrieve: Tag(id=%d) not found")
+		return model.Tag{}, fmt.Errorf("Retrieve: Tag(id=%d) not found", id)
 	}
 	return tag, nil
 }
@@ -40,7 +40,7 @@ func GetTagIDByName(name string) (int, error) {
 func AddTag(content string) (int, error) {
 	id, err := GetTagIDByName(content)
 	if err == nil {
-		return id, errors.New("Create: Tag(id=%d, content=%s) already exists")
+		return id, fmt.Errorf("Create: Tag(id=%d, content=%s) already exists", id, content)
 	}
 	newTag := model.Tag{
 		ID:      model.DB.Data.TagInc,

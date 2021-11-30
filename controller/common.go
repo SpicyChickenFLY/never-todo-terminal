@@ -25,15 +25,13 @@ func ShowSummary() error {
 	fmt.Println(constant.ColorfulLogo)
 	fmt.Println(constant.Descirption)
 	fmt.Println(constant.Separator)
-	var todoTotal, doneTotal, deletedTotal, tagTotal int
+	var todoTotal, doneTotal, tagTotal int
 	for _, task := range model.DB.Data.Tasks {
 		switch task.Status {
-		case model.ProjectTodo:
+		case model.TaskTodo:
 			todoTotal++
-		case model.ProjectDone:
+		case model.TaskDone:
 			doneTotal++
-		case model.ProjectDeleted:
-			deletedTotal++
 		}
 	}
 	for _, tag := range model.DB.Data.Tags {
@@ -42,6 +40,8 @@ func ShowSummary() error {
 		}
 	}
 	fmt.Printf("todo: %d, done: %d, tag: %d\n", todoTotal, doneTotal, tagTotal)
+
+	ListTodoTasks()
 
 	return nil
 }

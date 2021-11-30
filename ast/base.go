@@ -43,8 +43,27 @@ func (rn *RootNode) Execute(cmd string) {
 	case CMDNotSupport:
 		// ErrorList = append(ErrorList, errors.New("Command not support"))
 		render.Result(cmd, ErrorList, WarnList)
+	case CMDSummary:
+		if err := model.Init(""); err != nil {
+			ErrorList = append(ErrorList, err)
+			render.Result(cmd, ErrorList, WarnList)
+			return
+		}
+		if err := model.Begin(); err != nil {
+			ErrorList = append(ErrorList, err)
+			render.Result(cmd, ErrorList, WarnList)
+			return
+		}
+		controller.ShowSummary()
+		if len(ErrorList) > 0 {
+			if err := model.RollBack(); err != nil {
+				ErrorList = append(ErrorList, err)
+			}
+		} else if err := model.Commit(); err != nil {
+			ErrorList = append(ErrorList, err)
+		}
 	case CMDHelp:
-		controller.ShowHelp()
+		rn.stmtNode.execute()
 	case CMDUI:
 		controller.StartUI()
 	case CMDExplain:

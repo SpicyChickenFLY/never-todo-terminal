@@ -78,15 +78,18 @@ func NewTagAddNode(content, color string) *TagAddNode {
 func (tan *TagAddNode) execute() {
 	tagID, err := controller.AddTag(tan.content)
 	if err != nil {
-		ErrorList = append(ErrorList, err)
+		WarnList = append(WarnList, err.Error())
 	}
 	tag, err := controller.GetTagByID(tagID)
 	if err != nil {
-		WarnList = append(WarnList, err.Error())
+		ErrorList = append(ErrorList, err)
 	}
+	tag.Deleted = false
+	tag.Color = tan.color
 	controller.UpdateTag(tag)
 	render.Tags([]model.Tag{tag})
 }
+
 func (tan *TagAddNode) explain() string {
 	result := "tag add "
 	fmt.Println("Add new tag")
