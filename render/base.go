@@ -2,110 +2,123 @@ package render
 
 import (
 	"fmt"
+	"strings"
+
+	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
+	"github.com/SpicyChickenFLY/never-todo-cmd/model"
+	"github.com/SpicyChickenFLY/never-todo-cmd/utils/colorful"
 )
 
-type table struct {
-	pageLen         int
-	fieldNames      []string
-	fieldLenLimit   []int
-	fieldMaxLen     []int
-	fieldEmptyFLags []bool
+var t *table
 
-	rows []row
+func init() {
+	t = newTable()
+	t.pageLen = 200
+	t.Reset()
 }
 
-func newTable() *table {
-	return &table{}
-}
-
-const (
-	rowTypeRecord = iota
-	rowTypeLine
-)
-
-type row struct {
-	rowType     int
-	fieldValues []string
-}
-
-type record []interface{}
-
-func (t *table) calcFieldMaxLen() (sum int) {
-	for _, maxLen := range t.fieldMaxLen {
-		sum += maxLen
+// Tasks in table
+func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
+	defaultContentTitle := "Content"
+	if contenTitle != "" {
+		defaultContentTitle = contenTitle
 	}
+	t.SetFieldNames([]string{"#", defaultContentTitle, "Tags", "Due", "Loop"})
+
+	for _, task := range tasks {
+		record := record{task.ID}
+
+		if task.Content != "" {
+			contentStr := task.Content
+			for i := 0; i < task.Important; i++ {
+				// contentStr = colorful.RenderStr(contentStr, "line", "", "")
+				contentStr += "*" // ★
+			}
+			record = append(record, contentStr)
+		} else {
+			record = append(record, nil)
+		}
+
+		tags, _ := controller.FindTagsByTask(task.ID)
+		tagsStr := []string{}
+		for _, tag := range tags {
+			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
+			tagsStr = append(tagsStr, content)
+		}
+		tagStr := strings.Join(tagsStr, ",")
+		if tagStr == "" {
+			record = append(record, nil)
+		} else {
+			record = append(record, tagStr)
+		}
+
+		dueStr := task.Due.Format("2006/01/02 15:04:05")
+		if task.Due.IsZero() {
+			record = append(record, nil)
+		} else {
+			record = append(record, dueStr)
+		}
+		if task.Loop == "" {
+			record = append(record, nil)
+		} else {
+			record = append(record, task.Loop)
+		}
+		t.AppendRecord(record)
+	}
+	t.Render()
+	t.Reset()
 	return
 }
 
-func (t *table) SetFieldNames(fieldNames []string) {
-	t.fieldNames = make([]string, len(fieldNames))
-	t.fieldMaxLen = make([]int, len(fieldNames))
-	t.fieldEmptyFLags = make([]bool, len(fieldNames))
-	for i, fieldName := range fieldNames {
-		t.fieldNames[i] = fieldName
-		t.fieldMaxLen[i] = lenOnScreen(fieldName)
-		t.fieldEmptyFLags[i] = true
+// Tags in table
+func Tags(tags []model.Tag) {
+	t.SetFieldNames([]string{"#", "Content", "Color"})
+	for _, tag := range tags {
+		color := colorful.RenderStr(tag.Color, "default", "", tag.Color)
+		record := record{tag.ID, tag.Content, color}
+		t.AppendRecord(record)
 	}
-}
-func (t *table) SetFieldLenLimit(idx, length int) {}
-
-func (t *table) AppendRecord(record record) {
-	if len(record) != len(t.fieldNames) {
-		// TODO: fullfill or throw exception //
-		return
-	}
-	fieldValues := make([]string, len(record))
-	for i, field := range record {
-		fieldContent := ""
-		if field != nil {
-			fieldContent = fmt.Sprint(field)
-			fieldValues[i] = fieldContent
-			t.fieldEmptyFLags[i] = false
-			if lenOnScreen(fieldContent) >= t.fieldMaxLen[i] {
-				t.fieldMaxLen[i] = lenOnScreen(fieldContent)
-			}
-		}
-	}
-	row := row{rowTypeRecord, fieldValues}
-	t.rows = append(t.rows, row)
+	t.Render()
+	t.Reset()
 }
 
-func (t *table) AppendDoubleLine() {}
-func (t *table) AppendSolidLine()  {}
-func (t *table) AppendEmptyLine()  {}
-
-func (t *table) Render() {
-	if t.pageLen < t.calcFieldMaxLen() {
-		// TODO:  content outfill termial row  //
-		// if model.DB.Settings.WrapContent {}
+// Result of execution
+func Result(command string, errorList []error, warnList []string) {
+	for _, warn := range warnList {
+		fmt.Printf("%s %s\n",
+			colorful.RenderStr("[  INFO  ]: ", "default", "", "yellow"),
+			warn,
+		)
 	}
-	// render header
-	for fieldIdx, fieldName := range t.fieldNames {
-		if t.fieldEmptyFLags[fieldIdx] {
-			continue
+	if len(errorList) > 0 {
+		for _, err := range errorList {
+			fmt.Printf("%s %s\n",
+				colorful.RenderStr("[ ERROR  ]: ", "default", "", "red"),
+				err.Error(),
+			)
 		}
-		fmt.Print(fieldName)
-		for i := 0; i <= t.fieldMaxLen[fieldIdx]-lenOnScreen(fieldName); i++ {
-			fmt.Print(" ")
-		}
+		fmt.Printf("%s never %s\n",
+			colorful.RenderStr("[ FAILED ]: ", "default", "", "red"),
+			command,
+		)
+	} else {
+		fmt.Printf("%s never %s\n",
+			colorful.RenderStr("[   OK   ]: ", "default", "", "green"),
+			command,
+		)
 	}
-	fmt.Println()
-	for _, row := range t.rows {
-		switch row.rowType {
-		case rowTypeRecord:
-			// TODO:  list all fields value of this row //
-			for fieldIdx, field := range row.fieldValues {
-				// 中文为代表的宽字符换行后会多占一个空格
-				// 首先得判断是否需要换行，是否可以省略
-				fmt.Print(field)
-				for i := 0; i <= t.fieldMaxLen[fieldIdx]-lenOnScreen(field); i++ {
-					fmt.Print(" ")
-				}
-			}
-			fmt.Println()
-		}
-	}
+	t.Reset()
 }
 
-func (t *table) Reset() {
+// Seperator is a line full of "=" of "-"
+func Seperator() {
+
+}
+
+// MainTheme render logos and statistics
+func MainTheme() {}
+
+// Logo render logo in colors
+func Logo() {
+
 }
