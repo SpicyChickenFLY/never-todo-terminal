@@ -116,7 +116,9 @@ func Seperator() {
 }
 
 // MainTheme render logos and statistics
-func MainTheme() {}
+func MainTheme() {
+
+}
 
 // Logo render logo in colors
 func Logo() {

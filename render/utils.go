@@ -53,3 +53,7 @@ func lenOfTerminal() (int, error) {
 	width, err := strconv.Atoi(sizes[1])
 	return width, nil
 }
+
+func detectTerminalColor() {
+
+}
