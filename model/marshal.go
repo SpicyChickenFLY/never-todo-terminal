@@ -343,7 +343,7 @@ func marshalModel() (m map[string]interface{}, err error) {
 	m = make(map[string]interface{})
 	dm := make(map[string]interface{})
 
-	var tasks []interface{}
+	var tasks = []interface{}{}
 	for _, task := range DB.Data.Tasks {
 		var taskMap []interface{}
 		var dueTime string
@@ -363,7 +363,7 @@ func marshalModel() (m map[string]interface{}, err error) {
 	}
 	dm["tasks"] = tasks
 
-	var tags []interface{}
+	var tags = []interface{}{}
 	for _, tag := range DB.Data.Tags {
 		var tagMap []interface{}
 		tagMap = append(tagMap,
@@ -376,7 +376,7 @@ func marshalModel() (m map[string]interface{}, err error) {
 	}
 	dm["tags"] = tags
 
-	var taskTags []interface{}
+	var taskTags = []interface{}{}
 	for taskID, tagIDsOfTask := range DB.Data.TaskTags {
 		for tagID := range tagIDsOfTask {
 			taskTag := []interface{}{taskID, tagID}

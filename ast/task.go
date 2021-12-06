@@ -34,8 +34,6 @@ func (tln *TaskListNode) execute() {
 		tasks = controller.ListTodoTasks()
 	case model.TaskDone:
 		tasks = controller.ListDoneTasks()
-	case model.TaskDeleted:
-		tasks = controller.ListDeletedTasks()
 	}
 	tasks = tln.taskListFilterNode.filter(tasks)
 	tasks = tln.taskListOptionNode.filter(tasks)

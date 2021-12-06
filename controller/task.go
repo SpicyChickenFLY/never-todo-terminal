@@ -17,11 +17,6 @@ func ListTasks() (tasks []model.Task) {
 	return tasks
 }
 
-// ListAllTasks with filter provided by params
-func ListAllTasks() (todo, done, deleted []model.Task) {
-	return ListTodoTasks(), ListDoneTasks(), ListDeletedTasks()
-}
-
 // ListTodoTasks with filter provided by params
 func ListTodoTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
@@ -36,16 +31,6 @@ func ListTodoTasks() (tasks []model.Task) {
 func ListDoneTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
 		if task.Status == model.ProjectDone {
-			tasks = append(tasks, task)
-		}
-	}
-	return tasks
-}
-
-// ListDeletedTasks with filter provided by params
-func ListDeletedTasks() (tasks []model.Task) {
-	for _, task := range model.DB.Data.Tasks {
-		if task.Status == model.ProjectDeleted {
 			tasks = append(tasks, task)
 		}
 	}
@@ -79,9 +64,10 @@ func GetTasksByIDGroup(ids []int) (tasks []model.Task, warnList []string) {
 // DeleteTasks called by parser
 func DeleteTasks(ids []int) (warnList []string) {
 	for _, id := range ids {
-		if task, ok := model.DB.Data.Tasks[id]; ok {
-			task.Status = model.ProjectDeleted
-			model.DB.Data.Tasks[id] = task
+		if _, ok := model.DB.Data.Tasks[id]; ok {
+			// task.Status = model.ProjectDeleted
+			// model.DB.Data.Tasks[id] = task
+			delete(model.DB.Data.Tasks, id)
 		} else {
 			warnList = append(warnList,
 				fmt.Sprintf("Delete: Task(id=%d) not found", id),

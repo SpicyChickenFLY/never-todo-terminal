@@ -45,6 +45,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
 			tagsStr = append(tagsStr, content)
 		}
+		// TODO: 待办的对应标签需要排序
 		tagStr := strings.Join(tagsStr, ",")
 		if tagStr == "" {
 			record = append(record, nil)
