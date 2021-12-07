@@ -36,13 +36,6 @@ type TaskTag struct {
 	TagID  int
 }
 
-// Project default ID
-const (
-	ProjectTodo = iota
-	ProjectDone
-	ProjectDeleted
-)
-
 // Project is project struct
 type Project struct {
 	ID      int

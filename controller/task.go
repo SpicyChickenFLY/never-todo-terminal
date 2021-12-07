@@ -20,7 +20,7 @@ func ListTasks() (tasks []model.Task) {
 // ListTodoTasks with filter provided by params
 func ListTodoTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
-		if task.Status == model.ProjectTodo {
+		if task.Status == model.TaskTodo {
 			tasks = append(tasks, task)
 		}
 	}
@@ -30,7 +30,7 @@ func ListTodoTasks() (tasks []model.Task) {
 // ListDoneTasks with filter provided by params
 func ListDoneTasks() (tasks []model.Task) {
 	for _, task := range model.DB.Data.Tasks {
-		if task.Status == model.ProjectDone {
+		if task.Status == model.TaskDone {
 			tasks = append(tasks, task)
 		}
 	}
@@ -81,7 +81,7 @@ func DeleteTasks(ids []int) (warnList []string) {
 func CompleteTask(ids []int) (warnList []string) {
 	for _, id := range ids {
 		if task, ok := model.DB.Data.Tasks[id]; ok {
-			task.Status = model.ProjectDone
+			task.Status = model.TaskDone
 			model.DB.Data.Tasks[id] = task
 		} else {
 			warnList = append(warnList,
