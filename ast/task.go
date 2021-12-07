@@ -22,6 +22,9 @@ type TaskListNode struct {
 
 // NewTaskListNode return TaskListNode
 func NewTaskListNode(taskType int, tlfn *TaskListFilterNode, tlon *TaskListOptionNode) *TaskListNode {
+	if tlon == nil {
+		tlon = NewTaskListOptionNode()
+	}
 	return &TaskListNode{taskType, tlfn, tlon}
 }
 

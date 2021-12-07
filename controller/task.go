@@ -113,27 +113,20 @@ func UpdateTask(updateTask model.Task) error {
 	return nil
 }
 
-// TaskSortDue sorted by task id
-type TaskSortDue []model.Task
-
-func (tsd TaskSortDue) Len() int           { return len(tsd) }
-func (tsd TaskSortDue) Less(i, j int) bool { return utils.LessInAbs(tsd[i].ID, tsd[j].ID) }
-func (tsd TaskSortDue) Swap(i, j int)      { tsd[i], tsd[j] = tsd[j], tsd[i] }
-
 // SortTask with specified metric
 func SortTask(tasks []model.Task, metricName string) []model.Task {
 	switch metricName {
 	case "NAME":
 		sort.SliceStable(tasks, func(a, b int) bool {
-			return true
+			return !utils.LessInString(tasks[a].Content, tasks[a].Content)
 		})
 	case "name":
 		sort.SliceStable(tasks, func(a, b int) bool {
-			return true
+			return utils.LessInString(tasks[a].Content, tasks[a].Content)
 		})
 	case "DUE":
 		sort.SliceStable(tasks, func(a, b int) bool {
-			return utils.LessInTime(tasks[a].Due, tasks[b].Due)
+			return !utils.LessInTime(tasks[a].Due, tasks[b].Due)
 		})
 	case "due":
 		sort.SliceStable(tasks, func(a, b int) bool {

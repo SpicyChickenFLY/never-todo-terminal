@@ -3,8 +3,10 @@ package controller
 import (
 	"errors"
 	"fmt"
+	"sort"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
+	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
 // ListTags with filter provided by params
@@ -77,4 +79,36 @@ func DeleteTags(ids []int) (warnList []string) {
 		}
 	}
 	return
+}
+
+// SortTag with specified metric
+func SortTag(tags []model.Tag, metricName string) []model.Tag {
+	switch metricName {
+	case "NAME":
+		sort.SliceStable(tags, func(a, b int) bool {
+			return !utils.LessInString(tags[a].Content, tags[a].Content)
+		})
+	case "name":
+		sort.SliceStable(tags, func(a, b int) bool {
+			return !utils.LessInString(tags[a].Content, tags[a].Content)
+		})
+	case "COLOR":
+		sort.SliceStable(tags, func(a, b int) bool {
+			return !utils.LessInString(tags[a].Content, tags[a].Content)
+		})
+	case "color":
+		sort.SliceStable(tags, func(a, b int) bool {
+			return !utils.LessInString(tags[a].Content, tags[a].Content)
+		})
+
+	case "ID":
+		sort.SliceStable(tags, func(a, b int) bool {
+			return !utils.LessInID(tags[a].ID, tags[b].ID)
+		})
+	default:
+		sort.SliceStable(tags, func(a, b int) bool {
+			return utils.LessInID(tags[a].ID, tags[b].ID)
+		})
+	}
+	return tags
 }

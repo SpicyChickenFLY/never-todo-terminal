@@ -29,7 +29,6 @@ func ShowSummary() error {
 	for _, task := range model.DB.Data.Tasks {
 		switch task.Status {
 		case model.TaskTodo:
-			// TODO: 数值不正确
 			todoTotal++
 		case model.TaskDone:
 			doneTotal++
