@@ -46,6 +46,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 			tagsStr = append(tagsStr, content)
 		}
 		// TODO: 待办的对应标签需要排序
+		tags = controller.SortTag(tags, "ID")
 		tagStr := strings.Join(tagsStr, ",")
 		if tagStr == "" {
 			record = append(record, nil)
