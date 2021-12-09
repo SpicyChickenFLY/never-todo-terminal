@@ -54,6 +54,8 @@ func lenOfTerminal() (int, error) {
 	return width, nil
 }
 
+// TODO: detect terminal color supportation
+// for now assume it does
 func detectTerminalColor() {
 
 }
