@@ -8,22 +8,6 @@ import (
 	"unicode"
 )
 
-// TODO: 中英文比较不对
-// LessInString check if first string greater than the second
-func LessInString(a, b string) bool {
-	if len(a) > len(b) {
-		return true
-	}
-	ba, bb := []byte(a), []byte(b)
-	for i := 0; i < len(a); i++ {
-		if ba[i] == bb[i] {
-			continue
-		}
-		return ba[i] > bb[i]
-	}
-	return false
-}
-
 // ContainStr search for sub string
 func ContainStr(sentence, word string) bool {
 	sentence = strings.ToLower(sentence)

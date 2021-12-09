@@ -117,13 +117,9 @@ func UpdateTask(updateTask model.Task) error {
 func SortTask(tasks []model.Task, metricName string) []model.Task {
 	switch metricName {
 	case "NAME":
-		sort.SliceStable(tasks, func(a, b int) bool {
-			return !utils.LessInString(tasks[a].Content, tasks[a].Content)
-		})
+		sort.SliceStable(tasks, func(a, b int) bool { return tasks[a].Content > tasks[a].Content })
 	case "name":
-		sort.SliceStable(tasks, func(a, b int) bool {
-			return utils.LessInString(tasks[a].Content, tasks[a].Content)
-		})
+		sort.SliceStable(tasks, func(a, b int) bool { return tasks[a].Content <= tasks[a].Content })
 	case "DUE":
 		sort.SliceStable(tasks, func(a, b int) bool {
 			return !utils.LessInTime(tasks[a].Due, tasks[b].Due)

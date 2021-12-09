@@ -2,6 +2,7 @@ package render
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
@@ -45,8 +46,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
 			tagsStr = append(tagsStr, content)
 		}
-		// TODO: 待办的对应标签需要排序
-		tags = controller.SortTag(tags, "ID")
+		sort.SliceStable(tagsStr, func(i, j int) bool { return tagsStr[i] < tagsStr[j] })
 		tagStr := strings.Join(tagsStr, ",")
 		if tagStr == "" {
 			record = append(record, nil)

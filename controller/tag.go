@@ -85,30 +85,17 @@ func DeleteTags(ids []int) (warnList []string) {
 func SortTag(tags []model.Tag, metricName string) []model.Tag {
 	switch metricName {
 	case "NAME":
-		sort.SliceStable(tags, func(a, b int) bool {
-			return !utils.LessInString(tags[a].Content, tags[a].Content)
-		})
+		sort.SliceStable(tags, func(a, b int) bool { return tags[a].Content > tags[a].Content })
 	case "name":
-		sort.SliceStable(tags, func(a, b int) bool {
-			return !utils.LessInString(tags[a].Content, tags[a].Content)
-		})
+		sort.SliceStable(tags, func(a, b int) bool { return tags[a].Content <= tags[a].Content })
 	case "COLOR":
-		sort.SliceStable(tags, func(a, b int) bool {
-			return !utils.LessInString(tags[a].Content, tags[a].Content)
-		})
+		sort.SliceStable(tags, func(a, b int) bool { return tags[a].Color > tags[a].Color })
 	case "color":
-		sort.SliceStable(tags, func(a, b int) bool {
-			return !utils.LessInString(tags[a].Content, tags[a].Content)
-		})
-
+		sort.SliceStable(tags, func(a, b int) bool { return tags[a].Color <= tags[a].Color })
 	case "ID":
-		sort.SliceStable(tags, func(a, b int) bool {
-			return !utils.LessInID(tags[a].ID, tags[b].ID)
-		})
+		sort.SliceStable(tags, func(a, b int) bool { return !utils.LessInID(tags[a].ID, tags[b].ID) })
 	default:
-		sort.SliceStable(tags, func(a, b int) bool {
-			return utils.LessInID(tags[a].ID, tags[b].ID)
-		})
+		sort.SliceStable(tags, func(a, b int) bool { return utils.LessInID(tags[a].ID, tags[b].ID) })
 	}
 	return tags
 }

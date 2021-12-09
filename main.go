@@ -18,7 +18,7 @@ func main() {
 	// 	}
 	// }
 	cmd := strings.Join(os.Args[1:], " ")
-	// cmd := "done -11"
+	// cmd := "list"
 	cmdCode := ""
 	if len(cmd) > 0 {
 		cmdCode = utils.EncodeCmd(cmd)
