@@ -122,7 +122,36 @@ func MainTheme() {
 
 }
 
+func Summary() {
+	// 展示logo，用法，当前待办数和标签数
+	Logo()
+	var todoTotal, doneTotal, tagTotal int
+	for _, task := range model.DB.Data.Tasks {
+		switch task.Status {
+		case model.TaskTodo:
+			todoTotal++
+		case model.TaskDone:
+			doneTotal++
+		}
+	}
+	for _, tag := range model.DB.Data.Tags {
+		if !tag.Deleted {
+			tagTotal++
+		}
+	}
+	fmt.Printf("todo: %d, done: %d, tag: %d\n", todoTotal, doneTotal, tagTotal)
+
+	// tasks := controller.ListTodoTasks()
+	// Tasks(tasks, "")
+}
+
 // Logo render logo in colors
 func Logo() {
-
+	logo := BlackWhiteLogo
+	if detectTerminalColor() {
+		logo = ColorfulLogo
+	}
+	fmt.Println(logo)
+	fmt.Println(Descirption)
+	fmt.Println(Separator)
 }
