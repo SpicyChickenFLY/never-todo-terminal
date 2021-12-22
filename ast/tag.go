@@ -41,8 +41,9 @@ func NewTagListFilterNode(ign *IDGroupNode, content string) *TagListFilterNode {
 }
 
 func (tlfn *TagListFilterNode) filter(tags []model.Tag) []model.Tag {
+	var result []model.Tag
 	if tlfn.idGroup != nil {
-		result := []model.Tag{}
+		result = []model.Tag{}
 		for _, id := range tlfn.idGroup.ids {
 			for _, tag := range tags {
 				if tag.ID == id {
@@ -50,18 +51,18 @@ func (tlfn *TagListFilterNode) filter(tags []model.Tag) []model.Tag {
 				}
 			}
 		}
-		return result
 	} else if tlfn.content != "" {
-		result := []model.Tag{}
+		result = []model.Tag{}
 		for _, tag := range tags {
 			if utils.ContainStr(tag.Content, tlfn.content) {
 				result = append(result, tag)
 			}
 		}
-		return result
 	} else {
-		return tags
+		result = tags
 	}
+	controller.SortTag(result, "ID")
+	return result
 }
 
 // TagAddNode include tag list filter
