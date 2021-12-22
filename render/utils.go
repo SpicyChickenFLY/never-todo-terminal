@@ -53,9 +53,3 @@ func lenOfTerminal() (int, error) {
 	width, err := strconv.Atoi(sizes[1])
 	return width, nil
 }
-
-// TODO: detect terminal color supportation
-// for now assume it does
-func detectTerminalColor() {
-
-}

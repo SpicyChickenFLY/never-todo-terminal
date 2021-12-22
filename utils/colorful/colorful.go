@@ -1,9 +1,19 @@
 package colorful
 
-import "fmt"
+import (
+	"fmt"
 
-// MARK make terminal realize this is a color controller
-const MARK = 0x1B
+	"github.com/jwalton/go-supportscolor"
+)
+
+var supportsColor = false
+
+func init() {
+	supportsColor = supportscolor.Stdout().SupportsColor
+}
+
+// Mark make terminal realize this is a color controller
+const Mark = "\x1b"
 
 // Mode Map(Can be combined)
 //  code meaning
@@ -150,6 +160,9 @@ const (
 //  bColorStr:	your back color string(black/red/yellow/green/blue/cyan/purple/white)
 //  fColorStr: 	your front color string(same as back color)
 func RenderStr(str, modeStr, bColorStr, fColorStr string) string {
+	if !supportsColor {
+		return str
+	}
 	startMark := GetStartMark(modeStr, bColorStr, fColorStr)
 	endMark := GetEndMark()
 	return fmt.Sprintf("%s%s%s", startMark, str, endMark)
@@ -174,11 +187,11 @@ func GetStartMark(modeStr, bColorStr, fColorStr string) string {
 	}
 	fColorStr = fmt.Sprintf("%d", fColor)
 
-	return fmt.Sprintf("%c[%d;%s;%sm", MARK, mode, bColorStr, fColorStr)
+	return fmt.Sprintf("%s[%d;%s;%sm", Mark, mode, bColorStr, fColorStr)
 
 }
 
 // GetEndMark return end mark
 func GetEndMark() string {
-	return fmt.Sprintf("%c[0m", MARK)
+	return fmt.Sprintf("%s[0m", Mark)
 }
