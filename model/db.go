@@ -95,7 +95,7 @@ func RollBack() error {
 
 func getDatePath() (string, error) {
 	if runtime.GOOS == "windows" {
-		return homeDataWindows()
+		return getDataPathOnWindows()
 	}
 
 	user, err := user.Current()
@@ -104,10 +104,10 @@ func getDatePath() (string, error) {
 	}
 
 	// Unix-like system, so just assume Unix
-	return homeUnix()
+	return getHomeOnUnix()
 }
 
-func homeUnix() (string, error) {
+func getHomeOnUnix() (string, error) {
 	// First prefer the HOME environmental variable
 	if home := os.Getenv("HOME"); home != "" {
 		return home, nil
@@ -128,7 +128,7 @@ func homeUnix() (string, error) {
 	return result, nil
 }
 
-func homeDataWindows() (string, error) {
+func getDataPathOnWindows() (string, error) {
 	home := os.Getenv("APPDATA")
 	if home == "" {
 		return "", errors.New("APPDATA are blank")
