@@ -89,50 +89,70 @@ importance  ![0-9]
     return MULTI
 
 "AND" 
+    lval.str = string(y.buf)
     return AND
-"OR" 
+"OR"
+    lval.str = string(y.buf)
     return OR
 "NOT" 
+    lval.str = string(y.buf)
     return NOT
 
 "-h" 
     return HELP
 "ui" 
+    lval.str = string(y.buf)
     return UI
 "explain" 
+    lval.str = string(y.buf)
     return EXPLAIN
 "log" 
+    lval.str = string(y.buf)
     return LOG
 "undo" 
+    lval.str = string(y.buf)
     return UNDO
 
 "list"
+    lval.str = string(y.buf)
     return LIST
 "add"|"create" 
+    lval.str = string(y.buf)
     return ADD
 "del"|"delete"|"remove" 
+    lval.str = string(y.buf)
     return DELETE
 "set"
+    lval.str = string(y.buf)
     return UPDATE
 "todo"
+    lval.str = string(y.buf)
     return TODO
 "done" 
+    lval.str = string(y.buf)
     return DONE
 "all"
+    lval.str = string(y.buf)
     return ALL
 
 "tag" 
+    lval.str = string(y.buf)
     return TAG
 
 "age:" 
+    lval.str = string(y.buf)
     return AGE
 "due:" 
+    lval.str = string(y.buf)
     return DUE
 "loop:" 
+    lval.str = string(y.buf)
     return LOOP
 "color:"
+    lval.str = string(y.buf)
     return COLOR
 "sort:"
+    lval.str = string(y.buf)
     return SORT
 
 {date}

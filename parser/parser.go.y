@@ -374,21 +374,21 @@ content_logic_p1:
 
 content:
       definite_content 
-	  { 
-		var err error
-	  	$$, err = utils.DecodeCmd($1)
-		if err != nil {
-			ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
-		}	
-	  }
+      { 
+        var err error
+          $$, err = utils.DecodeCmd($1)
+        if err != nil {
+            ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
+        }	
+      }
     | indefinite_content 
-	  { 
-		var err error
-		$$, err = utils.DecodeCmd(strings.Trim($1, " "))
-		if err != nil {
-			ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
-		}	
-	  }
+      { 
+        var err error
+        $$, err = utils.DecodeCmd(strings.Trim($1, " "))
+        if err != nil {
+            ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
+        }	
+      }
     ;
 
 definite_content:
