@@ -170,6 +170,9 @@ func RenderStr(str, modeStr, bColorStr, fColorStr string) string {
 
 // GetStartMark return start mark with color controller
 func GetStartMark(modeStr, bColorStr, fColorStr string) string {
+	if !supportsColor {
+		return ""
+	}
 	mode, ok := modeMap[modeStr]
 	if !ok {
 		mode = ModeDefault
@@ -193,5 +196,8 @@ func GetStartMark(modeStr, bColorStr, fColorStr string) string {
 
 // GetEndMark return end mark
 func GetEndMark() string {
+	if !supportsColor {
+		return ""
+	}
 	return fmt.Sprintf("%s[0m", Mark)
 }

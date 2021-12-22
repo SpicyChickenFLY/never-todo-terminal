@@ -23,27 +23,11 @@ const (
    %s/___/%s                       %s\/____/ \/___/  \/__/\/_/ \/___/%s`
 )
 
+// global var for logo
 var (
 	startMarkGreen = colorful.GetStartMark("default", "default", "green")
 	startMarkRed   = colorful.GetStartMark("default", "default", "red")
 	endMark        = colorful.GetEndMark()
-
-	// BlackWhiteLogo is not nice
-	BlackWhiteLogo = fmt.Sprintf(logoStr,
-		"", "",
-		"", "",
-		"", "", "", "",
-		"", "", "", "",
-		"", "", "", "",
-		"", "", "", "",
-		"", "", "", "",
-		"", "", "", "", "", "",
-		"", "", "", "",
-		"", "", "", "",
-		"", "", "", "",
-		"", "", "", "",
-		"", "", "", "",
-	)
 
 	// ColorfulLogo is nice
 	ColorfulLogo = fmt.Sprintf(logoStr,

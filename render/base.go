@@ -122,6 +122,7 @@ func MainTheme() {
 
 }
 
+// Summary of this software and statistics
 func Summary() {
 	// 展示logo，用法，当前待办数和标签数
 	Logo()
@@ -147,11 +148,7 @@ func Summary() {
 
 // Logo render logo in colors
 func Logo() {
-	logo := BlackWhiteLogo
-	if detectTerminalColor() {
-		logo = ColorfulLogo
-	}
-	fmt.Println(logo)
+	fmt.Println(ColorfulLogo)
 	fmt.Println(Descirption)
 	fmt.Println(Separator)
 }
