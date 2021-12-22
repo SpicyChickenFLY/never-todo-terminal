@@ -1,4 +1,4 @@
-<div align=center><img src="./static/logo.png" width = "200" height = "200" /><img src="./static/icon-cmd.png" width = "200" height = "200" /><h1>never-todo-cmd</h1></div>
+<div align=center><img src="./static/logo.png" width = "200" height = "200" /><img src="./static/icon-cmd.png" width = "200" height = "200" /><h1>never-todo-terminal</h1></div>
 
 
 > NeverToDo待办列表——命令行端
