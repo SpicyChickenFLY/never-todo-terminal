@@ -54,14 +54,7 @@ func (rn *RootNode) Execute(cmd string) {
 			render.Result(cmd, ErrorList, WarnList)
 			return
 		}
-		controller.ShowSummary()
-		if len(ErrorList) > 0 {
-			if err := model.RollBack(); err != nil {
-				ErrorList = append(ErrorList, err)
-			}
-		} else if err := model.Commit(); err != nil {
-			ErrorList = append(ErrorList, err)
-		}
+		render.Summary()
 	case CMDHelp:
 		rn.stmtNode.execute()
 	case CMDUI:
