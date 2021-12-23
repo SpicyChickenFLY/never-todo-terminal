@@ -28,6 +28,15 @@ type row struct {
 	fieldValues []string
 }
 
+const (
+	recordID = iota
+	recordContent
+	recordTags
+	recordDue
+	recordLoop
+	recordLen
+)
+
 type record []interface{}
 
 func (t *table) calcFieldMaxLen() (sum int) {

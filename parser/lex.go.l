@@ -182,8 +182,6 @@ importance  ![0-9]
     lval.str = string(y.buf[1:])
     return IMPORTANCE
 
-
-
 %%
     y.empty = true
     return int(c)

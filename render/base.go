@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
@@ -27,7 +28,8 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	t.SetFieldNames([]string{"#", defaultContentTitle, "Tags", "Due", "Loop"})
 
 	for _, task := range tasks {
-		record := record{task.ID}
+		record := make(record, recordLen)
+		record[recordID] = task.ID
 
 		if task.Content != "" {
 			contentStr := task.Content
@@ -35,9 +37,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 				// contentStr = colorful.RenderStr(contentStr, "line", "", "")
 				contentStr += "*" // ★
 			}
-			record = append(record, contentStr)
-		} else {
-			record = append(record, nil)
+			record[recordContent] = contentStr
 		}
 
 		tags, _ := controller.FindTagsByTask(task.ID)
@@ -48,25 +48,20 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 		}
 		sort.SliceStable(tagsStr, func(i, j int) bool { return tagsStr[i] < tagsStr[j] })
 		tagStr := strings.Join(tagsStr, ",")
-		if tagStr == "" {
-			record = append(record, nil)
-		} else {
-			record = append(record, tagStr)
+		if tagStr != "" {
+			record[recordTags] = tagStr
 		}
 
-		dueStr := task.Due.Format("2006/01/02 15:04:05")
-		if task.Due.IsZero() {
-			record = append(record, nil)
-		} else {
-			record = append(record, dueStr)
+		if !task.Due.IsZero() {
+			dueStr := task.Due.Format("2006/01/02 15:04:05")
+			estTimeStr := EstimateTime(task.Due, time.Now(), false)
+			record[recordDue] = dueStr + estTimeStr
 		}
-		if task.Loop == "" {
-			record = append(record, nil)
-		} else {
-			record = append(record, task.Loop)
+
+		if task.Loop != "" {
+			record[recordLoop] = task.Loop
 		}
 		t.AppendRecord(record)
-		// TODO: calculate time remain
 	}
 	t.Render()
 	t.Reset()

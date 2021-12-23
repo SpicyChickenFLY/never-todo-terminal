@@ -357,13 +357,8 @@ type TimeNode struct {
 
 // NewTimeNode return *TimeNode
 func NewTimeNode(str string, dtType int) *TimeNode {
-	loc, err := time.LoadLocation("Asia/Shanghai")
-	if err != nil {
-		fmt.Println(err.Error())
-		ErrorList = append(ErrorList, err)
-	}
 	str = completeDateTime(str, dtType)
-	time, err := time.ParseInLocation("2006/01/02 15:04:05", str, loc)
+	time, err := time.ParseInLocation("2006/01/02 15:04:05", str, time.Local)
 	if err != nil {
 		fmt.Println(err.Error())
 		ErrorList = append(ErrorList, err)
