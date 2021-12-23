@@ -66,6 +66,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 			record = append(record, task.Loop)
 		}
 		t.AppendRecord(record)
+		// TODO: calculate time remain
 	}
 	t.Render()
 	t.Reset()
