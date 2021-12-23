@@ -42,7 +42,7 @@ func EstimateTime(t1, t2 time.Time, needAbbrev bool) string {
 		case d/minute > 0:
 			result += fmt.Sprintf("%dmin", d/minute)
 		default:
-			result = "now"
+			result = colorful.GetStartMark("default", "default", "yellow") + "(now"
 		}
 	} else {
 		switch {
@@ -59,7 +59,7 @@ func EstimateTime(t1, t2 time.Time, needAbbrev bool) string {
 		case d/minute > 0:
 			result += fmt.Sprintf("%dminute", d/minute)
 		default:
-			result = "now"
+			result = colorful.GetStartMark("default", "default", "yellow") + "(now"
 		}
 	}
 	result += ")" + colorful.GetEndMark()
