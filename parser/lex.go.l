@@ -65,6 +65,7 @@ identifier  {letter}({letter}|{digit})*
 white       [ \t\n\r]+
 date        {digit}\/{digit}\/{digit}|{digit}\/{digit}
 time        (20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d
+loop        ((((\d+,)+\d+|((\d+|\*)(-\d+)?(\/\d+)?)) ?){5})
 digit       [0-9]+
 importance  ![0-9]
 
@@ -162,11 +163,14 @@ importance  ![0-9]
 {time}
     lval.str = string(y.buf)
     return TIME
+    
+{loop}
+    lval.str = string(y.buf)
+    return LOOPSTR
 
 {digit}
     lval.str = string(y.buf)
     return NUM
-
 
 {setence}
     lval.str = string(y.buf[1:len(y.buf)-1])

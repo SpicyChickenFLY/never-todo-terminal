@@ -200,16 +200,6 @@ func (itlfn *IndefiniteTaskListFilterNode) SetDue(tfn *TimeFilterNode) *Indefini
 	return itlfn
 }
 
-// SetProject func
-func (itlfn *IndefiniteTaskListFilterNode) SetProject(project string) *IndefiniteTaskListFilterNode {
-	if itlfn.project != "" {
-		WarnList = append(WarnList, "Only one project filter will be accepted")
-	} else {
-		itlfn.project = project
-	}
-	return itlfn
-}
-
 // TaskListOptionNode include task list option
 type TaskListOptionNode struct {
 	sortMetrics []string
@@ -284,6 +274,7 @@ type TaskAddOptionNode struct {
 	importance      int
 	assignGroupNode *AssignGroupNode
 	due             *TimeFilterNode
+	loop            string
 }
 
 // NewTaskAddOptionNode return *TaskAddOptionNode
@@ -306,6 +297,10 @@ func (taon *TaskAddOptionNode) explain() string {
 		fmt.Print("\twhich will due ")
 		result += "due:" + taon.due.explain() + " "
 		fmt.Print("\n")
+	}
+	if taon.loop != "" {
+		fmt.Print("\tloop ")
+		result += taon.loop.explain()
 	}
 	return result
 }
@@ -342,6 +337,12 @@ func (taon *TaskAddOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) *Tas
 // SetDue for TaskAddOptionNode
 func (taon *TaskAddOptionNode) SetDue(due *TimeFilterNode) *TaskAddOptionNode {
 	taon.due = due
+	return taon
+}
+
+// SetLoop for TaskAddOptionNode
+func (taon *TaskAddOptionNode) SetLoop(loopStr string) *TaskAddOptionNode {
+	taon.loop = loopStr
 	return taon
 }
 
@@ -387,6 +388,7 @@ type TaskUpdateOptionNode struct {
 	importance      int
 	assignGroupNode *AssignGroupNode
 	due             *TimeNode
+	loop            string
 }
 
 // NewTaskUpdateOptionNode return *TaskUpdateOptionNode

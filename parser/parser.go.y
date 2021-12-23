@@ -50,7 +50,7 @@ import (
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
 %token <str> UI EXPLAIN LOG UNDO
 %token <str> LIST TODO TAG ADD DELETE UPDATE DONE ALL
-%token <str> AGE DUE LOOP IMPORTANCE COLOR SORT
+%token <str> AGE DUE LOOP LOOPSTR IMPORTANCE COLOR SORT
 %token <str> HELP
 
 %type <root> root
@@ -207,8 +207,6 @@ indefinite_task_list_filter:
     | indefinite_task_list_filter AGE time_filter { $$ = $1.SetAge($3) }
     | DUE time_filter indefinite_task_list_filter { $$ = $3.SetDue($2) }
     | indefinite_task_list_filter DUE time_filter { $$ = $1.SetDue($3) }
-    | project indefinite_task_list_filter { $$=$2.SetProject($1) }
-    | indefinite_task_list_filter project { $$=$1.SetProject($2) }
     ;
 
 // ========== TASK LIST OPTION =============
@@ -230,7 +228,8 @@ task_add_option:
     | importance task_add_option { $$ = $2.SetImportance($1) }
     | task_add_option DUE time_filter { $$ = $1.SetDue($3) }
     | DUE time_filter task_add_option { $$ = $3.SetDue($2) }    
-    /* | LOOP loop_time {} */
+    | task_add_option LOOP LOOPSTR { $$ = $1.SetLoop($3)}
+    | LOOP LOOPSTR task_add_option { $$ = $3.SetLoop($2)}
     ;
 
 // ========== TASK UPDATE OPTION =============
