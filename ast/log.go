@@ -6,6 +6,8 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 
+// TODO: add log for task/tag
+
 // ============================
 // Log List
 // ============================
