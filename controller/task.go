@@ -97,6 +97,7 @@ func AddTask(content string) (taskID int) {
 	newTask := model.Task{
 		ID:      model.DB.Data.TaskInc,
 		Content: content,
+		Status:  model.TaskTodo,
 	}
 	model.DB.Data.Tasks[newTask.ID] = newTask
 	model.DB.Data.TaskTags[newTask.ID] = make(map[int]bool, 0)
@@ -115,27 +116,21 @@ func UpdateTask(updateTask model.Task) error {
 
 // SortTask with specified metric
 func SortTask(tasks []model.Task, metricName string) []model.Task {
+	var lessFunc func(a, b int) bool
 	switch metricName {
 	case "NAME":
-		sort.SliceStable(tasks, func(a, b int) bool { return tasks[a].Content > tasks[a].Content })
+		lessFunc = func(a, b int) bool { return tasks[a].Content > tasks[a].Content }
 	case "name":
-		sort.SliceStable(tasks, func(a, b int) bool { return tasks[a].Content <= tasks[a].Content })
+		lessFunc = func(a, b int) bool { return tasks[a].Content <= tasks[a].Content }
 	case "DUE":
-		sort.SliceStable(tasks, func(a, b int) bool {
-			return !utils.LessInTime(tasks[a].Due, tasks[b].Due)
-		})
+		lessFunc = func(a, b int) bool { return !utils.LessInTime(tasks[a].Due, tasks[b].Due) }
 	case "due":
-		sort.SliceStable(tasks, func(a, b int) bool {
-			return utils.LessInTime(tasks[a].Due, tasks[b].Due)
-		})
+		lessFunc = func(a, b int) bool { return utils.LessInTime(tasks[a].Due, tasks[b].Due) }
 	case "ID":
-		sort.SliceStable(tasks, func(a, b int) bool {
-			return !utils.LessInID(tasks[a].ID, tasks[b].ID)
-		})
+		lessFunc = func(a, b int) bool { return !utils.LessInID(tasks[a].ID, tasks[b].ID) }
 	default:
-		sort.SliceStable(tasks, func(a, b int) bool {
-			return utils.LessInID(tasks[a].ID, tasks[b].ID)
-		})
+		lessFunc = func(a, b int) bool { return utils.LessInID(tasks[a].ID, tasks[b].ID) }
 	}
+	sort.SliceStable(tasks, lessFunc)
 	return tasks
 }
