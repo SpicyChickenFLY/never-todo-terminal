@@ -126,6 +126,12 @@ help:
     | task_update HELP { $$ = ast.NewHelpNode(ast.HelpTaskUpdate) }
     | UPDATE HELP { $$ = ast.NewHelpNode(ast.HelpTaskUpdate) }
     | UPDATE { $$ = ast.NewHelpNode(ast.HelpTaskUpdate) }
+    | task_todo HELP { $$ = ast.NewHelpNode(ast.HelpTaskTodo) }
+    | TODO HELP { $$ = ast.NewHelpNode(ast.HelpTaskTodo) }
+    | TODO { $$ = ast.NewHelpNode(ast.HelpTaskTodo) }
+    | task_done HELP { $$ = ast.NewHelpNode(ast.HelpTaskDone) }
+    | DONE HELP { $$ = ast.NewHelpNode(ast.HelpTaskDone) }
+    | DONE { $$ = ast.NewHelpNode(ast.HelpTaskDone) }
     | tag_list HELP { $$ = ast.NewHelpNode(ast.HelpTagList) }
     | TAG LIST HELP { $$ = ast.NewHelpNode(ast.HelpTagList) }
     | tag_add HELP { $$ = ast.NewHelpNode(ast.HelpTagAdd) }
