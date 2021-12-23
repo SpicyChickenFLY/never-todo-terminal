@@ -34,8 +34,8 @@
 
 #### 项目搭建
 ```bash
-cp lex.go 
-cp parser.go 
+cp lex.go ./parser/
+cp parser.go ./parser/
 
 go build
 ```
@@ -45,8 +45,8 @@ go build
 # 查看总览
 never
 
-# 查看帮助(当前版本未实现)
-#never -h
+# 查看帮助
+never -h
 
 # 通过UI交互界面进行操作(当前版本未实现）
 #never ui
