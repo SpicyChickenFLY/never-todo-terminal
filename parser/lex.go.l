@@ -65,6 +65,7 @@ identifier  {letter}({letter}|{digit})*
 white       [ \t\n\r]+
 date        {digit}\/{digit}\/{digit}|{digit}\/{digit}
 time        (20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d
+// TODO: update this
 loop        ((((\d+,)+\d+|((\d+|\*)(-\d+)?(\/\d+)?)) ?){5})
 digit       [0-9]+
 importance  ![0-9]

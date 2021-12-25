@@ -300,7 +300,8 @@ func (taon *TaskAddOptionNode) explain() string {
 	}
 	if taon.loop != "" {
 		fmt.Print("\tloop ")
-		result += taon.loop.explain()
+		// result += render.ExplainCrontabStr(taon.loop)
+		// TODO: explain crontab string for task
 	}
 	return result
 }

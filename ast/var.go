@@ -435,17 +435,3 @@ func completeTime(t string) string {
 	}
 	return fmt.Sprintf("%s:%s:%s", hour, minute, second)
 }
-
-// LoopNode contains a crontab like string
-type LoopNode struct {
-	loopStr string
-}
-
-// NewLoopNode return *LoopNode
-func NewLoopNode() *LoopNode {
-	return &LoopNode{loopStr: ""}
-}
-
-func (ln *LoopNode) explain() string {
-
-}
