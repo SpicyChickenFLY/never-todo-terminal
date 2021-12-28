@@ -8,6 +8,7 @@ import (
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
+	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 	"github.com/SpicyChickenFLY/never-todo-cmd/utils/colorful"
 )
 
@@ -54,7 +55,7 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 
 		if !task.Due.IsZero() {
 			dueStr := task.Due.Format("2006/01/02 15:04:05")
-			estTimeStr := EstimateTime(task.Due, time.Now(), false)
+			estTimeStr := utils.EstimateTime(task.Due, time.Now(), false)
 			record[recordDue] = dueStr + estTimeStr
 		}
 
