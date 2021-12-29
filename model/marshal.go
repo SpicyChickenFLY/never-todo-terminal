@@ -291,6 +291,9 @@ func unmarshalSettings(settings interface{}) error {
 	if v, ok := settingsMap["wrapContent"]; ok {
 		DB.Settings.WrapContent = v.(bool)
 	}
+	if v, ok := settingsMap["timeAbbreviation"]; ok {
+		DB.Settings.TimeAbbreviation = v.(bool)
+	}
 	return nil
 }
 
@@ -407,6 +410,7 @@ func marshalModel() (m map[string]interface{}, err error) {
 	settings["showResult"] = DB.Settings.ShowResult
 	settings["compressTask"] = DB.Settings.CompressTask
 	settings["wrapContent"] = DB.Settings.WrapContent
+	settings["timeAbbreviation"] = DB.Settings.TimeAbbreviation
 	m["settings"] = settings
 
 	m["logs"] = logs
