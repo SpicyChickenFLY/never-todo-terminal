@@ -21,7 +21,7 @@ func TestParseCronString(t *testing.T) {
 		"10 10 * 7,8 *",    // finish homework in summer holiday
 	}
 	for _, testCase := range testCases {
-		fields, err := parseCronString(testCase)
+		fields, err := parseCronString(testCase, false)
 		assert.Nil(t, err)
 		for _, field := range fields {
 			fmt.Println(field.explanation, field.values)

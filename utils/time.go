@@ -31,34 +31,34 @@ func EstimateTime(t1, t2 time.Time, needAbbrev bool) string {
 	if needAbbrev {
 		switch {
 		case d/yearPerSec > 0:
-			result += fmt.Sprintf("%dy", d/yearPerSec)
+			result += fmt.Sprintf("%.1fy", float64(d)/float64(yearPerSec))
 		case d/monthPerSec > 0:
-			result += fmt.Sprintf("%dmon", d/monthPerSec)
+			result += fmt.Sprintf("%.1fmon", float64(d)/float64(monthPerSec))
 		case d/weekPerSec > 0:
-			result += fmt.Sprintf("%dw", d/weekPerSec)
+			result += fmt.Sprintf("%.1fw", float64(d)/float64(weekPerSec))
 		case d/dayPerSec > 0:
-			result += fmt.Sprintf("%dd", d/dayPerSec)
+			result += fmt.Sprintf("%.1fd", float64(d)/float64(dayPerSec))
 		case d/hourPerSec > 0:
-			result += fmt.Sprintf("%dh", d/hourPerSec)
+			result += fmt.Sprintf("%.1fh", float64(d)/float64(hourPerSec))
 		case d/minPerSec > 0:
-			result += fmt.Sprintf("%dmin", d/minPerSec)
+			result += fmt.Sprintf("%.1fmin", float64(d)/float64(minPerSec))
 		default:
 			result = colorful.GetStartMark("default", "default", "yellow") + "(now"
 		}
 	} else {
 		switch {
 		case d/yearPerSec > 0:
-			result += fmt.Sprintf("%dyear", d/yearPerSec)
+			result += fmt.Sprintf("%.1fyear", float64(d)/float64(yearPerSec))
 		case d/monthPerSec > 0:
-			result += fmt.Sprintf("%dmonth", d/monthPerSec)
+			result += fmt.Sprintf("%.1fmonth", float64(d)/float64(monthPerSec))
 		case d/weekPerSec > 0:
-			result += fmt.Sprintf("%dweek", d/weekPerSec)
+			result += fmt.Sprintf("%.1fweek", float64(d)/float64(weekPerSec))
 		case d/dayPerSec > 0:
-			result += fmt.Sprintf("%dday", d/dayPerSec)
+			result += fmt.Sprintf("%.1fday", float64(d)/float64(dayPerSec))
 		case d/hourPerSec > 0:
-			result += fmt.Sprintf("%dhour", d/hourPerSec)
+			result += fmt.Sprintf("%.1fhour", float64(d)/float64(hourPerSec))
 		case d/minPerSec > 0:
-			result += fmt.Sprintf("%dminute", d/minPerSec)
+			result += fmt.Sprintf("%.1fminute", float64(d)/float64(minPerSec))
 		default:
 			result = colorful.GetStartMark("default", "default", "yellow") + "(now"
 		}
@@ -134,37 +134,42 @@ func CalcNextSchedule(cronStr string, lastSchedule time.Time) time.Time {
 
 // ExplainSchedule bu return a string
 func ExplainSchedule(cronStr string, needAbbrev bool) string {
-	// TODO: need abbreviation
-	fields, err := parseCronString(cronStr)
+	fields, err := parseCronString(cronStr, needAbbrev)
 	if err != nil {
-		return "Invalid Crontab string"
+		fmt.Printf("Invalid Crontab string: %s\n", err.Error())
+		return cronStr
 	}
-	return fmt.Sprintf("this task loop AT %s FOR %s ON %s and %s IN %s",
+	fmt.Printf("this task loop AT %s FOR %s ON %s and %s IN %s\n",
 		fields[minIdx].explanation,
 		fields[hourIdx].explanation,
 		fields[domIdx].explanation,
 		fields[dowIdx].explanation,
 		fields[monthIdx].explanation,
 	)
+	return cronStr
 }
 
 //parseCronString return its explaination and calculate next schedule
-func parseCronString(cronStr string) ([]field, error) {
+func parseCronString(cronStr string, needAbbrev bool) ([]field, error) {
 	if len(cronStr) == 0 {
 		return nil, fmt.Errorf("invalid format")
 	}
 
 	// Split on whitespace.
 	fieldExprs := strings.Fields(cronStr)
-	if len(fieldExprs) == 5 {
+	switch len(fieldExprs) {
+	case 5:
 		fieldExprs = append([]string{"0"}, fieldExprs...) // fill second field
 		fieldExprs = append(fieldExprs, "*")              // fill year field
+	default:
+		return nil, fmt.Errorf("too few fields")
+
 	}
 
 	fields := make([]field, fieldCount)
 	var err error
 	for i := minIdx; i <= dowIdx; i++ {
-		fields[i], err = parseField(fieldExprs[i], fieldConfs[i].min, fieldConfs[i].max, fieldConfs[i].units)
+		fields[i], err = parseField(fieldExprs[i], fieldConfs[i].min, fieldConfs[i].max, fieldConfs[i].units, needAbbrev)
 		if err != nil {
 			return nil, err
 		}
@@ -173,12 +178,12 @@ func parseCronString(cronStr string) ([]field, error) {
 	return fields, nil
 }
 
-func parseField(expr string, min, max uint, units []string) (field, error) {
+func parseField(expr string, min, max uint, units []string, needAbbrev bool) (field, error) {
 	f := field{make([]uint, 0), ""}
 	parts := strings.Split(expr, ",")
 	explanations := make([]string, 0)
 	for _, partExpr := range parts {
-		value, explaination, err := parseRangeAndStep(partExpr, min, max, units)
+		value, explaination, err := parseRangeAndStep(partExpr, min, max, units, needAbbrev)
 		if err != nil {
 			return field{}, err
 		}
@@ -192,7 +197,7 @@ func parseField(expr string, min, max uint, units []string) (field, error) {
 // parseRangeAndStep returns the bits indicated by the given expression:
 //   number | number "-" number [ "/" number ]
 // or error parsing range.
-func parseRangeAndStep(expr string, min, max uint, units []string) ([]uint, string, error) {
+func parseRangeAndStep(expr string, min, max uint, units []string, needAbbrev bool) ([]uint, string, error) {
 	var start, end, step uint = min, max, 1
 	var err error
 	rangeAndStep := strings.Split(expr, "/")
@@ -255,34 +260,41 @@ func parseRangeAndStep(expr string, min, max uint, units []string) ([]uint, stri
 	if len(lowAndHigh) == 1 {
 		if lowAndHigh[0] != "*" {
 			if len(units) == 1 {
-				explanation = fmt.Sprintf("every %s %s", GetOrdinalFormat(start), units[0])
+				explanation = fmt.Sprintf("every %s %s", GetOrdinalFormat(start), processUnit(units[0], needAbbrev))
 			} else {
-				explanation = fmt.Sprintf("every %s", units[start])
+				explanation = fmt.Sprintf("every %s", processUnit(units[start], needAbbrev))
 			}
 		} else {
 			if step == 1 {
-				explanation = fmt.Sprintf("every %s", units[0])
+				explanation = fmt.Sprintf("every %s", processUnit(units[0], needAbbrev))
 			} else {
-				explanation = fmt.Sprintf("every %d %s", step, units[0])
+				explanation = fmt.Sprintf("every %d %s", step, processUnit(units[0], needAbbrev))
 			}
 		}
 	} else {
 		if len(units) == 1 {
 			if step > 1 {
-				explanation = fmt.Sprintf("every %d %s ", step, units[0])
+				explanation = fmt.Sprintf("every %d %s ", step, processUnit(units[0], needAbbrev))
 			}
 			explanation += fmt.Sprintf("from every %s %s to %s %s",
-				GetOrdinalFormat(start), units[0], GetOrdinalFormat(end), units[0])
+				GetOrdinalFormat(start), units[0], GetOrdinalFormat(end), processUnit(units[0], needAbbrev))
 		} else {
 			explanations := make([]string, 0)
 			for i := start; i <= end; i += step {
-				explanations = append(explanations, units[i])
+				explanations = append(explanations, processUnit(units[i], needAbbrev))
 			}
 			explanation = "every " + strings.Join(explanations, ", ")
 		}
 	}
 
 	return values, explanation, nil
+}
+
+func processUnit(unit string, needAbbrev bool) string {
+	if needAbbrev {
+		return unit[0:3]
+	}
+	return unit
 }
 
 // mustParseInt parses the given expression as an int or returns an error.
