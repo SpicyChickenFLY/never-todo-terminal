@@ -7,6 +7,7 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/render"
+	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
 // ============================
@@ -256,7 +257,6 @@ func (tan *TaskAddNode) execute() {
 		return
 	}
 	tan.option.apply(task)
-
 }
 func (tan *TaskAddNode) explain() string {
 	result := "todo add "
@@ -300,8 +300,8 @@ func (taon *TaskAddOptionNode) explain() string {
 	}
 	if taon.loop != "" {
 		fmt.Print("\tloop ")
-		// result += render.ExplainCrontabStr(taon.loop)
-		// TODO: explain crontab string for task
+
+		result += utils.ExplainSchedule(taon.loop, false)
 	}
 	return result
 }

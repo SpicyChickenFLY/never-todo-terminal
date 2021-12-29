@@ -435,3 +435,11 @@ func completeTime(t string) string {
 	}
 	return fmt.Sprintf("%s:%s:%s", hour, minute, second)
 }
+
+// ============================
+// Loop
+// ============================
+
+type LoopNode struct {
+	expr string
+}
