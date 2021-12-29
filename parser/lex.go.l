@@ -65,10 +65,6 @@ identifier  {letter}({letter}|{digit})*
 white       [ \t\n\r]+
 date        {digit}\/{digit}\/{digit}|{digit}\/{digit}
 time        (20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d
-loopStep \/\d+
-loopRange -\d+ 
-loopPart \d+|((\d+|\*){loopRange}?{loopStep}?)
-loop        (({loopPart},)+{loopPart}\ ?){5}
 digit       [0-9]+
 importance  ![0-9]
 
@@ -82,15 +78,21 @@ importance  ![0-9]
 "-" 
     lval.str = string(y.buf)
     return MINUS
+"*"
+    lval.str = string(y.buf)
+    return MULTI
+"/"
+    lval.str = string(y.buf)
+    return DIVIDE
 "(" 
     lval.str = string(y.buf)
     return LBRACK
 ")" 
     lval.str = string(y.buf)
     return RBRACK
-"*"
+","
     lval.str = string(y.buf)
-    return MULTI
+    return COMMA
 
 "AND" 
     lval.str = string(y.buf)
@@ -166,10 +168,6 @@ importance  ![0-9]
 {time}
     lval.str = string(y.buf)
     return TIME
-    
-{loop}
-    lval.str = string(y.buf)
-    return LOOPSTR
 
 {digit}
     lval.str = string(y.buf)

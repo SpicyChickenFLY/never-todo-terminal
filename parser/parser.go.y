@@ -40,17 +40,20 @@ import (
   assignGroupNode *ast.AssignGroupNode
   timeFilterNode *ast.TimeFilterNode
   timeNode *ast.TimeNode
+  loopNode *ast.LoopNode
 }
 
 %left <str> PLUS MINUS
+%left <str> MULTI DIVIDE
+
 %left <str> NOT
 %left <str> AND OR 
 
-%token <str> LBRACK RBRACK MULTI
+%token <str> LBRACK RBRACK COMMA
 %token <str> NUM IDENT SETENCE DATE TIME WEEK
 %token <str> UI EXPLAIN LOG UNDO
 %token <str> LIST TODO TAG ADD DELETE UPDATE DONE ALL
-%token <str> AGE DUE LOOP LOOPSTR IMPORTANCE COLOR SORT
+%token <str> AGE DUE LOOP IMPORTANCE COLOR SORT
 %token <str> HELP
 
 %type <root> root
@@ -85,6 +88,7 @@ import (
 %type <str> assign_tag unassign_tag
 %type <timeFilterNode> time_filter
 %type <timeNode> time
+%type <loopNode> loop
 
 %start root
 
@@ -214,8 +218,7 @@ indefinite_task_list_filter:
 task_list_option:
       { $$ = ast.NewTaskListOptionNode() }
     | sort task_list_option { $$ = $2.SetSortMetric($1) }
-    | task_list_option sort { $$ = $1.SetSortMetric($2) } 
-    /* | LOOP loop_time {} */
+    | task_list_option sort { $$ = $1.SetSortMetric($2) }
     ;
 
 // ========== TASK ADD OPTION =============
@@ -228,8 +231,8 @@ task_add_option:
     | importance task_add_option { $$ = $2.SetImportance($1) }
     | task_add_option DUE time_filter { $$ = $1.SetDue($3) }
     | DUE time_filter task_add_option { $$ = $3.SetDue($2) }    
-    | task_add_option LOOP LOOPSTR { $$ = $1.SetLoop($3)}
-    | LOOP LOOPSTR task_add_option { $$ = $3.SetLoop($2)}
+    | task_add_option LOOP loop_node { $$ = $1.SetLoop($3)}
+    | LOOP loop_node task_add_option { $$ = $3.SetLoop($2)}
     ;
 
 // ========== TASK UPDATE OPTION =============
@@ -420,4 +423,27 @@ indefinite_content:
     | indefinite_content DATE { $$ = $1 + " " + $2 }
     | indefinite_content TIME { $$ = $1 + " " + $2 }
     ;
+    
+// CRONTAB
+loop:
+      field field field field field // 5 field string
+    | field field field field field field field // 7 field string
+    ;
+
+field:
+      field_step
+    | field_step COMMA field
+    ;
+
+field_step:
+      field_range
+    | field_range DIVIDE NUM
+    ;
+
+field_range:
+      NUM
+    | NUM MINUS NUM
+    | MULTI
+    ;
+
 %%
