@@ -439,7 +439,3 @@ func completeTime(t string) string {
 // ============================
 // Loop
 // ============================
-
-type LoopNode struct {
-	expr string
-}

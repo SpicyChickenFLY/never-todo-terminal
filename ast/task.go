@@ -3,6 +3,7 @@ package ast
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
@@ -300,7 +301,6 @@ func (taon *TaskAddOptionNode) explain() string {
 	}
 	if taon.loop != "" {
 		fmt.Print("\tloop ")
-
 		result += utils.ExplainSchedule(taon.loop, false)
 	}
 	return result
@@ -316,6 +316,12 @@ func (taon *TaskAddOptionNode) apply(task model.Task) {
 	task.Important = taon.importance
 	if taon.due != nil {
 		task.Due = *taon.due.startTime.time
+	}
+	if taon.loop != "" {
+		task.Loop = taon.loop
+		if taon.due == nil {
+			task.Due = utils.CalcNextSchedule(task.Loop, time.Now())
+		}
 	}
 	if err := controller.UpdateTask(task); err != nil {
 		ErrorList = append(ErrorList, err)

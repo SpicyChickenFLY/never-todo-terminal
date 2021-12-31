@@ -77,7 +77,7 @@ func unmarshalTask(tasks interface{}) error {
 		if !ok {
 			return errors.New("field taskMap cannot be convert to []interface{}")
 		}
-		if len(taskMap) != 5 {
+		if len(taskMap) != 6 {
 			return errors.New("count of taskMap fields is not matched")
 		}
 
@@ -97,11 +97,8 @@ func unmarshalTask(tasks interface{}) error {
 		if taskImportant, ok = taskMap[3].(float64); !ok {
 			return errors.New("field taskMap[3] cannot be convert to float64")
 		}
-		// if taskProjectID, ok = taskMap[4].(float64); !ok {
-		// 	return errors.New("field taskMap[4] cannot be convert to float64")
-		// }
 		if taskDue, ok = taskMap[4].(string); !ok {
-			return errors.New("field taskMap[5] cannot be convert to time.Time")
+			return errors.New("field taskMap[4] cannot be convert to time.Time")
 		}
 		var dueTime time.Time
 		var err error
@@ -113,18 +110,17 @@ func unmarshalTask(tasks interface{}) error {
 			}
 		}
 
-		// if taskLoop, ok = taskMap[5].(string); !ok {
-		// 	return errors.New("field taskMap[5] cannot be convert to string")
-		// }
+		if taskLoop, ok = taskMap[5].(string); !ok {
+			return errors.New("field taskMap[5] cannot be convert to string")
+		}
 
 		task := Task{
 			ID:        int(taskID),
 			Content:   taskContent,
 			Status:    int(taskStatus),
 			Important: int(taskImportant),
-			// ProjectID: int(taskProjectID),
-			Due:  dueTime,
-			Loop: taskLoop,
+			Due:       dueTime,
+			Loop:      taskLoop,
 		}
 
 		DB.Data.Tasks[task.ID] = task
@@ -355,9 +351,8 @@ func marshalModel() (m map[string]interface{}, err error) {
 			task.Content,
 			task.Status,
 			task.Important,
-			// task.ProjectID,
 			dueTime,
-			// task.Loop,
+			task.Loop,
 		)
 		tasks = append(tasks, taskMap)
 	}

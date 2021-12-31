@@ -129,6 +129,7 @@ var fieldConfs = []fieldConf{
 
 // CalcNextSchedule after last schedule by your plan
 func CalcNextSchedule(cronStr string, lastSchedule time.Time) time.Time {
+	// TODO: CalcNextSchedule
 	return time.Now()
 }
 

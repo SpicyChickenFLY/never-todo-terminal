@@ -96,12 +96,17 @@ type Loop struct {
 
 // Settings is the user configs struct
 type Settings struct {
-	TagStyle         string // TaskWarrior Mode/ NeverTodo Mode
-	Separator        string
-	ConciseTag       bool
-	ColorfulStr      bool
-	ShowResult       bool
-	CompressTask     bool
-	WrapContent      bool
+	TagStyle  string // TaskWarrior Mode/ NeverTodo Mode
+	Separator string
+
+	FullRecord   bool
+	WrapContent  bool
+	CompressTask bool
+	ConciseTag   bool
+	ConciseDue   bool
+	ShowLoop     bool
+	ColorfulStr  bool
+
 	TimeAbbreviation bool
+	ShowResult       bool
 }
