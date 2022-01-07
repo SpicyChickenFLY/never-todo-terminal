@@ -426,6 +426,10 @@ func (tuon *TaskUpdateOptionNode) explain() string {
 		result += tuon.due.explain()
 		fmt.Print("\n")
 	}
+	if tuon.loop != "" {
+		fmt.Print("\tloop ")
+		result += utils.ExplainSchedule(tuon.loop, false)
+	}
 	return result
 }
 
@@ -446,6 +450,11 @@ func (tuon *TaskUpdateOptionNode) apply(task model.Task) {
 	task.Important = tuon.importance
 	if tuon.due != nil {
 		task.Due = *tuon.due.time
+	}
+	if tuon.loop != "" {
+		task.Loop = tuon.loop
+		// Update due is required
+		task.Due = utils.CalcNextSchedule(task.Loop, time.Now())
 	}
 	if err := controller.UpdateTask(task); err != nil {
 		ErrorList = append(ErrorList, err)
@@ -474,6 +483,12 @@ func (tuon *TaskUpdateOptionNode) SetAssignGroup(assignGourp *AssignGroupNode) *
 // SetDue for TaskUpdateOptionNode
 func (tuon *TaskUpdateOptionNode) SetDue(due *TimeNode) *TaskUpdateOptionNode {
 	tuon.due = due
+	return tuon
+}
+
+// SetLoop for TaskAddOptionNode
+func (tuon *TaskUpdateOptionNode) SetLoop(loopStr string) *TaskUpdateOptionNode {
+	tuon.loop = loopStr
 	return tuon
 }
 

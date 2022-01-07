@@ -119,13 +119,13 @@ importance  ![0-9]
     lval.str = string(y.buf)
     return UNDO
 
-"list"
+"list"|"ls"
     lval.str = string(y.buf)
     return LIST
 "add"|"create" 
     lval.str = string(y.buf)
     return ADD
-"del"|"delete"|"remove" 
+"delete"|"del"|"remove"|"rm"
     lval.str = string(y.buf)
     return DELETE
 "set"

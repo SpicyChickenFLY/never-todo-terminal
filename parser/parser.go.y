@@ -245,6 +245,8 @@ task_update_option:
     | importance task_update_option { $$ = $2.SetImportance($1) }
     | task_update_option DUE time { $$ = $1.SetDue($3) }
     | DUE time task_update_option { $$ = $3.SetDue($2) }
+    | task_update_option LOOP crontab { $$ = $1.SetLoop($3) }
+    | LOOP crontab task_update_option { $$ = $3.SetLoop($2) }
     ;
 
 task_update_option_first:
@@ -252,6 +254,7 @@ task_update_option_first:
     | assign_group { $$ = ast.NewTaskUpdateOptionNode().SetAssignGroup($1) }
     | importance { $$ = ast.NewTaskUpdateOptionNode().SetImportance($1) }
     | DUE time { $$ = ast.NewTaskUpdateOptionNode().SetDue($2) }
+    | LOOP crontab  { $$ = ast.NewTaskUpdateOptionNode().SetLoop($2) }
     ;
 
 // ========== TAG COMMAND =============

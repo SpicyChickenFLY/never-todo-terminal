@@ -40,3 +40,16 @@ func TestExplainSchedule(t *testing.T) {
 		fmt.Println(ExplainSchedule(testCase, false))
 	}
 }
+
+func Test_calcDatesByDOM(t *testing.T) {
+	testCases := [][]interface{}{
+		{2021, 8, []uint{1, 7}},
+		{2021, 12, []uint{3, 5}},
+		{2022, 1, []uint{2, 4}},
+		{2022, 2, []uint{3, 5}},
+	}
+	for _, testCase := range testCases {
+		result := calcDatesByDOW(uint(testCase[0].(int)), uint(testCase[1].(int)), testCase[2].([]uint))
+		fmt.Println(result)
+	}
+}

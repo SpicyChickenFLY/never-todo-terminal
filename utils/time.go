@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -127,10 +128,66 @@ var fieldConfs = []fieldConf{
 	{1, 7, dayName},
 }
 
+func calcDatesByDOW(year, month uint, dowList []uint) []uint {
+	result := []uint{}
+	t, err := time.Parse("2006/01/02", fmt.Sprintf("%4d/%02d/01", year, month))
+	if err != nil {
+
+	}
+	fmt.Println(t.Format("2006/01/02"))
+	offset := 1 - int(t.Weekday()) - 7
+	for _, dom := range dowList {
+		for i := int(dom) + offset; i <= 31; i += 7 {
+			if i <= 0 {
+				continue
+			}
+			result = append(result, uint(i))
+		}
+	}
+	sort.SliceStable(result, func(i, j int) bool { return int(result[i]) < int(result[j]) })
+	return result
+}
+
+func mergeDOMWithDOW(domList, dowList []uint) []uint {
+	result := []uint{}
+	j := 0
+	for i := 0; i < len(domList) && j < len(dowList); i++ {
+		for ; j < len(dowList); j++ {
+			if dowList[j] > domList[i] {
+				break
+			} else if dowList[j] == domList[i] {
+				result = append(result, dowList[j])
+			}
+		}
+	}
+	return result
+}
+
 // CalcNextSchedule after last schedule by your plan
 func CalcNextSchedule(cronStr string, lastSchedule time.Time) time.Time {
+	result := time.Time{}
 	// TODO: CalcNextSchedule
-	return time.Now()
+	fields, err := parseCronString(cronStr, true)
+	if err != nil {
+		return result
+	}
+
+	carry := false
+	// calculate available month
+	lsMonth := uint(lastSchedule.Month())
+	nextMonth :=
+	for _, month := range fields[monthIdx].values {
+		if lsMonth < month {
+			carry = true
+		} else if lsMonth == month {
+			break
+		}
+	}
+	// calculate time
+	if carry == true {
+
+	}
+	return result
 }
 
 // ExplainSchedule bu return a string
