@@ -21,7 +21,7 @@ func TestParseCronString(t *testing.T) {
 		"10 10 * 7,8 *",    // finish homework in summer holiday
 	}
 	for _, testCase := range testCases {
-		fields, err := parseCronString(testCase, false)
+		fields, err := parseCronStr(testCase, false)
 		assert.Nil(t, err)
 		for _, field := range fields {
 			fmt.Println(field.explanation, field.values)
@@ -49,7 +49,7 @@ func Test_calcDatesByDOM(t *testing.T) {
 		{2022, 2, []uint{3, 5}},
 	}
 	for _, testCase := range testCases {
-		result := calcDatesByDOW(uint(testCase[0].(int)), uint(testCase[1].(int)), testCase[2].([]uint))
+		result := convertDOWToDOM(uint(testCase[0].(int)), uint(testCase[1].(int)), testCase[2].([]uint))
 		fmt.Println(result)
 	}
 }

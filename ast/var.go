@@ -3,19 +3,11 @@ package ast
 import (
 	"fmt"
 	"sort"
-	"strings"
 	"time"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
-)
-
-// Time format
-const (
-	TimeFormatDate = 0 + iota
-	TimeFormatTime
-	TimeFormatDateTime
 )
 
 // ============================
@@ -357,7 +349,7 @@ type TimeNode struct {
 
 // NewTimeNode return *TimeNode
 func NewTimeNode(str string, dtType int) *TimeNode {
-	str = completeDateTime(str, dtType)
+	str = utils.CompleteDateTime(str, dtType)
 	time, err := time.ParseInLocation("2006/01/02 15:04:05", str, time.Local)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -373,69 +365,31 @@ func (tn *TimeNode) explain() string {
 	return tn.time.Format("2006/01/02 15:04:05")
 }
 
-func completeDateTime(str string, dtType int) string {
-	now := time.Now()
-	d, t := now.Format("2006/01/02"), "00:00:00"
-	switch dtType {
-	case TimeFormatDate:
-		d = completeDate(str)
-	case TimeFormatTime:
-		t = completeTime(str)
-	case TimeFormatDateTime:
-		dateTimeParts := strings.Split(str, " ")
-		d, t = completeDate(dateTimeParts[0]), completeTime(dateTimeParts[1])
-	}
-	return d + " " + t
-}
-
-func completeDate(d string) string {
-	now := strings.Split(time.Now().Format("2006/01/02"), "/")
-	var year, month, day string
-	dateParts := strings.Split(d, "/")
-	switch len(dateParts) {
-	case 3: // year/month/day
-		year, month, day = dateParts[0], dateParts[1], dateParts[2]
-	case 2: // month/day
-		year, month, day = now[0], dateParts[0], dateParts[1]
-	case 1: // day
-		year, month, day = now[0], now[1], dateParts[0]
-	}
-	if len(year) == 2 { // complete year
-		year = now[0][:2] + year
-	}
-	if len(month) == 1 { // complete month
-		month = "0" + month
-	}
-	if len(day) == 1 { // complete day
-		day = "0" + day
-	}
-	return fmt.Sprintf("%s/%s/%s", year, month, day)
-}
-
-func completeTime(t string) string {
-	now := strings.Split(time.Now().Format("15:04:05"), ":")
-	var hour, minute, second string
-	dateParts := strings.Split(t, ":")
-	switch len(dateParts) {
-	case 3: // hour/minute/second
-		hour, minute, second = dateParts[0], dateParts[1], dateParts[2]
-	case 2: // minute/second
-		hour, minute, second = dateParts[0], dateParts[1], now[2]
-	case 1: // second
-		hour, minute, second = dateParts[0], now[1], now[2]
-	}
-	if len(hour) == 1 { // complete hour
-		hour = "0" + hour
-	}
-	if len(minute) == 1 { // complete minute
-		minute = "0" + minute
-	}
-	if len(second) == 1 { // complete second
-		second = "0" + second
-	}
-	return fmt.Sprintf("%s:%s:%s", hour, minute, second)
-}
-
 // ============================
 // Loop
 // ============================
+
+// LoopNode contains loop plan
+type LoopNode struct {
+	plan *utils.Plan
+}
+
+// NewLoopNode return *LoopNode
+func NewLoopNode(cronStr string) *LoopNode {
+	p := utils.NewPlan(cronStr)
+	if p == nil {
+		return nil
+	}
+	return &LoopNode{p}
+}
+
+func (ln *LoopNode) explain() string {
+	if ln.plan != nil {
+		return ln.plan.Explain()
+	}
+	fmt.Print("INVALID LOOP PLAN")
+	return "INVALID LOOP PLAN"
+}
+
+func (ln *LoopNode) apply() {
+}

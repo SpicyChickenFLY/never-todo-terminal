@@ -245,16 +245,16 @@ task_update_option:
     | importance task_update_option { $$ = $2.SetImportance($1) }
     | task_update_option DUE time { $$ = $1.SetDue($3) }
     | DUE time task_update_option { $$ = $3.SetDue($2) }
-    | task_update_option LOOP crontab { $$ = $1.SetLoop($3) }
-    | LOOP crontab task_update_option { $$ = $3.SetLoop($2) }
+    | task_update_option LOOP crontab { $$ = $1.SetLoop($3) } // TODO
+    | LOOP crontab task_update_option { $$ = $3.SetLoop($2) } // TODO
     ;
 
 task_update_option_first:
       content { $$ = ast.NewTaskUpdateOptionNode().SetContent($1) }
     | assign_group { $$ = ast.NewTaskUpdateOptionNode().SetAssignGroup($1) }
     | importance { $$ = ast.NewTaskUpdateOptionNode().SetImportance($1) }
-    | DUE time { $$ = ast.NewTaskUpdateOptionNode().SetDue($2) }
-    | LOOP crontab  { $$ = ast.NewTaskUpdateOptionNode().SetLoop($2) }
+    | DUE time { $$ = ast.NewTaskUpdateOptionNode().SetDue($2) } // TODO
+    | LOOP crontab  { $$ = ast.NewTaskUpdateOptionNode().SetLoop($2) } // TODO
     ;
 
 // ========== TAG COMMAND =============
@@ -425,10 +425,11 @@ indefinite_content:
     | indefinite_content TIME { $$ = $1 + " " + $2 }
     ;
     
-// CRONTAB
+// CRONTAB 
+// TODO:
 crontab:
       field field field field field { // 5 field string
-        $$ = fmt.Sprintf("%s %s %s %s %s", $1,$2,$3,$4,$5)
+        $$ = fmt.Sprintf("0 %s %s %s %s %s *", $1,$2,$3,$4,$5)
       }
     | field field field field field field field { // 7 field string
         $$ = fmt.Sprintf("%s %s %s %s %s %s %s", $1,$2,$3,$4,$5,$6,$7)
