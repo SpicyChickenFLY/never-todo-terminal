@@ -3,12 +3,10 @@ package ast
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
 	"github.com/SpicyChickenFLY/never-todo-cmd/render"
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
 )
 
 // ============================
@@ -275,7 +273,7 @@ type TaskAddOptionNode struct {
 	importance      int
 	assignGroupNode *AssignGroupNode
 	due             *TimeFilterNode
-	loop            string
+	loop            *LoopNode
 }
 
 // NewTaskAddOptionNode return *TaskAddOptionNode
@@ -299,9 +297,9 @@ func (taon *TaskAddOptionNode) explain() string {
 		result += "due:" + taon.due.explain() + " "
 		fmt.Print("\n")
 	}
-	if taon.loop != "" {
+	if taon.loop != nil {
 		fmt.Print("\tloop ")
-		result += utils.ExplainSchedule(taon.loop, false)
+		result += taon.loop.explain()
 	}
 	return result
 }
@@ -317,10 +315,10 @@ func (taon *TaskAddOptionNode) apply(task model.Task) {
 	if taon.due != nil {
 		task.Due = *taon.due.startTime.time
 	}
-	if taon.loop != "" {
-		task.Loop = taon.loop
+	if taon.loop != nil {
+		task.Loop = taon.loop.getExpr()
 		if taon.due == nil {
-			task.Due = utils.CalcNextSchedule(task.Loop, time.Now())
+			task.Due = taon.loop.getNextDue()
 		}
 	}
 	if err := controller.UpdateTask(task); err != nil {
@@ -348,8 +346,8 @@ func (taon *TaskAddOptionNode) SetDue(due *TimeFilterNode) *TaskAddOptionNode {
 }
 
 // SetLoop for TaskAddOptionNode
-func (taon *TaskAddOptionNode) SetLoop(loopStr string) *TaskAddOptionNode {
-	taon.loop = loopStr
+func (taon *TaskAddOptionNode) SetLoop(loop *LoopNode) *TaskAddOptionNode {
+	taon.loop = loop
 	return taon
 }
 
@@ -395,7 +393,7 @@ type TaskUpdateOptionNode struct {
 	importance      int
 	assignGroupNode *AssignGroupNode
 	due             *TimeNode
-	loop            string
+	loop            *LoopNode
 }
 
 // NewTaskUpdateOptionNode return *TaskUpdateOptionNode
@@ -426,9 +424,9 @@ func (tuon *TaskUpdateOptionNode) explain() string {
 		result += tuon.due.explain()
 		fmt.Print("\n")
 	}
-	if tuon.loop != "" {
+	if tuon.loop != nil {
 		fmt.Print("\tloop ")
-		result += utils.ExplainSchedule(tuon.loop, false)
+		result += tuon.loop.explain()
 	}
 	return result
 }
@@ -451,10 +449,10 @@ func (tuon *TaskUpdateOptionNode) apply(task model.Task) {
 	if tuon.due != nil {
 		task.Due = *tuon.due.time
 	}
-	if tuon.loop != "" {
-		task.Loop = tuon.loop
+	if tuon.loop != nil {
+		task.Loop = tuon.loop.getExpr()
 		// Update due is required
-		task.Due = utils.CalcNextSchedule(task.Loop, time.Now())
+		task.Due = tuon.loop.getNextDue()
 	}
 	if err := controller.UpdateTask(task); err != nil {
 		ErrorList = append(ErrorList, err)
@@ -487,8 +485,8 @@ func (tuon *TaskUpdateOptionNode) SetDue(due *TimeNode) *TaskUpdateOptionNode {
 }
 
 // SetLoop for TaskAddOptionNode
-func (tuon *TaskUpdateOptionNode) SetLoop(loopStr string) *TaskUpdateOptionNode {
-	tuon.loop = loopStr
+func (tuon *TaskUpdateOptionNode) SetLoop(loopNode *LoopNode) *TaskUpdateOptionNode {
+	tuon.loop = tuon.loop
 	return tuon
 }
 

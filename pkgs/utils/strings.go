@@ -170,8 +170,8 @@ func DecodeCmd(cmd string) (result string, err error) {
 	return result, nil
 }
 
-// mustParseUint parses the given expression as an int or returns an error.
-func mustParseUint(expr string) (uint, error) {
+// MustParseUint parses the given expression as an int or returns an error.
+func MustParseUint(expr string) (uint, error) {
 	num, err := strconv.Atoi(expr)
 	if err != nil {
 		return 0, fmt.Errorf("failed to parse int from %s: %s", expr, err)

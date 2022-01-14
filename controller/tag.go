@@ -6,7 +6,7 @@ import (
 	"sort"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/utils"
 )
 
 // ListTags with filter provided by params

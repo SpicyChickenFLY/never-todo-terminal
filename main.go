@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/parser"
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/utils"
 )
 
 func main() {

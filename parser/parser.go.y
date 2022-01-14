@@ -7,7 +7,7 @@ import (
   "strings"
   "errors"
   "github.com/SpicyChickenFLY/never-todo-cmd/ast"
-  "github.com/SpicyChickenFLY/never-todo-cmd/utils"
+  "github.com/SpicyChickenFLY/never-todo-cmd/pkgs/utils"
   "github.com/SpicyChickenFLY/never-todo-cmd/model"
 )
 %}
@@ -40,6 +40,7 @@ import (
   assignGroupNode *ast.AssignGroupNode
   timeFilterNode *ast.TimeFilterNode
   timeNode *ast.TimeNode
+  loopNode *ast.LoopNode
 }
 
 %left <str> PLUS MINUS
@@ -87,7 +88,8 @@ import (
 %type <str> assign_tag unassign_tag
 %type <timeFilterNode> time_filter
 %type <timeNode> time
-%type <str> crontab field field_step field_range
+%type <loopNode> loop_node
+%type <str>  field field_step field_range
 %start root
 
 %%
@@ -229,8 +231,8 @@ task_add_option:
     | importance task_add_option { $$ = $2.SetImportance($1) }
     | task_add_option DUE time_filter { $$ = $1.SetDue($3) }
     | DUE time_filter task_add_option { $$ = $3.SetDue($2) }    
-    | task_add_option LOOP crontab { $$ = $1.SetLoop($3)}
-    | LOOP crontab task_add_option { $$ = $3.SetLoop($2)}
+    | task_add_option LOOP loop_node { $$ = $1.SetLoop($3)}
+    | LOOP loop_node task_add_option { $$ = $3.SetLoop($2)}
     ;
 
 // ========== TASK UPDATE OPTION =============
@@ -245,16 +247,16 @@ task_update_option:
     | importance task_update_option { $$ = $2.SetImportance($1) }
     | task_update_option DUE time { $$ = $1.SetDue($3) }
     | DUE time task_update_option { $$ = $3.SetDue($2) }
-    | task_update_option LOOP crontab { $$ = $1.SetLoop($3) } // TODO
-    | LOOP crontab task_update_option { $$ = $3.SetLoop($2) } // TODO
+    | task_update_option LOOP loop_node { $$ = $1.SetLoop($3) }
+    | LOOP loop_node task_update_option { $$ = $3.SetLoop($2) }
     ;
 
 task_update_option_first:
       content { $$ = ast.NewTaskUpdateOptionNode().SetContent($1) }
     | assign_group { $$ = ast.NewTaskUpdateOptionNode().SetAssignGroup($1) }
     | importance { $$ = ast.NewTaskUpdateOptionNode().SetImportance($1) }
-    | DUE time { $$ = ast.NewTaskUpdateOptionNode().SetDue($2) } // TODO
-    | LOOP crontab  { $$ = ast.NewTaskUpdateOptionNode().SetLoop($2) } // TODO
+    | DUE time { $$ = ast.NewTaskUpdateOptionNode().SetDue($2) }
+    | LOOP loop_node  { $$ = ast.NewTaskUpdateOptionNode().SetLoop($2) }
     ;
 
 // ========== TAG COMMAND =============
@@ -333,9 +335,9 @@ time_filter:
     ;
 
 time:
-      DATE { $$ = ast.NewTimeNode($1, ast.TimeFormatDate) }
-    | TIME { $$ = ast.NewTimeNode($1, ast.TimeFormatTime) }
-    | DATE TIME { $$ = ast.NewTimeNode($1 + " " + $2, ast.TimeFormatDateTime) }
+      DATE { $$ = ast.NewTimeNode($1, utils.TimeFormatDate) }
+    | TIME { $$ = ast.NewTimeNode($1, utils.TimeFormatTime) }
+    | DATE TIME { $$ = ast.NewTimeNode($1 + " " + $2, utils.TimeFormatDateTime) }
     ;
 
 importance:
@@ -426,13 +428,14 @@ indefinite_content:
     ;
     
 // CRONTAB 
-// TODO:
-crontab:
+loop_node:
       field field field field field { // 5 field string
-        $$ = fmt.Sprintf("0 %s %s %s %s %s *", $1,$2,$3,$4,$5)
+        $$ = ast.NewLoopNode(
+            fmt.Sprintf("0 %s %s %s %s %s *", $1,$2,$3,$4,$5))
       }
     | field field field field field field field { // 7 field string
-        $$ = fmt.Sprintf("%s %s %s %s %s %s %s", $1,$2,$3,$4,$5,$6,$7)
+        $$ = ast.NewLoopNode(
+            fmt.Sprintf("%s %s %s %s %s %s %s", $1,$2,$3,$4,$5,$6,$7))
       }
     ;
 

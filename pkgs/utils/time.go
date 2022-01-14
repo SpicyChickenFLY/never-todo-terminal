@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils/colorful"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/colorful"
 )
 
 const (
@@ -16,18 +16,6 @@ const (
 	monthPerSec = dayPerSec * 30
 	yearPerSec  = dayPerSec * 365
 )
-
-var monthName = []string{
-	"month",
-	"January", "February", "March", "April",
-	"May", "June", "July", "August",
-	"September", "October", "November", "December",
-}
-
-var dayName = []string{
-	"day", "Monday", "Tuesday", "Wednesday",
-	"Thursday", "Friday", "Saturday", "Sunday",
-}
 
 // GetOrdinalFormat transfer number to ordinary
 func GetOrdinalFormat(num uint) string {

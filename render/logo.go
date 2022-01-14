@@ -3,7 +3,7 @@ package render
 import (
 	"fmt"
 
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils/colorful"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/colorful"
 )
 
 // Logos

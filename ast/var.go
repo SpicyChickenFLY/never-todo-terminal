@@ -7,7 +7,8 @@ import (
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/cron"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/utils"
 )
 
 // ============================
@@ -371,24 +372,31 @@ func (tn *TimeNode) explain() string {
 
 // LoopNode contains loop plan
 type LoopNode struct {
-	plan *utils.Plan
+	plan *cron.Plan
 }
 
 // NewLoopNode return *LoopNode
 func NewLoopNode(cronStr string) *LoopNode {
-	p := utils.NewPlan(cronStr)
-	if p == nil {
+	p, err := cron.NewPlan(cronStr)
+	if err != nil {
 		return nil
 	}
 	return &LoopNode{p}
+}
+
+func (ln *LoopNode) getExpr() string {
+	return ln.plan.GetExpr()
+}
+
+func (ln *LoopNode) getNextDue() time.Time {
+	return ln.plan.Next(time.Now())
 }
 
 func (ln *LoopNode) explain() string {
 	if ln.plan != nil {
 		return ln.plan.Explain()
 	}
-	fmt.Print("INVALID LOOP PLAN")
-	return "INVALID LOOP PLAN"
+	return "Invalid plan"
 }
 
 func (ln *LoopNode) apply() {

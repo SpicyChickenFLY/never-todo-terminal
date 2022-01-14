@@ -8,8 +8,8 @@ import (
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/controller"
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils"
-	"github.com/SpicyChickenFLY/never-todo-cmd/utils/colorful"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/colorful"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/utils"
 )
 
 var t *table
