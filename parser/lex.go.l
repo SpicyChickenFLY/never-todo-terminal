@@ -59,7 +59,6 @@ func (y *yylexer) Lex(lval *yySymType) int {
 %yyc c
 %yyn c = y.getc()
 
-setence     \"[^"]*\"|'[^']*'|`[^`]*`
 letter      [_a-zA-Z\\]
 identifier  {letter}({letter}|{digit})*
 white       [ \t\n\r]+
@@ -172,10 +171,6 @@ importance  ![0-9]
 {digit}
     lval.str = string(y.buf)
     return NUM
-
-{setence}
-    lval.str = string(y.buf[1:len(y.buf)-1])
-    return SETENCE
 
 {identifier}
     lval.str = string(y.buf)

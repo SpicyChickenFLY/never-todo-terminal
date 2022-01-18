@@ -7,21 +7,6 @@ import (
 	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/utils"
 )
 
-type fieldConf struct {
-	min, max uint
-	units    []string
-}
-
-var fieldConfs = []*fieldConf{
-	{0, 59, []string{"second"}},
-	{0, 59, []string{"minute"}},
-	{0, 23, []string{"hour"}},
-	{1, 31, []string{"day"}},
-	{1, 12, monthName},
-	{1, 7, dayName},
-	{1, 9999, []string{"year"}},
-}
-
 // 用uint map来代表结果值
 // 难点在于特殊标识符L
 // 在范围值中使用L可以，取值通过限制最大值即可
@@ -35,12 +20,12 @@ type field struct {
 
 func newField(expr string, conf *fieldConf, needAbbrev bool) (*field, error) {
 	f := &field{conf: conf}
-	err := f.parseField(expr, false)
+	err := f.parseField(expr, needAbbrev)
 	return f, err
 }
 
 func (f *field) getValues(max uint) uint64 {
-	offset := maskLen - max
+	offset := maskLen - 1 - max
 	mask := (maskAll<<offset)>>offset | maskOpt
 	if f.values&maskOptL != 0 {
 		f.values |= 1 << max
@@ -66,6 +51,7 @@ func (f *field) parseField(expr string, needAbbrev bool) error {
 		values |= value
 	}
 	f.explanation = strings.Join(explanations, " and ")
+	f.values = values
 	return nil
 }
 

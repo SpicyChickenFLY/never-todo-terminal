@@ -50,7 +50,7 @@ import (
 %left <str> AND OR 
 
 %token <str> LBRACK RBRACK COMMA
-%token <str> NUM IDENT SETENCE DATE TIME WEEK
+%token <str> NUM IDENT SETENCE DATE TIME
 %token <str> UI EXPLAIN LOG UNDO
 %token <str> LIST TODO TAG ADD DELETE UPDATE DONE ALL
 %token <str> AGE DUE LOOP IMPORTANCE COLOR SORT
@@ -82,7 +82,7 @@ import (
 %type <num> id importance
 
 %type <idGroupNode> id_group
-%type <str> content definite_content indefinite_content color project sort
+%type <str> content  indefinite_content color project sort
 %type <contentGroupNode> content_group content_logic_p3 content_logic_p2 content_logic_p1
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
@@ -384,15 +384,7 @@ content_logic_p1:
     ;
 
 content:
-      definite_content 
-      { 
-        var err error
-          $$, err = utils.DecodeCmd($1)
-        if err != nil {
-            ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
-        }	
-      }
-    | indefinite_content 
+      indefinite_content 
       { 
         var err error
         $$, err = utils.DecodeCmd(strings.Trim($1, " "))
@@ -400,10 +392,6 @@ content:
             ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
         }	
       }
-    ;
-
-definite_content:
-      SETENCE { $$ = ast.SearchVarMap($1) }
     ;
 
 indefinite_content:
@@ -416,15 +404,19 @@ indefinite_content:
     | DONE { $$ = $1 }
     | DATE { $$ = $1 }
     | TIME { $$ = $1 }
-    | indefinite_content NUM  { $$ = $1 + " " + fmt.Sprint($2) }
-    | indefinite_content IDENT {$$ = $1 + " " + $2}
-    | indefinite_content TODO { $$ = $1 + " " + $2 }
-    | indefinite_content TAG { $$ = $1 + " " + $2 }
-    | indefinite_content ADD { $$ = $1 + " " + $2 }
-    | indefinite_content DELETE { $$ = $1 + " " + $2 }
-    | indefinite_content DONE { $$ = $1 + " " + $2 }
-    | indefinite_content DATE { $$ = $1 + " " + $2 }
-    | indefinite_content TIME { $$ = $1 + " " + $2 }
+    | PLUS { $$ = $1 }
+    | MINUS { $$ = $1 }
+    | indefinite_content NUM  { $$ = $1 + fmt.Sprint($2) }
+    | indefinite_content IDENT {$$ = $1 + $2}
+    | indefinite_content TODO { $$ = $1 + $2 }
+    | indefinite_content TAG { $$ = $1 + $2 }
+    | indefinite_content ADD { $$ = $1 + $2 }
+    | indefinite_content DELETE { $$ = $1 + $2 }
+    | indefinite_content DONE { $$ = $1 + $2 }
+    | indefinite_content DATE { $$ = $1 + $2 }
+    | indefinite_content TIME { $$ = $1 + $2 }
+    | indefinite_content PLUS { $$ = $1 + $2 }
+    | indefinite_content MINUS { $$ = $1 + $2 }
     ;
     
 // CRONTAB 

@@ -389,7 +389,7 @@ func (ln *LoopNode) getExpr() string {
 }
 
 func (ln *LoopNode) getNextDue() time.Time {
-	return ln.plan.Next(time.Now())
+	return ln.plan.Next(time.Now().Add(time.Second * time.Duration(1)))
 }
 
 func (ln *LoopNode) explain() string {

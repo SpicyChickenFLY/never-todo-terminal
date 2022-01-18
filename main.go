@@ -1,6 +1,9 @@
 package main
 
 import (
+	"os"
+	"strings"
+
 	"github.com/SpicyChickenFLY/never-todo-cmd/parser"
 	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/utils"
 )
@@ -14,8 +17,9 @@ func main() {
 	// 		os.Args[i] = fmt.Sprintf("`%s`", os.Args[i])
 	// 	}
 	// }
-	// cmd := strings.Join(os.Args[1:], " ")
-	cmd := "list"
+	// fmt.Println(os.Args)
+	cmd := strings.Join(os.Args[1:], " ")
+	// cmd := "list"
 	cmdCode := ""
 	if len(cmd) > 0 {
 		cmdCode = utils.EncodeCmd(cmd)

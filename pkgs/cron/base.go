@@ -14,6 +14,21 @@ var dayName = []string{
 
 const monthWith31Days = 1<<1 | 1<<3 | 1<<5 | 1<<7 | 1<<8 | 1<<10 | 1<<12
 
+type fieldConf struct {
+	min, max uint
+	units    []string
+}
+
+var fcs = []*fieldConf{
+	{0, 59, []string{"second"}},
+	{0, 59, []string{"minute"}},
+	{0, 23, []string{"hour"}},
+	{1, 31, []string{"day"}},
+	{1, 12, monthName},
+	{1, 7, dayName},
+	{1, 9999, []string{"year"}},
+}
+
 // field value related
 const (
 	maskLen     = 64

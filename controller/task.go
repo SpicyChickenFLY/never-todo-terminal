@@ -4,8 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"time"
 
 	"github.com/SpicyChickenFLY/never-todo-cmd/model"
+	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/cron"
 	"github.com/SpicyChickenFLY/never-todo-cmd/pkgs/utils"
 )
 
@@ -83,6 +85,20 @@ func CompleteTask(ids []int) (warnList []string) {
 		if task, ok := model.DB.Data.Tasks[id]; ok {
 			task.Status = model.TaskDone
 			model.DB.Data.Tasks[id] = task
+			if task.Loop != "" {
+				p, err := cron.NewPlan(task.Loop)
+				if err != nil {
+					warnList = append(warnList,
+						fmt.Sprintf("Complete: Task(id=%d) loop is invalid because: %s", id, err.Error()))
+				} else {
+					if task.Due.IsZero() {
+						task.Due = time.Now()
+					}
+					task.Due = p.Next(task.Due)
+					task.Status = model.TaskTodo
+				}
+			}
+			model.DB.Data.Tasks[id] = task
 		} else {
 			warnList = append(warnList,
 				fmt.Sprintf("Complete: Task(id=%d) not found", id),
@@ -109,6 +125,13 @@ func AddTask(content string) (taskID int) {
 func UpdateTask(updateTask model.Task) error {
 	if _, ok := model.DB.Data.Tasks[updateTask.ID]; !ok {
 		return fmt.Errorf("Update: Task(id=%d) not found", updateTask.ID)
+	}
+	if updateTask.Loop != "" {
+		p, err := cron.NewPlan(updateTask.Loop)
+		if err != nil {
+			return fmt.Errorf("Complete: Task(id=%d) loop is invalid because: %s", updateTask.ID, err.Error())
+		}
+		updateTask.Due = p.Next(time.Now())
 	}
 	model.DB.Data.Tasks[updateTask.ID] = updateTask
 	return nil
