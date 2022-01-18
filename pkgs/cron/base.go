@@ -14,6 +14,16 @@ var dayName = []string{
 
 const monthWith31Days = 1<<1 | 1<<3 | 1<<5 | 1<<7 | 1<<8 | 1<<10 | 1<<12
 
+// field value related
+const (
+	maskLen     = 64
+	maskAll     = ^(uint64(0))
+	maskOpt     = 1<<63 | 1<<62 | 1<<61 | 1<<60
+	maskData    = maskAll ^ maskOpt
+	maskOptL    = 1 << 62
+	maskOptStar = 1 << 63
+)
+
 // field index
 const (
 	secType = iota

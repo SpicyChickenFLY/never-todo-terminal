@@ -25,11 +25,11 @@ func NewPlan(cronStr string) (*Plan, error) {
 // Explain return explanation
 func (p *Plan) Explain() string {
 	fmt.Printf("this task loop AT %s FOR %s ON %s and %s IN %s\n",
-		p.fields[minType].explainField(true),
-		p.fields[hourType].explainField(true),
-		p.fields[domType].explainField(true),
-		p.fields[dowType].explainField(true),
-		p.fields[monthType].explainField(true),
+		p.fields[minType].getExplanation(),
+		p.fields[hourType].getExplanation(),
+		p.fields[domType].getExplanation(),
+		p.fields[dowType].getExplanation(),
+		p.fields[monthType].getExplanation(),
 	)
 	return p.expr
 }
@@ -43,18 +43,38 @@ func (p *Plan) GetExpr() string {
 // this function promise a valid return
 func (p *Plan) Next(lastSchedule time.Time) time.Time {
 	// TODO: Calc Next Schedule
-	lastMonth := uint(lastSchedule.Month())
+	return p.searchNextMatchDay(lastSchedule)
+}
+
+func (p *Plan) searchNextMatchDay(lastSchedule time.Time) time.Time {
 	lastYear := uint(lastSchedule.Year())
+	lastMonth := uint(lastSchedule.Month())
+	lastDay := uint(lastSchedule.Day())
 	for year := lastYear; ; year++ {
-		// calculate available month
-		for month := p.fields[monthType].getValues(); month >= lastMonth; month++ {
-			dayMap = p.fields[domType]
-			result, ok := searchNextMatch(int(year), int(month), lastSchedule)
-			if ok {
-				return result
+		for month := lastMonth; month <= fieldConfs[monthType].max; month++ {
+			if 1<<month&p.fields[monthType].getValues(fieldConfs[monthType].max) == 0 {
+				continue
+			}
+			max := daysIn(year, month)
+			domVal := p.fields[domType].getValues(uint(max))
+			dowVal := p.fields[dowType].getValues(fieldConfs[dowType].max)
+			dayVal := mergeDOWToDOM(year, month, dowVal, domVal)
+			for day := lastDay; day <= uint(max); day++ {
+				if 1<<day&dayVal == 0 {
+					continue
+				}
+				result, ok := p.searchNextMatchTime(day, lastSchedule)
+				if ok {
+					return result
+				}
 			}
 		}
 	}
+}
+
+func (p *Plan) searchNextMatchTime(dom uint, lastSchedule time.Time) (time.Time, bool) {
+	// TODO: Calc Next Matched day&time in this month
+	return time.Time{}, false
 }
 
 //parseCronStr return its explaination and calculate next schedule

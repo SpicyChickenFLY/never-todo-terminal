@@ -114,3 +114,6 @@ nt -+ [task] -+ list
               | del
               | [set]
 ```
+
+
+// TODO: 表达式中有减号会出错
