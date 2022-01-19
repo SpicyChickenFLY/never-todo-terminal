@@ -26,11 +26,11 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 	if contenTitle != "" {
 		defaultContentTitle = contenTitle
 	}
-	t.SetFieldNames([]string{"#", defaultContentTitle, "Tags", "Due", "Loop"})
+	t.SetFieldNames([]string{"#", defaultContentTitle, "Tags", "Loop", "Due"})
 
 	for _, task := range tasks {
 		record := make(record, recordLen)
-		record[recordID] = task.ID
+		record[recordID] = newField(task.ID, lenOnScreen(fmt.Sprint(task.ID)))
 
 		if task.Content != "" {
 			contentStr := task.Content
@@ -38,30 +38,33 @@ func Tasks(tasks []model.Task, contenTitle string) (warnList []string) {
 				// contentStr = colorful.RenderStr(contentStr, "line", "", "")
 				contentStr += "*" // ★
 			}
-			record[recordContent] = contentStr
+			record[recordContent] = newField(contentStr, lenOnScreen(contentStr))
 		}
 
 		tags, _ := controller.FindTagsByTask(task.ID)
 		tagsStr := []string{}
+		tagLen := 0
 		for _, tag := range tags {
 			content := colorful.RenderStr(tag.Content, "default", "", tag.Color)
 			tagsStr = append(tagsStr, content)
+			tagLen += lenOnScreen(tag.Content)
 		}
 		sort.SliceStable(tagsStr, func(i, j int) bool { return tagsStr[i] < tagsStr[j] })
 		tagStr := strings.Join(tagsStr, ",")
+		tagLen += len(tagsStr) - 1
 		if tagStr != "" {
-			record[recordTags] = tagStr
+			record[recordTags] = newField(tagStr, tagLen)
+		}
+		if task.Loop != "" {
+			record[recordLoop] = newField(task.Loop, lenOnScreen(task.Loop))
 		}
 
 		if !task.Due.IsZero() {
 			dueStr := task.Due.Format("2006/01/02 15:04:05")
 			estTimeStr := utils.EstimateTime(task.Due, time.Now(), false)
-			record[recordDue] = dueStr + estTimeStr
+			record[recordDue] = newField(dueStr+estTimeStr, lenOnScreen(dueStr+estTimeStr))
 		}
 
-		if task.Loop != "" {
-			record[recordLoop] = task.Loop
-		}
 		t.AppendRecord(record)
 	}
 	t.Render()
@@ -74,7 +77,11 @@ func Tags(tags []model.Tag) {
 	t.SetFieldNames([]string{"#", "Content", "Color"})
 	for _, tag := range tags {
 		color := colorful.RenderStr(tag.Color, "default", "", tag.Color)
-		record := record{tag.ID, tag.Content, color}
+		record := record{
+			newField(tag.ID, lenOnScreen(fmt.Sprint(tag.ID))),
+			newField(tag.Content, lenOnScreen(tag.Content)),
+			newField(color, lenOnScreen(color)),
+		}
 		t.AppendRecord(record)
 	}
 	t.Render()

@@ -50,7 +50,7 @@ import (
 %left <str> AND OR 
 
 %token <str> LBRACK RBRACK COMMA
-%token <str> NUM IDENT SETENCE DATE TIME
+%token <str> NUM IDENT DATE TIME
 %token <str> UI EXPLAIN LOG UNDO
 %token <str> LIST TODO TAG ADD DELETE UPDATE DONE ALL
 %token <str> AGE DUE LOOP IMPORTANCE COLOR SORT
@@ -396,27 +396,65 @@ content:
 
 indefinite_content:
       NUM  { $$ = fmt.Sprint($1)}
+    | DATE { $$ = $1 }
+    | TIME { $$ = $1 }
     | IDENT {$$ = $1}
+    | LIST {$$ = $1}
     | TODO { $$ = $1 }
     | TAG { $$ = $1 }
     | ADD { $$ = $1 }
     | DELETE { $$ = $1 }
+    | UPDATE { $$ = $1 }
     | DONE { $$ = $1 }
-    | DATE { $$ = $1 }
-    | TIME { $$ = $1 }
+    | ALL { $$ = $1 }
     | PLUS { $$ = $1 }
     | MINUS { $$ = $1 }
+    | MULTI { $$ = $1 }
+    | DIVIDE { $$ = $1 }
+    | LBRACK { $$ = $1 }
+    | RBRACK { $$ = $1 }
+    | COMMA { $$ = $1 }
+    | UI { $$ = $1 }
+    | EXPLAIN { $$ = $1 }
+    | LOG { $$ = $1 }
+    | UNDO { $$ = $1 }
+    | AGE { $$ = $1 }
+    | DUE { $$ = $1 }
+    | LOOP { $$ = $1 }
+    | IMPORTANCE { $$ = $1 }
+    | COLOR { $$ = $1 }
+    | SORT { $$ = $1 }
+    | HELP { $$ = $1 }
     | indefinite_content NUM  { $$ = $1 + fmt.Sprint($2) }
-    | indefinite_content IDENT {$$ = $1 + $2}
+    | indefinite_content DATE { $$ = $1 + $2 }
+    | indefinite_content TIME { $$ = $1 + $2 }
+    | indefinite_content IDENT {$$ = $1 + $2 }
+    | indefinite_content LIST {$$ = $1 + $2 }
     | indefinite_content TODO { $$ = $1 + $2 }
     | indefinite_content TAG { $$ = $1 + $2 }
     | indefinite_content ADD { $$ = $1 + $2 }
     | indefinite_content DELETE { $$ = $1 + $2 }
+    | indefinite_content UPDATE { $$ = $1 + $2 }
     | indefinite_content DONE { $$ = $1 + $2 }
-    | indefinite_content DATE { $$ = $1 + $2 }
-    | indefinite_content TIME { $$ = $1 + $2 }
+    | indefinite_content ALL { $$ = $1 + $2 }
     | indefinite_content PLUS { $$ = $1 + $2 }
     | indefinite_content MINUS { $$ = $1 + $2 }
+    | indefinite_content MULTI { $$ = $1 + $2 }
+    | indefinite_content DIVIDE { $$ = $1 + $2 }
+    | indefinite_content LBRACK { $$ = $1 + $2 }
+    | indefinite_content RBRACK { $$ = $1 + $2 }
+    | indefinite_content COMMA { $$ = $1 + $2 }
+    | indefinite_content UI { $$ = $1 + $2}
+    | indefinite_content EXPLAIN { $$ = $1 + $2}
+    | indefinite_content LOG { $$ = $1 + $2}
+    | indefinite_content UNDO { $$ = $1 + $2}
+    | indefinite_content AGE { $$ = $1 + $2}
+    | indefinite_content DUE { $$ = $1 + $2}
+    | indefinite_content LOOP { $$ = $1 + $2}
+    | indefinite_content IMPORTANCE { $$ = $1 + $2}
+    | indefinite_content COLOR { $$ = $1 + $2}
+    | indefinite_content SORT { $$ = $1 + $2}
+    | indefinite_content HELP { $$ = $1 + $2}
     ;
     
 // CRONTAB 
