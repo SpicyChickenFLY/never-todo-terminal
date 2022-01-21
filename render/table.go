@@ -24,29 +24,20 @@ const (
 )
 
 type row struct {
-	rowType int
-	fields  []*field
+	rowType     int
+	fieldValues []string
 }
 
 const (
 	recordID = iota
 	recordContent
 	recordTags
-	recordLoop
 	recordDue
+	recordLoop
 	recordLen
 )
 
-type record []*field
-
-type field struct {
-	value  interface{}
-	length int
-}
-
-func newField(v interface{}, l int) *field {
-	return &field{v, l}
-}
+type record []interface{}
 
 func (t *table) calcFieldMaxLen() (sum int) {
 	for _, maxLen := range t.fieldMaxLen {
@@ -73,19 +64,18 @@ func (t *table) AppendRecord(record record) {
 		return
 	}
 	fieldValues := make([]string, len(record))
-	for i := range record {
+	for i, field := range record {
 		fieldContent := ""
-		if record[i] != nil {
+		if field != nil {
+			fieldContent = fmt.Sprint(field)
 			fieldValues[i] = fieldContent
 			t.fieldEmptyFLags[i] = false
-			if record[i].length >= t.fieldMaxLen[i] {
-				t.fieldMaxLen[i] = record[i].length
+			if lenOnScreen(fieldContent) >= t.fieldMaxLen[i] {
+				t.fieldMaxLen[i] = lenOnScreen(fieldContent)
 			}
-		} else {
-			record[i] = newField("", 0)
 		}
 	}
-	row := row{rowTypeRecord, record}
+	row := row{rowTypeRecord, fieldValues}
 	t.rows = append(t.rows, row)
 }
 
@@ -113,11 +103,11 @@ func (t *table) Render() {
 		switch row.rowType {
 		case rowTypeRecord:
 			// TODO:  list all fields value of this row //
-			for fieldIdx, field := range row.fields {
+			for fieldIdx, field := range row.fieldValues {
 				// 中文为代表的宽字符换行后会多占一个空格
 				// 首先得判断是否需要换行，是否可以省略
-				fmt.Print(field.value)
-				for i := 0; i <= t.fieldMaxLen[fieldIdx]-field.length; i++ {
+				fmt.Print(field)
+				for i := 0; i <= t.fieldMaxLen[fieldIdx]-lenOnScreen(field); i++ {
 					fmt.Print(" ")
 				}
 			}
