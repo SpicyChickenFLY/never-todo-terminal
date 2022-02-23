@@ -28,18 +28,28 @@ var (
 
 // RootNode is the root of ast
 type RootNode struct {
-	cmdType  int
-	stmtNode StmtNode
+	CmdType int
+	Stmt    StmtNode
 }
 
 // NewRootNode return * RootNode
 func NewRootNode(cmdType int, sn StmtNode) *RootNode {
-	return &RootNode{cmdType: cmdType, stmtNode: sn}
+	return &RootNode{CmdType: cmdType, Stmt: sn}
 }
+
+// // SetCmdType is setter of cmd type
+// func (rn *RootNode) SetCmdType(cmdType int) {
+// 	rn.cmdType = cmdType
+// }
+
+// // SetStmtNode is setter of stmt node
+// func (rn *RootNode) SetStmtNode(stmt StmtNode) {
+// 	rn.stmtNode = stmt
+// }
 
 // Execute should start from root
 func (rn *RootNode) Execute(cmd string) {
-	switch rn.cmdType {
+	switch rn.CmdType {
 	case CMDNotSupport:
 		// ErrorList = append(ErrorList, errors.New("Command not support"))
 		render.Result(cmd, ErrorList, WarnList)
@@ -56,33 +66,34 @@ func (rn *RootNode) Execute(cmd string) {
 		}
 		render.Summary()
 	case CMDHelp:
-		rn.stmtNode.execute()
+		rn.Stmt.execute()
 	case CMDUI:
 		controller.StartUI()
 	case CMDExplain:
-		if rn.stmtNode != nil {
+		if rn.Stmt != nil {
 			rn.Explain()
-		} else {
-			// No stmt found
 		}
+		render.Result(cmd, ErrorList, WarnList)
 	case CMDStmt:
-		if err := model.Init(""); err != nil {
-			ErrorList = append(ErrorList, err)
-			render.Result(cmd, ErrorList, WarnList)
-			return
-		}
-		if err := model.Begin(); err != nil {
-			ErrorList = append(ErrorList, err)
-			render.Result(cmd, ErrorList, WarnList)
-			return
-		}
-		rn.stmtNode.execute()
-		if len(ErrorList) > 0 {
-			if err := model.RollBack(); err != nil {
+		if rn.Stmt != nil {
+			if err := model.Init(""); err != nil {
+				ErrorList = append(ErrorList, err)
+				render.Result(cmd, ErrorList, WarnList)
+				return
+			}
+			if err := model.Begin(); err != nil {
+				ErrorList = append(ErrorList, err)
+				render.Result(cmd, ErrorList, WarnList)
+				return
+			}
+			rn.Stmt.execute()
+			if len(ErrorList) > 0 {
+				if err := model.RollBack(); err != nil {
+					ErrorList = append(ErrorList, err)
+				}
+			} else if err := model.Commit(); err != nil {
 				ErrorList = append(ErrorList, err)
 			}
-		} else if err := model.Commit(); err != nil {
-			ErrorList = append(ErrorList, err)
 		}
 		render.Result(cmd, ErrorList, WarnList)
 	}
@@ -95,7 +106,7 @@ func (rn *RootNode) Explain() {
 }
 
 func (rn *RootNode) explain() string {
-	switch rn.cmdType {
+	switch rn.CmdType {
 	case CMDHelp:
 		fmt.Println("show help")
 		return "show help"
@@ -103,13 +114,13 @@ func (rn *RootNode) explain() string {
 		fmt.Println("show UI")
 		return "show UI"
 	case CMDExplain:
-		if rn.stmtNode != nil {
-			return rn.stmtNode.explain()
+		if rn.Stmt != nil {
+			return rn.Stmt.explain()
 		}
 		return "show help"
 	case CMDStmt:
-		if rn.stmtNode != nil {
-			return rn.stmtNode.explain()
+		if rn.Stmt != nil {
+			return rn.Stmt.explain()
 		}
 	}
 	return ""

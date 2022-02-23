@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"fmt"
 	"sort"
 	"time"
@@ -43,7 +42,7 @@ func ListDoneTasks() (tasks []model.Task) {
 func GetTaskByID(id int) (model.Task, error) {
 	task, ok := model.DB.Data.Tasks[id]
 	if !ok {
-		return model.Task{}, errors.New("Retrieve: Task(id:%d) not found")
+		return model.Task{}, fmt.Errorf("Retrieve: Task(id:%d) not found", id)
 	}
 	return task, nil
 }

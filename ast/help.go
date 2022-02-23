@@ -13,16 +13,19 @@ const (
 	HelpTaskDone
 	HelpTaskTodo
 
+	HelpTag
 	HelpTagList
 	HelpTagAdd
 	HelpTagDelete
 	HelpTagUpdate
+
+	HelpExplain
 )
 
 // help strings
 var helpMap = map[int]string{
-	HelpRoot: `Usage: nt [Commands]
-Commands:
+	HelpRoot: `Usage: nt [<command>]
+command:
     list - list tasks
     add - add new tasks
     set - update tasks
@@ -48,12 +51,20 @@ Usage(locate mode): nt list {[todo]|done|all} <id>[-<id>] [<id>]`,
 	HelpTaskTodo:   `Usage: nt todo <id>[-<id>] [<id>]`,
 	HelpTaskDone:   `Usage: nt done <id>[-<id>] [<id>]`,
 
-	HelpTagList: `Usage(filter mode): never tag
+	HelpTag: `Usage: nt tag [<command>]
+command:
+	[list] - list tag
+	add - add new tag
+	set - update tag
+	del - delete tag`,
+	HelpTagList: `Usage(filter mode): nt tag
     [ <content> [and|or <content>] ]
 Usage(locate mode): nt tag <id>[-<id>] [<id>]`,
 	HelpTagAdd:    `nt tag add [<content>] [color:<color>]`,
 	HelpTagUpdate: `nt tag [set] <id> [<content>] [color:<color>]`,
 	HelpTagDelete: `nt tag del <id>[-<id>] [<id>]`,
+
+	HelpExplain: `Usage: explain <your command>`,
 }
 
 // HelpNode show help for specified cmd

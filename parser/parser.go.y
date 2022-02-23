@@ -43,14 +43,14 @@ import (
   loopNode *ast.LoopNode
 }
 
-%left <str> PLUS MINUS
+%right <str> PLUS MINUS
 %left <str> MULTI DIVIDE
 
 %left <str> NOT
 %left <str> AND OR 
 
-%token <str> LBRACK RBRACK COMMA
-%token <str> NUM IDENT SETENCE DATE TIME
+%token <str> LBRACK RBRACK COMMA SENTENCE
+%token <str> NUM IDENT DATE TIME
 %token <str> UI EXPLAIN LOG UNDO
 %token <str> LIST TODO TAG ADD DELETE UPDATE DONE ALL
 %token <str> AGE DUE LOOP IMPORTANCE COLOR SORT
@@ -82,7 +82,7 @@ import (
 %type <num> id importance
 
 %type <idGroupNode> id_group
-%type <str> content  indefinite_content color project sort
+%type <str> content indefinite_content color project sort
 %type <contentGroupNode> content_group content_logic_p3 content_logic_p2 content_logic_p1
 %type <assignGroupNode> assign_group positive_assign_group
 %type <str> assign_tag unassign_tag
@@ -360,6 +360,7 @@ id_group:
 
 id: 
       NUM { $$, _ = strconv.Atoi($1) }
+    | PLUS NUM { $$, _ = strconv.Atoi($2) }
     | MINUS NUM { $$, _ = strconv.Atoi("-"+$2) }
     ; 
 
@@ -392,31 +393,39 @@ content:
             ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
         }	
       }
+    | SENTENCE
+      {
+        var err error
+        $$, err = utils.DecodeCmd($1)
+        if err != nil {
+            ast.ErrorList = append(ast.ErrorList, errors.New("Illegal character in CMD"))
+        }	
+      }
     ;
 
 indefinite_content:
       NUM  { $$ = fmt.Sprint($1)}
+    | LIST {$$ = $1 }
     | IDENT {$$ = $1}
     | TODO { $$ = $1 }
     | TAG { $$ = $1 }
     | ADD { $$ = $1 }
     | DELETE { $$ = $1 }
+    | UPDATE { $$ = $1 }
     | DONE { $$ = $1 }
-    | DATE { $$ = $1 }
-    | TIME { $$ = $1 }
-    | PLUS { $$ = $1 }
-    | MINUS { $$ = $1 }
-    | indefinite_content NUM  { $$ = $1 + fmt.Sprint($2) }
-    | indefinite_content IDENT {$$ = $1 + $2}
-    | indefinite_content TODO { $$ = $1 + $2 }
-    | indefinite_content TAG { $$ = $1 + $2 }
-    | indefinite_content ADD { $$ = $1 + $2 }
-    | indefinite_content DELETE { $$ = $1 + $2 }
-    | indefinite_content DONE { $$ = $1 + $2 }
-    | indefinite_content DATE { $$ = $1 + $2 }
-    | indefinite_content TIME { $$ = $1 + $2 }
-    | indefinite_content PLUS { $$ = $1 + $2 }
-    | indefinite_content MINUS { $$ = $1 + $2 }
+    | ALL { $$ = $1 }
+    | COMMA { $$ = $1 }
+    | NUM indefinite_content  { $$ = $1 + fmt.Sprint($2) }
+    | IDENT indefinite_content {$$ = $1 + $2 }
+    | LIST indefinite_content {$$ = $1 + $2 }
+    | TODO indefinite_content { $$ = $1 + $2 }
+    | TAG indefinite_content { $$ = $1 + $2 }
+    | ADD indefinite_content { $$ = $1 + $2 }
+    | DELETE indefinite_content { $$ = $1 + $2 }
+    | UPDATE indefinite_content { $$ = $1 + $2 }
+    | DONE indefinite_content { $$ = $1 + $2 }
+    | ALL indefinite_content { $$ = $1 + $2 }
+    | COMMA indefinite_content { $$ = $1 + $2 }
     ;
     
 // CRONTAB 

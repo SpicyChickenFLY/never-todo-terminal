@@ -18,6 +18,16 @@ func ContainStr(sentence, word string) bool {
 	return strings.Contains(sentence, word)
 }
 
+// MatchWord search word in word list
+func MatchWord(strs []string, target string) bool {
+	for _, str := range strs {
+		if target == str {
+			return true
+		}
+	}
+	return false
+}
+
 // MinDistance calculate Edit-Distance for strings
 func MinDistance(word1 string, word2 string) int {
 	dp := make([][]int, len(word1)+1)

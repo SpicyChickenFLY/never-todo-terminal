@@ -19,14 +19,16 @@ func main() {
 	// }
 	// fmt.Println(os.Args)
 	cmd := strings.Join(os.Args[1:], " ")
+
 	// cmd := "list"
-	cmdCode := ""
 	if len(cmd) > 0 {
-		cmdCode = utils.EncodeCmd(cmd)
+		cmd = utils.EncodeCmd(cmd)
 	}
 
 	// Parse command string to an AST
-	result := parser.Parse(cmdCode)
+	// result := parser.Parse(cmd)
+
+	result := parser.ParseRoot(os.Args[1:])
 
 	// Execute the AST
 	result.Execute(cmd)
